@@ -8,4 +8,6 @@
 
 .body {
     text-align: center;
+    height: 90vh;
+    overflow: auto;
 }

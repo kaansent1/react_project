@@ -10,7 +10,7 @@ export interface User {
     avatarUrl?: string
 }
 
-export function getUsers(count: number = 10): User[] {
+export function getUsers(count: number = 4): User[] {
     return Array.from({length: count}, () => getUser())
 }
 
