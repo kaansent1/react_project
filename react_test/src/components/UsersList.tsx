@@ -1,4 +1,4 @@
-import {User} from "../api"
+import {User} from "../api/user.ts"
 import {TableContainer, TableHead, Paper, TableBody, TableRow} from "@mui/material";
 
 interface UsersListProps {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../styles/DropDownMenuStyle.css";
 
-const DropdownMenu: React.FC = () => {
+function DropdownMenu() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -55,6 +55,6 @@ const DropdownMenu: React.FC = () => {
             {isDropdownOpen && <div className="background" onClick={closeDropdown}></div>}
         </div>
     );
-};
+}
 
 export default DropdownMenu;

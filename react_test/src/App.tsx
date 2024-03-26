@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginPage from "./pages/LoginPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
+import AddPostPage from "./pages/AddPostPage.tsx"
 import React from "react";
 
 const App: React.FC = () => {
@@ -9,6 +10,7 @@ const App: React.FC = () => {
             <Routes>
                 <Route path="/home" element={<HomePage/>}/>
                 <Route path="/" element={<LoginPage/>}/>
+                <Route path="/new" element={<AddPostPage/>}/>
             </Routes>
         </BrowserRouter>
     );

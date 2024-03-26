@@ -4,7 +4,7 @@ import "../styles/LoginStyle.css"
 import {useNavigate} from "react-router-dom";
 //import Axios from "axios";
 
-const LoginPage: React.FC = () => {
+function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
@@ -138,6 +138,6 @@ const LoginPage: React.FC = () => {
             </div>
         </div>
     );
-};
+}
 
 export default LoginPage;

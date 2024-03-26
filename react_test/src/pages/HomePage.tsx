@@ -1,31 +1,66 @@
-import React from 'react';
-import DropdownMenu from '../components/DropDownMenu.tsx';
-import {getUsers} from '../api';
+import { getUsers } from '../api/user.ts';
 import "../styles/HomeStyle.css";
+import {Box, TextField, InputAdornment} from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
+import UserFeed from '../components/UserFeed';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import {useNavigate} from "react-router-dom";
+import Header from "./HeaderPage.tsx";
 
 function Home() {
+    const navigate = useNavigate();
+
     const users = getUsers();
+    const userPostsMap = new Map();
+
+    // for (const user of users) {
+    //     userPostsMap.set(user.id, posts);
+    // }
 
     return (
         <div className="container">
-            <header className="header">
-                Social-React
-                <DropdownMenu/>
-            </header>
+            <Header />
+
             <div className="body">
-                <h2>Users:</h2>
-                <ul>
-                    {users.map(user => (
-                        <div>
-                            <p>First Name: {user.firstname}</p>
-                            <p>Last Name: {user.lastname}</p>
-                            <p>Username: {user.username}</p>
-                            <p>Email: {user.email}</p>
-                            <p>Birthdate: {user.birthdate.toLocaleDateString()}</p>
-                            {user.avatarUrl && <img src={user.avatarUrl} alt="Avatar"/>}
-                        </div>
-                    ))}
-                </ul>
+                <Box sx={{display: "flex", p: 1, justifyContent: "flex-end"}}>
+                    <TextField
+                        type="text"
+                        variant="outlined"
+                        size="small"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon/>
+                                </InputAdornment>
+                            )
+                        }}
+                    />
+                </Box>
+                <Button
+                    color="success"
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    onClick={() => navigate("/new")}
+                    sx={{
+                        position: 'fixed',
+                        width: '20vw',
+                        margin: '10px',
+                        bottom: '2%',
+                        left: '10%',
+                        transform: 'translateX(-50%)',
+                        zIndex: 9999,
+                    }}
+                >
+                    Post hinzufügen
+                </Button>
+
+
+                <h2>UserFeed</h2>
+                {Array.from(userPostsMap).map(([userId, posts]) => {
+                    const user = users.find(user => user.id === userId);
+                    return <UserFeed key={userId} user={user} posts={posts}/>;
+                })}
             </div>
         </div>
     );

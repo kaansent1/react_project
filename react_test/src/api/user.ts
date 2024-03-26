@@ -10,7 +10,7 @@ export interface User {
     avatarUrl?: string
 }
 
-export function getUsers(count: number = 4): User[] {
+export function getUsers(count: number = 10): User[] {
     return Array.from({length: count}, () => getUser())
 }
 
@@ -23,7 +23,7 @@ export function getUser(): User {
         lastname,
         username: faker.internet.userName(firstname, lastname),
         email: faker.internet.email(firstname, lastname),
-        birthdate: faker.date.birthdate({min: 18, max: 30, mode: "age"}),
+        birthdate: faker.date.birthdate({min: 20, max: 30, mode: "age"}),
         avatarUrl: faker.image.avatar(),
     }
 
