@@ -33,7 +33,7 @@ function DropdownMenu() {
     const logout = () => {
         localStorage.removeItem("logegd_user_id");
         localStorage.removeItem("logged_user");
-        navigate("/");
+        navigate("/login");
     };
 
     const closeDropdown = () => {

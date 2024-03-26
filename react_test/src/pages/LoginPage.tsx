@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import "../styles/LoginStyle.css"
-import {useNavigate} from "react-router-dom";
-//import Axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "../styles/LoginStyle.css";
+
+export interface LoginFormData {
+    username: string;
+    password: string;
+    email: string;
+    repeatPassword: string;
+}
 
 function LoginPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [repeatPassword, setRepeatPassword] = useState('');
-    const [email, setEmail] = useState('');
+    const [formData, setFormData] = useState<LoginFormData>({
+        username: '',
+        password: '',
+        email: '',
+        repeatPassword: '',
+    });
     const [showRegister, setShowRegister] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleLogin = (event: React.FormEvent) => {
         event.preventDefault();
 
-
-        if (username === '1' && password === '1') {
-            navigate("/home");
+        if (formData.password === '1') {
+            navigate("/");
         } else {
             showError('Falsche Anmeldeinformationen');
         }
@@ -31,6 +38,14 @@ function LoginPage() {
 
     const handleToggleRegister = () => {
         setShowRegister(!showRegister);
+    };
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
 
     const showSuccess = (message: string) => {
@@ -72,18 +87,18 @@ function LoginPage() {
                             {/* Login form */}
                             <input
                                 type="text"
-                                id="username"
+                                name="username"
                                 placeholder="Username"
-                                value={username}
-                                onChange={e => setUsername(e.target.value)}
+                                value={formData.username}
+                                onChange={handleInputChange}
                                 required
                             />
                             <input
                                 type="password"
-                                id="password"
+                                name="password"
                                 placeholder="Password"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
+                                value={formData.password}
+                                onChange={handleInputChange}
                                 required
                             />
                             <button type="submit">
@@ -98,34 +113,34 @@ function LoginPage() {
                             {/* Register form */}
                             <input
                                 type="text"
-                                id="username"
+                                name="username"
                                 placeholder="Username"
-                                value={username}
-                                onChange={e => setUsername(e.target.value)}
+                                value={formData.username}
+                                onChange={handleInputChange}
                                 required
                             />
                             <input
                                 type="text"
-                                id="email"
+                                name="email"
                                 placeholder="Email"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
+                                value={formData.email}
+                                onChange={handleInputChange}
                                 required
                             />
                             <input
                                 type="password"
-                                id="password"
+                                name="password"
                                 placeholder="Password"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
+                                value={formData.password}
+                                onChange={handleInputChange}
                                 required
                             />
                             <input
                                 type="password"
-                                id="repeat_password"
+                                name="repeatPassword"
                                 placeholder="Repeat Password"
-                                value={repeatPassword}
-                                onChange={e => setRepeatPassword(e.target.value)}
+                                value={formData.repeatPassword}
+                                onChange={handleInputChange}
                                 required
                             />
                             <button type="submit">Register</button>

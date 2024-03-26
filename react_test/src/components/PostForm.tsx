@@ -26,11 +26,11 @@ const PostForm = () => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 const formData = { ...data, image: reader.result as string };
-                db.posts.add(formData).then(() => navigate("/home"));
+                db.posts.add(formData).then(() => navigate("/"));
             };
             reader.readAsDataURL(data.image[0]);
         } else {
-            db.posts.add(data).then(() => navigate("/home"));
+            db.posts.add(data).then(() => navigate("/"));
         }
     }
 

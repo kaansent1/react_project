@@ -5,7 +5,7 @@ export interface Post {
     id: string;
     user: User;
     text: string;
-    image?: string;
+    image?: File;
     createdAt: Date;
 }
 
@@ -15,7 +15,7 @@ export class PostsDataBase extends Dexie {
     constructor() {
         super('posts');
         this.version(2).stores({
-            posts: '++id, user, text, image, created_At'
+            posts: 'user, text, image, created_At'
         });
     }
 }

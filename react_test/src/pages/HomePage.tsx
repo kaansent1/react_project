@@ -38,6 +38,7 @@ function Home() {
                     sx={{
                         position: 'fixed',
                         width: '20vw',
+                        maxWidth: '20vh',
                         margin: '10px',
                         bottom: '2%',
                         left: '10%',
