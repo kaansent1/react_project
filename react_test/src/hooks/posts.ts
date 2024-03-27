@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { db, Post } from '../api/db';
 
-export function usePosts(): [Post[], () => void] {
+export function usePosts(): [Post[]] {
     const [posts, setPosts] = useState<Post[]>([]);
 
     const fetchPosts = () => {

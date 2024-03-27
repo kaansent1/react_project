@@ -1,16 +1,9 @@
 import React from 'react';
-import { Container, Grid, Typography, IconButton } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { db } from '../api/db';
+import { Container, Grid, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-function UserFeed({ posts, fetchPosts }) {
-    const handleDeletePost = (postId) => {
-        db.posts.delete(postId).then(() => {
-            fetchPosts();
-        }).catch(error => {
-            console.error('Fehler beim Löschen des Posts:', error);
-        });
-    };
+function UserFeed({ posts }) {
+    const navigate = useNavigate();
 
     const reversedPosts = [...posts].reverse();
     return (
@@ -23,16 +16,17 @@ function UserFeed({ posts, fetchPosts }) {
                 reversedPosts.map(post => (
                     <Container
                         key={post.id}
+                        onClick={() => navigate(`/details/post/${post.id}`)}
                         sx={{
                             width: 600,
                             padding: 2,
                             marginBottom: 2,
                             backgroundColor: '#3a5169',
                             color: 'white',
-                            borderRadius: 4
+                            borderRadius: 4,
+                            cursor: 'pointer'
                         }}
                     >
-                        {console.log(post.image)}
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <Typography variant="body1" align="left">
@@ -41,11 +35,6 @@ function UserFeed({ posts, fetchPosts }) {
                                 {post.image !== '' && (
                                     <img src={post.image} style={{ maxWidth: '100%', marginTop: '10px' }}  alt=""/>
                                 )}
-                            </Grid>
-                            <Grid item xs={12}>
-                                <IconButton onClick={() => handleDeletePost(post.id)} color="error">
-                                    <DeleteIcon />
-                                </IconButton>
                             </Grid>
                         </Grid>
                     </Container>

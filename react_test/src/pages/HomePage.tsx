@@ -37,8 +37,8 @@ function Home() {
                     onClick={() => navigate('/new')}
                     sx={{
                         position: 'fixed',
-                        width: '20vw',
-                        maxWidth: '20vh',
+                        width: '15vw',
+                        maxWidth: '20vw',
                         margin: '10px',
                         bottom: '2%',
                         left: '10%',

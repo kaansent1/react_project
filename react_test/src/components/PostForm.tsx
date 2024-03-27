@@ -12,7 +12,7 @@ export interface PostFormData {
     user: User;
     text: string;
     image?: File;
-    createdAt: Date;
+    created_at: Date;
 }
 
 const PostForm = () => {
