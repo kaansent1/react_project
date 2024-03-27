@@ -13,7 +13,6 @@ function UserFeed({ posts, fetchPosts }) {
     };
 
     const reversedPosts = [...posts].reverse();
-
     return (
         <div>
             {reversedPosts.length === 0 ? (
@@ -33,13 +32,14 @@ function UserFeed({ posts, fetchPosts }) {
                             borderRadius: 4
                         }}
                     >
+                        {console.log(post.image)}
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <Typography variant="body1" align="left">
                                     {post.text}
                                 </Typography>
-                                {post.image && (
-                                    <img src={post.image} alt="Post Image" style={{ maxWidth: '100%', marginTop: '10px' }} />
+                                {post.image !== '' && (
+                                    <img src={post.image} style={{ maxWidth: '100%', marginTop: '10px' }}  alt=""/>
                                 )}
                             </Grid>
                             <Grid item xs={12}>

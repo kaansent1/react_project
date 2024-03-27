@@ -24,7 +24,7 @@ function LoginPage() {
         event.preventDefault();
 
         if (formData.password === '1') {
-            navigate("/");
+            navigate("/home");
         } else {
             showError('Falsche Anmeldeinformationen');
         }
