@@ -9,10 +9,10 @@ const AddPostPage: React.FC = () => {
         <div>
             <Header/>
             <Paper sx={{p: 1}}>
-                <PostForm />
+                <PostForm/>
             </Paper>
         </div>
     )
 }
 
-export default AddPostPage;
+export default AddPostPage

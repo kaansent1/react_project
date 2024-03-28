@@ -1,7 +1,7 @@
 import { Container, Grid, Typography, TextField, InputAdornment } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
-import {useState} from "react";
+import { useState } from "react";
 
 interface Post {
     postId: string;
@@ -20,9 +20,9 @@ function UserFeed({ posts }: UserFeedProps) {
 
     let displayedPosts = posts
 
-    if(search !== "") {
+    if (search !== "") {
         displayedPosts = posts.filter((p) => {
-           return p.text.includes(search)
+            return p.text.includes(search)
         })
     }
 
@@ -70,8 +70,9 @@ function UserFeed({ posts }: UserFeedProps) {
                                 <Typography variant="body1" align="left">
                                     {post.text}
                                 </Typography>
-                                {post.image !== '' && (
-                                    <img src={post.image} style={{ maxWidth: '100%', marginTop: '10px' }} alt=""/>
+                                {/* Anzeigen des Bildes, wenn vorhanden */}
+                                {post.image && (
+                                    <img src={post.image} style={{ maxWidth: '100%', marginTop: '10px' }} alt="" />
                                 )}
                             </Grid>
                         </Grid>
