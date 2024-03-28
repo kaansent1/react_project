@@ -1,26 +1,18 @@
-import React from 'react';
-import Header from './HeaderPage';
-import {useNavigate, useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { usePosts } from '../hooks/posts';
 import { Container, Grid, Typography, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { db } from '../api/db'; // Import database module
+import { Post } from '../api/db';
+import Header from "./HeaderPage.tsx";
 
 function PostDetailPage() {
-    const { postId } = useParams();
-    const [posts, fetchPosts] = usePosts();
-    const navigate = useNavigate()
+    const { id } = useParams<{ id: string }>();
+    const [posts, , deletePost] = usePosts();
+    const post = posts.find((p) => p.postId === id);
 
-    const postIdNumber = parseInt(postId);
-    const post = posts.find((p) => p.id === postIdNumber);
 
-    const handleDeletePost = (postId) => {
-        db.posts.delete(postId).then(() => {
-            fetchPosts();
-            navigate("/home")
-        }).catch(error => {
-            console.error('Fehler beim Löschen des Posts:', error);
-        });
+    const handleDeletePost = (postToDelete: Post) => {
+        deletePost(postToDelete);
     };
 
     return (
@@ -48,7 +40,7 @@ function PostDetailPage() {
                                 )}
                             </Grid>
                             <Grid item xs={12}>
-                                <IconButton onClick={() => handleDeletePost(post.id)} color="error">
+                                <IconButton onClick={() => handleDeletePost(post)} color="error">
                                     <DeleteIcon />
                                 </IconButton>
                             </Grid>
@@ -56,7 +48,7 @@ function PostDetailPage() {
                     </Container>
                 ) : (
                     <Typography variant="body1" align="center" sx={{ fontSize: 20, marginTop: 4 }}>
-                        Post nicht gefunden
+                        Post not found
                     </Typography>
                 )}
             </Container>

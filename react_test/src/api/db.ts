@@ -2,10 +2,10 @@ import Dexie, { Table } from "dexie";
 import {User} from "./user.ts";
 
 export interface Post {
+    postId: string
     user: User;
     text: string;
-    image?: File;
-    created_at: Date;
+    image?: string;
 }
 
 export class PostsDataBase extends Dexie {
@@ -14,7 +14,7 @@ export class PostsDataBase extends Dexie {
     constructor() {
         super('posts');
         this.version(2).stores({
-            posts: '++id, user, text, image, created_at'
+            posts: '++id, user, text, image, postId'
         });
     }
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { db, Post } from '../api/db';
 
-export function usePosts(): [Post[]] {
+export function usePosts(): [Post[], (() => void), ((post: Post) => void)] {
     const [posts, setPosts] = useState<Post[]>([]);
 
     const fetchPosts = () => {
@@ -14,5 +14,11 @@ export function usePosts(): [Post[]] {
         fetchPosts();
     }, []);
 
-    return [posts, fetchPosts];
+    const deletePost = (postToDelete: Post) => {
+        db.posts.delete(postToDelete.postId).then(() => {
+            setPosts(prevPosts => prevPosts.filter(post => post.postId !== postToDelete.postId));
+        })
+    };
+
+    return [posts, fetchPosts, deletePost];
 }

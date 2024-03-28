@@ -1,5 +1,4 @@
 import "../styles/HomeStyle.css";
-import React from 'react';
 import { Link } from 'react-router-dom';
 import DropdownMenu from '../components/DropDownMenu.tsx';
 import HomeIcon from '@mui/icons-material/Home';

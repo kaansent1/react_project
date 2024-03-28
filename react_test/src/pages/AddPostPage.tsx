@@ -4,8 +4,7 @@ import {Paper} from "@mui/material";
 import PostForm from "../components/PostForm.tsx";
 
 
-const AddPostPage = () => {
-    
+const AddPostPage: React.FC = () => {
     return (
         <div>
             <Header/>
