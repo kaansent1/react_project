@@ -17,6 +17,10 @@ const AuthOverlay = ({children}: AuthOverlayProps) => {
         }
     }
 
+    function logout() {
+        setAuthenticated(false)
+        setUsername("")
+    }
 
     if(!authenticated) {
         return <>
@@ -25,7 +29,7 @@ const AuthOverlay = ({children}: AuthOverlayProps) => {
     }
 
     return (
-        <AuthContext.Provider value={ {authenticated, username} }>
+        <AuthContext.Provider value={ {authenticated, username, logout} }>
             {children}
         </AuthContext.Provider>
     )

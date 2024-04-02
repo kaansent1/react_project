@@ -62,7 +62,10 @@ function UserFeed({ posts }: UserFeedProps) {
                             backgroundColor: '#3a5169',
                             color: 'white',
                             borderRadius: 4,
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            '@media (max-width: 768px)': {
+                                width: '80%',
+                            },
                         }}
                     >
                         <Grid container spacing={2}>
@@ -70,7 +73,6 @@ function UserFeed({ posts }: UserFeedProps) {
                                 <Typography variant="body1" align="left">
                                     {post.text}
                                 </Typography>
-                                {/* Anzeigen des Bildes, wenn vorhanden */}
                                 {post.image && (
                                     <img src={post.image} style={{ maxWidth: '100%', marginTop: '10px' }} alt="" />
                                 )}

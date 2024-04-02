@@ -1,10 +1,13 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import "../styles/DropDownMenuStyle.css";
+import {useAuth} from "./AuthContext.tsx";
 
 function DropdownMenu() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
+    const {logout} = useAuth();
+
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -25,12 +28,6 @@ function DropdownMenu() {
     const goToFollowers = () => {
         closeDropdown();
         navigate("/follower");
-    };
-
-    const logout = () => {
-        localStorage.removeItem("logegd_user_id");
-        localStorage.removeItem("logged_user");
-        navigate("/");
     };
 
     const closeDropdown = () => {

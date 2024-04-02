@@ -4,14 +4,10 @@ import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import Header from './HeaderPage.tsx';
 import { usePosts } from '../hooks/posts.ts';
-import { Typography } from "@mui/material";
-import { useContext } from "react";
-import AuthContext from "../components/AuthContext.tsx";
-
+import Footer from '../components/Footer.tsx'
 function Home() {
     const navigate = useNavigate();
     const [posts] = usePosts();
-    const context = useContext(AuthContext);
 
     return (
         <div className="container">
@@ -24,25 +20,28 @@ function Home() {
                     onClick={() => navigate('/new')}
                     sx={{
                         position: 'fixed',
-                        width: '15vw',
-                        maxWidth: '20vw',
+                        width: 'auto',
+                        maxWidth: '15vw',
                         margin: '10px',
-                        bottom: '2%',
+                        bottom: '5%',
                         left: '10%',
                         transform: 'translateX(-50%)',
-                        zIndex: 99
+                        zIndex: 99,
+                        fontSize: '15px',
+                        '@media (max-width: 950px)': {
+                            '& .MuiButton-startIcon': {
+                                display: 'none'
+                            }
+                        }
                     }}
                 >
-                    Post hinzufügen
+                    Hinzufügen
                 </Button>
-                <div className="user-greeting">
-                    <Typography variant="h6" sx={{ color: 'gray' }}>
-                        Hallo, {context.username}!
-                    </Typography>
-                </div>
+
                 <h2>UserFeed</h2>
                 <UserFeed posts={posts} />
             </div>
+            <Footer />
         </div>
     );
 }
