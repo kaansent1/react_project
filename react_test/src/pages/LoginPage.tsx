@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import { useNavigate } from "react-router-dom";
 import "../styles/LoginStyle.css";
 
 export interface LoginFormData {
@@ -10,7 +9,11 @@ export interface LoginFormData {
     repeatPassword: string;
 }
 
-function LoginPage() {
+interface LoginPageProps {
+    onSubmit: (data: LoginFormData) => void;
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
     const [formData, setFormData] = useState<LoginFormData>({
         username: '',
         password: '',
@@ -18,16 +21,11 @@ function LoginPage() {
         repeatPassword: '',
     });
     const [showRegister, setShowRegister] = useState(false);
-    const navigate = useNavigate();
 
     const handleLogin = (event: React.FormEvent) => {
         event.preventDefault();
 
-        if (formData.password === '1') {
-            navigate("/home");
-        } else {
-            showError('Falsche Anmeldeinformationen');
-        }
+        onSubmit(formData);
     };
 
     const handleRegister = (event: React.FormEvent) => {
@@ -62,15 +60,6 @@ function LoginPage() {
         });
     };
 
-    const showError = (message: string) => {
-        Swal.fire({
-            title: 'Fehler',
-            text: message,
-            icon: 'error',
-            showCloseButton: false,
-            confirmButtonText: 'Schließen',
-        });
-    };
 
     return (
         <div className="login-container">

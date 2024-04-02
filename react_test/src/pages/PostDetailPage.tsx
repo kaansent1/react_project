@@ -1,4 +1,4 @@
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import {usePosts} from '../hooks/posts';
 import {Container, Grid, Typography, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -8,14 +8,15 @@ import Header from "./HeaderPage.tsx";
 function PostDetailPage() {
     const {postId} = useParams();
     const [posts, , deletePost] = usePosts();
-    const post = posts.find((p) => p.postId === postId);
+    const navigate = useNavigate();
 
+
+    const post = posts.find((p) => p.postId == postId);
 
     const handleDeletePost = (postToDelete: Post) => {
         deletePost(postToDelete);
+        navigate('/home');
     };
-
-    console.log(posts);
 
     return (
         <div>

@@ -4,11 +4,14 @@ import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import Header from './HeaderPage.tsx';
 import { usePosts } from '../hooks/posts.ts';
+import { Typography } from "@mui/material";
+import { useContext } from "react";
+import AuthContext from "../components/AuthContext.tsx";
 
 function Home() {
     const navigate = useNavigate();
     const [posts] = usePosts();
-
+    const context = useContext(AuthContext);
 
     return (
         <div className="container">
@@ -27,11 +30,16 @@ function Home() {
                         bottom: '2%',
                         left: '10%',
                         transform: 'translateX(-50%)',
-                        zIndex: 9999
+                        zIndex: 99
                     }}
                 >
                     Post hinzufügen
                 </Button>
+                <div className="user-greeting">
+                    <Typography variant="h6" sx={{ color: 'gray' }}>
+                        Hallo, {context.username}!
+                    </Typography>
+                </div>
                 <h2>UserFeed</h2>
                 <UserFeed posts={posts} />
             </div>

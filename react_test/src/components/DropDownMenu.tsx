@@ -1,29 +1,26 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import "../styles/DropDownMenuStyle.css";
 
 function DropdownMenu() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
 
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
+
     const goToCredits = () => {
         closeDropdown();
         navigate("/credits");
     };
 
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
 
     const goToAccount = () => {
         closeDropdown();
         navigate("/account");
     };
 
-    const goToMessenger = () => {
-        closeDropdown();
-        navigate("/messenger");
-    };
 
     const goToFollowers = () => {
         closeDropdown();
@@ -46,7 +43,6 @@ function DropdownMenu() {
             {isDropdownOpen && (
                 <div className="overlay">
                     <button onClick={goToAccount} className="menu-item">Account Info</button>
-                    <button onClick={goToMessenger} className="menu-item">Messenger</button>
                     <button onClick={goToFollowers} className="menu-item">Your Followers</button>
                     <button onClick={goToCredits} className="menu-item">Credits</button>
                     <button type="submit" onClick={logout} className="menu-item">Logout</button>
