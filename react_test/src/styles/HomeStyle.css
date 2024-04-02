@@ -29,10 +29,6 @@
 
 .body {
     text-align: center;
-    height: 90vh;
+    height: calc(100vh - 150px);
     overflow: auto;
-}
-
-.user-greeting {
-    margin-bottom: 20px;
 }

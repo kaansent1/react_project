@@ -1,7 +1,9 @@
-import { Container, Grid, Typography, TextField, InputAdornment } from '@mui/material';
+import {Container, Grid, Typography, TextField, InputAdornment, useMediaQuery} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import Button from "@mui/material/Button";
 
 interface Post {
     postId: string;
@@ -15,15 +17,15 @@ interface UserFeedProps {
 
 function UserFeed({ posts }: UserFeedProps) {
     const navigate = useNavigate();
+    const [search, setSearch] = useState('');
+    const isSmallScreen = useMediaQuery('(max-width:950px)');
 
-    const [search, setSearch] = useState("")
+    let displayedPosts = posts;
 
-    let displayedPosts = posts
-
-    if (search !== "") {
+    if (search !== '') {
         displayedPosts = posts.filter((p) => {
-            return p.text.includes(search)
-        })
+            return p.text.includes(search);
+        });
     }
 
     const reversedPosts = [...displayedPosts].reverse();
@@ -42,7 +44,7 @@ function UserFeed({ posts }: UserFeedProps) {
                         <InputAdornment position="start">
                             <SearchIcon />
                         </InputAdornment>
-                    )
+                    ),
                 }}
                 sx={{ marginBottom: 2 }}
             />
@@ -51,7 +53,7 @@ function UserFeed({ posts }: UserFeedProps) {
                     Keine Posts vorhanden
                 </Typography>
             ) : (
-                reversedPosts.map(post => (
+                reversedPosts.map((post) => (
                     <Container
                         key={post.postId}
                         onClick={() => navigate(`/details/post/${post.postId}`)}
@@ -73,14 +75,31 @@ function UserFeed({ posts }: UserFeedProps) {
                                 <Typography variant="body1" align="left">
                                     {post.text}
                                 </Typography>
-                                {post.image && (
-                                    <img src={post.image} style={{ maxWidth: '100%', marginTop: '10px' }} alt="" />
-                                )}
+                                {post.image && <img src={post.image} style={{ maxWidth: '100%', marginTop: '10px' }} alt="" />}
                             </Grid>
                         </Grid>
                     </Container>
                 ))
             )}
+            <Button
+                color="success"
+                variant="contained"
+                startIcon={isSmallScreen ? null : <AddIcon />}
+                onClick={() => navigate('/new')}
+                sx={{
+                    position: 'fixed',
+                    width: 'auto',
+                    maxWidth: '15vw',
+                    margin: '10px',
+                    bottom: '50px',
+                    right: '2px',
+                    transform: 'translateX(-50%)',
+                    zIndex: 99,
+                    fontSize: '15px',
+                }}
+            >
+                {isSmallScreen ? <AddIcon /> : 'Hinzufügen'}
+            </Button>
         </div>
     );
 }

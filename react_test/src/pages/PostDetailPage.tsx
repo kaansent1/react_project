@@ -4,6 +4,7 @@ import {Container, Grid, Typography, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Post} from '../api/db';
 import Header from "./HeaderPage.tsx";
+import Footer from "../components/Footer.tsx";
 
 function PostDetailPage() {
     const {postId} = useParams();
@@ -54,6 +55,7 @@ function PostDetailPage() {
                     </Typography>
                 )}
             </Container>
+            <Footer />
         </div>
     );
 }
