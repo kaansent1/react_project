@@ -15,7 +15,7 @@ function PostDetailPage() {
 
     const handleDeletePost = (postToDelete: Post) => {
         deletePost(postToDelete);
-        navigate('/home');
+        navigate('/');
     };
 
     return (
