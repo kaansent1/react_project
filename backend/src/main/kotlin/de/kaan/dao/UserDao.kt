@@ -3,6 +3,8 @@ package de.kaan.dao
 import de.kaan.models.*
 import de.kaan.utils.dbQuery
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.transactions.transaction
 
 object UserDao {
 
@@ -35,10 +37,11 @@ object UserDao {
             it[email] = user.email
         }
     }
-    /*
-    suspend fun deleteUser(id: Int): Int = dbQuery {
-        Users.deleteWhere { Users.userId eq id }
+
+    suspend fun deleteUser(id: Int): Boolean = dbQuery {
+        transaction {
+            Users.deleteWhere { userId eq id } > 0
+        }
     }
 
-     */
 }

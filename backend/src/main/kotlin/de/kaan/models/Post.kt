@@ -1,9 +1,11 @@
 package de.kaan.models
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
+@Serializable
 data class Post(
-    val postId: Int,
+    val postId: Int? = null,
     val userId: Int,
     val text: String,
     val image: String? = null,

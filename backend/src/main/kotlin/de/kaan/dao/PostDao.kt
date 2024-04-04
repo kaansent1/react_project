@@ -3,6 +3,8 @@ package de.kaan.dao
 import de.kaan.models.*
 import de.kaan.utils.dbQuery
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.transactions.transaction
 
 object PostDao {
 
@@ -31,10 +33,11 @@ object PostDao {
             it[image] = post.image ?: ""
         }
     }
-/*
-    suspend fun deletePost(id: Int): Int = dbQuery {
-        Posts.deleteWhere { Posts.postId eq id }
+
+    suspend fun deletePost(id: Int): Boolean = dbQuery {
+        transaction {
+            Posts.deleteWhere { postId eq id } > 0
+        }
     }
 
- */
 }

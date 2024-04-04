@@ -22,24 +22,23 @@ fun Application.configureRouting() {
                 call.respondText("User added successfully with ID: $userId", status = HttpStatusCode.Created)
             }
 
-            put("/{id}") {
-                val id = call.parameters["id"]?.toIntOrNull() ?: return@put call.respond("Invalid user ID")
+            put("/updateUser/{id}") {
+                val id = call.parameters["userId"]?.toIntOrNull() ?: return@put call.respond("Invalid user ID")
                 val user = call.receive<User>()
                 UserDao.updateUser(id, user)
                 call.respond("User updated successfully")
             }
-/*
+
             delete("/{id}") {
                 val id = call.parameters["id"]?.toIntOrNull() ?: return@delete call.respond("Invalid user ID")
                 val deleted = UserDao.deleteUser(id)
                 if (deleted) {
                     call.respond("User deleted successfully")
                 } else {
-                    call.respond("User not found", status = HttpStatusCode.NotFound)
+                    call.respond("User not found")
                 }
             }
 
- */
         }
 
         route("/posts") {
@@ -54,24 +53,24 @@ fun Application.configureRouting() {
                 call.respondText("Post added successfully with ID: $postId", status = HttpStatusCode.Created)
             }
 
-            put("/{id}") {
-                val id = call.parameters["id"]?.toIntOrNull() ?: return@put call.respond("Invalid post ID")
+            put("/updatePost/{id}") {
+                val id = call.parameters["postId"]?.toIntOrNull() ?: return@put call.respond("Invalid post ID")
                 val post = call.receive<Post>()
                 PostDao.updatePost(id, post)
                 call.respond("Post updated successfully")
             }
-            /*
+
             delete("/{id}") {
                 val id = call.parameters["id"]?.toIntOrNull() ?: return@delete call.respond("Invalid post ID")
                 val deleted = PostDao.deletePost(id)
                 if (deleted) {
                     call.respond("Post deleted successfully")
                 } else {
-                    call.respond("Post not found", status = HttpStatusCode.NotFound)
+                    call.respond("Post not found")
                 }
             }
 
-             */
+
         }
     }
 }

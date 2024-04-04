@@ -1,9 +1,11 @@
 package de.kaan.models
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
+@Serializable
 data class User (
-    val userId: Int,
+    val userId: Int? = null,
     val username: String,
     val firstname: String,
     val lastname: String,
