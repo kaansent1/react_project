@@ -1,0 +1,25 @@
+openapi: 3.0.3
+info:
+  description: API für die Verwaltung von Usern und Posts
+  title: Social-React API
+  version: 1.0.187
+servers:
+- url: http://0.0.0.0:8080
+paths:
+  /:
+    get:
+      description: Kaans Server
+      responses:
+        "200":
+          content:
+            text/plain:
+              examples:
+                Example#1:
+                  value: Hello World!
+              schema:
+                type: string
+          description: OK
+      x-accepts: text/plain
+components:
+  schemas: {}
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="de.kaan.backend.main" target="11" />
+      <module name="de.kaan.backend.test" target="11" />
+      <module name="ktor_backend" target="11" />
+      <module name="ktor_backend.main" target="11" />
+      <module name="ktor_backend.test" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
