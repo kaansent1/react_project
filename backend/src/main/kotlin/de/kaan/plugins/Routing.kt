@@ -22,7 +22,7 @@ fun Application.configureRouting() {
                 call.respondText("User added successfully with ID: $userId", status = HttpStatusCode.Created)
             }
 
-            put("/updateUser/{id}") {
+            put("/{id}") {
                 val id = call.parameters["userId"]?.toIntOrNull() ?: return@put call.respond("Invalid user ID")
                 val user = call.receive<User>()
                 UserDao.updateUser(id, user)
@@ -53,7 +53,7 @@ fun Application.configureRouting() {
                 call.respondText("Post added successfully with ID: $postId", status = HttpStatusCode.Created)
             }
 
-            put("/updatePost/{id}") {
+            put("/{id}") {
                 val id = call.parameters["postId"]?.toIntOrNull() ?: return@put call.respond("Invalid post ID")
                 val post = call.receive<Post>()
                 PostDao.updatePost(id, post)

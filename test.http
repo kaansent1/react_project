@@ -1,0 +1,10 @@
+###
+POST http://localhost:8080/users/add
+Content-Type: application/json
+
+{
+  "username": "Spanky Ham",
+  "firstname": "Kaan",
+  "lastname": "Sentürk",
+  "email": "ksentuerk@progeek.de"
+}
