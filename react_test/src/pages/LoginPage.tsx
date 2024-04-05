@@ -22,10 +22,26 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
     });
     const [showRegister, setShowRegister] = useState(false);
 
-    const handleLogin = (event: React.FormEvent) => {
-        event.preventDefault();
-
-        onSubmit(formData);
+    const handleLogin = async (event: React.FormEvent) => {
+        event.preventDefault()
+        const response = await fetch("http://localhost:8080/login/authenticate", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: formData.username,
+                password: formData.password,
+                email: formData.email
+            }),
+        });
+        if (response.ok) {
+            showSuccess('Erfolgreich angemeldet');
+            onSubmit(formData)
+        }
+        else {
+            showError('Anmeldung fehlgeschlagen')
+        }
     };
 
     const handleRegister = async (event: React.FormEvent) => {
@@ -38,14 +54,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
             body: JSON.stringify({
                 username: formData.username,
                 password: formData.password,
-                email: formData.email,
             }),
         });
         if (response.ok) {
             showSuccess('Erfolgreich registriert');
         }
         else {
-            showError('Registrierung fehlgesschlagen')
+            showError('Registrierung fehlgeschlagen')
         }
     };
 
