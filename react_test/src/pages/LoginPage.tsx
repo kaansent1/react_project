@@ -54,6 +54,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
             body: JSON.stringify({
                 username: formData.username,
                 password: formData.password,
+                email: formData.email
             }),
         });
         if (response.ok) {
