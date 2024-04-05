@@ -23,7 +23,7 @@ fun Application.configureRouting() {
             }
 
             put("/{id}") {
-                val id = call.parameters["userId"]?.toIntOrNull() ?: return@put call.respond("Invalid user ID")
+                val id = call.parameters["id"]?.toIntOrNull() ?: return@put call.respond("Invalid user ID")
                 val user = call.receive<User>()
                 UserDao.updateUser(id, user)
                 call.respond("User updated successfully")
@@ -54,7 +54,7 @@ fun Application.configureRouting() {
             }
 
             put("/{id}") {
-                val id = call.parameters["postId"]?.toIntOrNull() ?: return@put call.respond("Invalid post ID")
+                val id = call.parameters["id"]?.toIntOrNull() ?: return@put call.respond("Invalid post ID")
                 val post = call.receive<Post>()
                 PostDao.updatePost(id, post)
                 call.respond("Post updated successfully")

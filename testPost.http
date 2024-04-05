@@ -1,0 +1,25 @@
+###
+POST http://localhost:8080/posts/add
+Content-Type: application/json
+
+{
+  "userId": 8,
+  "text": "Deez Nuts"
+}
+
+
+###
+PUT http://localhost:8080/posts/3
+Content-Type: application/json
+
+{
+  "userId": 8,
+  "text": "Got' em"
+}
+
+
+###
+DELETE http://localhost:8080/posts/3
+
+###
+GET http://localhost:8080/posts/allPosts

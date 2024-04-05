@@ -1,0 +1,29 @@
+###
+POST http://localhost:8080/users/add
+Content-Type: application/json
+
+{
+  "username": "Spanky Ham",
+  "firstname": "Kaan",
+  "lastname": "Sentürk",
+  "email": "ksentuerk@progeek.de"
+}
+
+
+###
+PUT http://localhost:8080/users/7
+Content-Type: application/json
+
+{
+  "username": "TommusBlockus",
+  "firstname": "Tom",
+  "lastname": "Becke",
+  "email": "tbecke@progeek.de"
+}
+
+
+###
+DELETE http://localhost:8080/users/7
+
+###
+GET http://localhost:8080/users/allUsers
