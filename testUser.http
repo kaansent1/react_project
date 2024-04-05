@@ -4,8 +4,6 @@ Content-Type: application/json
 
 {
   "username": "Spanky Ham",
-  "firstname": "Kaan",
-  "lastname": "Sentürk",
   "email": "ksentuerk@progeek.de"
 }
 
@@ -16,14 +14,13 @@ Content-Type: application/json
 
 {
   "username": "TommusBlockus",
-  "firstname": "Tom",
-  "lastname": "Becke",
   "email": "tbecke@progeek.de"
 }
 
 
 ###
-DELETE http://localhost:8080/users/7
+DELETE http://localhost:8080/users/13
+
 
 ###
 GET http://localhost:8080/users/allUsers

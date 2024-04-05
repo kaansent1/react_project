@@ -28,10 +28,25 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
         onSubmit(formData);
     };
 
-    const handleRegister = (event: React.FormEvent) => {
+    const handleRegister = async (event: React.FormEvent) => {
         event.preventDefault();
-
-        showSuccess('Erfolgreich registriert');
+        const response = await fetch("http://localhost:8080/users/add", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: formData.username,
+                password: formData.password,
+                email: formData.email,
+            }),
+        });
+        if (response.ok) {
+            showSuccess('Erfolgreich registriert');
+        }
+        else {
+            showError('Registrierung fehlgesschlagen')
+        }
     };
 
     const handleToggleRegister = () => {
@@ -60,6 +75,19 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
         });
     };
 
+    const showError = (message: string) => {
+        Swal.fire({
+            title: 'Fehler',
+            text: message,
+            icon: 'info',
+            showCloseButton: false,
+            confirmButtonText: 'Schließen',
+        }).then(result => {
+            if (result.value) {
+                setShowRegister(false);
+            }
+        });
+    };
 
     return (
         <div className="login-container">

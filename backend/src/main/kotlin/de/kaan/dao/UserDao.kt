@@ -5,16 +5,20 @@ import de.kaan.utils.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.mindrot.jbcrypt.BCrypt
 
 object UserDao {
 
     private fun resultRowToUser(row: ResultRow) = User(
         userId = row[Users.userId],
         username = row[Users.username],
-        firstname = row[Users.firstname],
-        lastname = row[Users.lastname],
+        password = row[Users.password],
         email = row[Users.email]
     )
+
+    private fun hashPassword(password: String): String {
+        return BCrypt.hashpw(password, BCrypt.gensalt())
+    }
 
     suspend fun allUsers(): List<User> = dbQuery {
         Users.selectAll().map(::resultRowToUser)
@@ -23,8 +27,7 @@ object UserDao {
     suspend fun addUser(user: User): Int = dbQuery {
         Users.insert {
             it[username] = user.username
-            it[firstname] = user.firstname
-            it[lastname] = user.lastname
+            it[password] = hashPassword(user.password)
             it[email] = user.email
         } get Users.userId
     }
@@ -32,8 +35,7 @@ object UserDao {
     suspend fun updateUser(id: Int, user: User): Int = dbQuery {
         Users.update({ Users.userId eq id }) {
             it[username] = user.username
-            it[firstname] = user.firstname
-            it[lastname] = user.lastname
+            it[password] = hashPassword(user.password)
             it[email] = user.email
         }
     }
@@ -43,5 +45,4 @@ object UserDao {
             Users.deleteWhere { userId eq id } > 0
         }
     }
-
 }
