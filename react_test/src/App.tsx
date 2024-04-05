@@ -4,6 +4,7 @@ import AddPostPage from "./pages/AddPostPage.tsx"
 import PostDetailPage from "./pages/PostDetailPage.tsx"
 import React from "react";
 import AuthOverlay from "./components/AuthOverlay.tsx";
+import UserDetailPage from "./pages/UserDetailPage.tsx";
 
 const App: React.FC = () => {
     return (
@@ -13,6 +14,7 @@ const App: React.FC = () => {
                     <Route path="/" element={<HomePage/>}/>
                     <Route path="/new" element={<AddPostPage/>}/>
                     <Route path="/details/post/:postId" element={<PostDetailPage/>}/>
+                    <Route path="/account" element={<UserDetailPage/>}/>
                 </Routes>
             </AuthOverlay>
         </BrowserRouter>

@@ -10,6 +10,7 @@ const AuthOverlay = ({ children }: AuthOverlayProps) => {
     const [authenticated, setAuthenticated] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("")
 
     async function onSubmit(data: LoginFormData) {
         try {
@@ -21,24 +22,29 @@ const AuthOverlay = ({ children }: AuthOverlayProps) => {
                 body: JSON.stringify({
                     username: data.username,
                     password: data.password,
+                    email: data.email
+
                 }),
             });
 
             if (response.ok) {
-                setAuthenticated(true);
-                setUsername(data.username);
+                setAuthenticated(true)
+                setUsername(data.username)
                 setPassword(data.password)
+                setEmail(data.email)
             } else {
-                console.error("Login failed.");
+                console.error("Login failed.")
             }
         } catch (error) {
-            console.error("An error occurred during login:", error);
+            console.error("An error occurred during login:", error)
         }
     }
 
     function logout() {
         setAuthenticated(false);
-        setUsername("");
+        setUsername("")
+        setPassword("")
+        setEmail("")
     }
 
     return (
@@ -46,7 +52,7 @@ const AuthOverlay = ({ children }: AuthOverlayProps) => {
             {!authenticated ? (
                 <LoginPage onSubmit={onSubmit} />
             ) : (
-                <AuthContext.Provider value={{ authenticated, username, password, logout }}>
+                <AuthContext.Provider value={{ authenticated, username, password, email, logout }}>
                     {children}
                 </AuthContext.Provider>
             )}

@@ -78,6 +78,7 @@ fun Application.configureRouting() {
                 val user = UserDao.getUserByUsername(loginCredentials.username)
                 if (user != null && BCrypt.checkpw(loginCredentials.password, user.password)) {
                     call.respondText("Login successful")
+                    print(loginCredentials)
                 } else {
                     call.respond(HttpStatusCode.Unauthorized, "Invalid username or password")
                 }
