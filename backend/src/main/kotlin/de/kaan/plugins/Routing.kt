@@ -7,6 +7,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.mindrot.jbcrypt.BCrypt
 
 fun Application.configureRouting() {
     routing {
@@ -70,7 +71,17 @@ fun Application.configureRouting() {
                 }
             }
 
-
+        }
+        route("/login") {
+            post("/authenticate") {
+                val loginCredentials = call.receive<LoginCredentials>()
+                val user = UserDao.getUserByUsername(loginCredentials.username)
+                if (user != null && BCrypt.checkpw(loginCredentials.password, user.password)) {
+                    call.respondText("Login successful")
+                } else {
+                    call.respond(HttpStatusCode.Unauthorized, "Invalid username or password")
+                }
+            }
         }
     }
 }

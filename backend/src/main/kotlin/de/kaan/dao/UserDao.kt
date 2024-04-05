@@ -45,4 +45,11 @@ object UserDao {
             Users.deleteWhere { userId eq id } > 0
         }
     }
+
+    suspend fun getUserByUsername(username: String): User? = dbQuery {
+        Users.select { Users.username eq username }
+            .mapNotNull { resultRowToUser(it) }
+            .singleOrNull()
+    }
+
 }
