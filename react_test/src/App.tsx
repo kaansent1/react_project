@@ -2,22 +2,38 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import HomePage from "./pages/HomePage.tsx";
 import AddPostPage from "./pages/AddPostPage.tsx"
 import PostDetailPage from "./pages/PostDetailPage.tsx"
-import React from "react";
+import React, {useState} from "react";
 import UserDetailPage from "./pages/UserDetailPage.tsx";
-import AuthOverlay from "./context/AuthOverlay.tsx";
-
+import LoginPage from "./pages/LoginPage.tsx";
+import {ClientContext} from "./context/ClientContext.tsx";
+import {User} from "./api/user.ts";
+/*
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import {queryClient} from "./api/client.ts";
+*/
 const App: React.FC = () => {
+    const [client, setClient] = useState<User>({
+        username: "",
+        email: "",
+        avatar: "",
+        userId: 0
+    })
     return (
-        <BrowserRouter>
-            <AuthOverlay>
+        //<QueryClientProvider client={queryClient}>
+        <ClientContext.Provider value={{client, setClient}}>
+            <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<HomePage/>}/>
+                    <Route path="/" element={<LoginPage/>}/>
+                    <Route path="/home" element={<HomePage/>}/>
                     <Route path="/new" element={<AddPostPage/>}/>
                     <Route path="/details/post/:postId" element={<PostDetailPage/>}/>
                     <Route path="/account" element={<UserDetailPage/>}/>
                 </Routes>
-            </AuthOverlay>
-        </BrowserRouter>
+            </BrowserRouter>
+        </ClientContext.Provider>
+           // <ReactQueryDevtools initialIsOpen={false} />
+       // </QueryClientProvider>
     );
 };
 

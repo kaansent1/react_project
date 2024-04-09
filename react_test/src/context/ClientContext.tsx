@@ -1,0 +1,26 @@
+import {createContext, useContext} from 'react';
+import {User} from "../api/user.ts";
+
+
+const initialClientState: User = {
+    userId: 0,
+    username: '',
+    avatar: '',
+    email: ''
+};
+
+export const ClientContext = createContext<{
+    client: User;
+    setClient: (client: User) => void;
+    children?: Element[];
+}>({
+    client: initialClientState,
+    setClient: (newClient) => {
+        // @ts-ignore
+        this.client = newClient
+    },
+});
+
+const useClient = () => useContext(ClientContext);
+
+export {useClient};

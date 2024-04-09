@@ -14,7 +14,7 @@ data class PostRow(
     val text: String,
     val image: String? = null,
     val createdAt: String,
-    val userName: String,
+    val username: String,
     val userImage: String?
     )
 

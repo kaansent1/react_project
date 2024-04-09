@@ -20,7 +20,7 @@ const PostForm = () => {
     function onSubmit(data: PostFormData) {
         const imageData = data.image?.[0];
         const postData = { ...data, image: imageData ? URL.createObjectURL(imageData) : undefined };
-        db.posts.add(postData).then(() => navigate("/"));
+        db.posts.add(postData).then(() => navigate("/home"));
     }
 
     return (

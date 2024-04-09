@@ -15,7 +15,7 @@ data class Post(
     val image: String?,
     val createdAt: String,
     val userId: Long,
-    val userName: String,
+    val username: String,
     val userImage: String?,
     val isOwnPost: Boolean
 )

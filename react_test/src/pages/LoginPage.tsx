@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Swal from 'sweetalert2';
 import "../styles/LoginStyle.css";
+import {useNavigate} from "react-router-dom";
+import {useClient} from "../context/ClientContext.tsx";
 
 export interface LoginFormData {
     username: string;
@@ -9,11 +11,8 @@ export interface LoginFormData {
     repeatPassword: string;
 }
 
-interface LoginPageProps {
-    onSubmit: (data: LoginFormData) => void;
-}
 
-const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
+function LoginPage() {
     const [formData, setFormData] = useState<LoginFormData>({
         username: '',
         password: '',
@@ -21,18 +20,42 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
         repeatPassword: '',
     });
     const [showRegister, setShowRegister] = useState(false);
+    const navigate = useNavigate()
+
+    const {setClient} = useClient();
 
     const handleLogin = async (event: React.FormEvent) => {
         event.preventDefault();
-        onSubmit(formData);
-    }
+
+        const response = await fetch("http://localhost:8080/login", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: formData.username,
+                password: formData.password
+            }),
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            const userData = responseData.data;
+            console.log(responseData)
+            setClient({
+                userId: userData.userId,
+                username: userData.username,
+                avatar: userData.avatar,
+                email: userData.email
+            });
+            navigate("/home");
+        } else {
+            showError('Login fehlgeschlagen');
+        }
+    };
 
     const handleRegister = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (formData.password !== formData.repeatPassword) {
-            showError('Passwort und wiederholtes Passwort stimmen nicht überein');
-            return;
-        }
 
         const response = await fetch("http://localhost:8080/register", {
             method: 'POST',
@@ -45,12 +68,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
                 email: formData.email
             }),
         });
+
         if (response.ok) {
             showSuccess('Erfolgreich registriert');
-            console.log(response)
         } else {
-            showError('Registrierung fehlgeschlagen')
-            console.log(response)
+            showError('Registrierung fehlgeschlagen');
         }
     };
 

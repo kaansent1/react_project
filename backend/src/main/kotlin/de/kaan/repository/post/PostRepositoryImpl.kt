@@ -99,7 +99,7 @@ class PostRepositoryImpl(
             createdAt = postRow.createdAt,
             userId = postRow.userId,
             userImage = postRow.userImage,
-            userName = postRow.userName,
+            username = postRow.username,
             isOwnPost = isOwnPost,
         )
     }

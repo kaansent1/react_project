@@ -11,7 +11,7 @@ function Header() {
             </div>
             Social-React
             <div className="right">
-                <Link to="/">
+                <Link to="/home">
                     <HomeIcon sx={{ fontSize: 40, color: 'white', mt: '0.4em'}} />
                 </Link>
 

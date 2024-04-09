@@ -1,14 +1,16 @@
 import "../styles/FooterStyle.css";
 import { Typography } from "@mui/material";
-import { useAuth } from "../context/AuthContext.tsx";
+import {useClient} from "../context/ClientContext.tsx";
+
 
 function Footer() {
-    const { username } = useAuth();
+
+    const {client} = useClient()
 
     return (
         <div className="footer">
             <Typography variant="h6" className="footer-typography">
-                Hallo, {username}!
+                Willkommen, {client.username}!
             </Typography>
         </div>
     );

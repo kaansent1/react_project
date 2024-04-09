@@ -16,7 +16,7 @@ class PostDaoImpl : PostDao {
             image = row[PostsTable.image],
             createdAt = row[PostsTable.createdAt].toString(),
             userId = row[PostsTable.userId],
-            userName = row[UserTable.username],
+            username = row[UserTable.username],
             userImage = row[UserTable.image]
         )
     }
