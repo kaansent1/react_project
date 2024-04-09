@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import "../styles/DropDownMenuStyle.css";
-import {useAuth} from "./AuthContext.tsx";
+import {useAuth} from "../context/AuthContext.tsx";
 
 function DropdownMenu() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);

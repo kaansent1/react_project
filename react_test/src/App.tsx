@@ -3,8 +3,8 @@ import HomePage from "./pages/HomePage.tsx";
 import AddPostPage from "./pages/AddPostPage.tsx"
 import PostDetailPage from "./pages/PostDetailPage.tsx"
 import React from "react";
-import AuthOverlay from "./components/AuthOverlay.tsx";
 import UserDetailPage from "./pages/UserDetailPage.tsx";
+import AuthOverlay from "./context/AuthOverlay.tsx";
 
 const App: React.FC = () => {
     return (

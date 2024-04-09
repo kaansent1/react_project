@@ -1,6 +1,6 @@
 package de.kaan
 
-import io.github.smiley4.ktorswaggerui.SwaggerUI
+import de.kaan.di.configureDI
 import de.kaan.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -16,22 +16,8 @@ fun Application.module() {
     configureSecurity()
     configureHTTP()
     configureSerialization()
+    configureDI()
     configureRouting()
-    install(SwaggerUI) {
-        swagger {
-            swaggerUrl = "swagger-ui"
-            forwardRoot = true
-        }
-        info {
-            title = "Social-React Api"
-            version = "latest"
-            description = "API zur Verwaltung von Posts und Usern"
-        }
-        server {
-            url = "http://localhost:8080"
-            description = "Kaans Server"
-        }
-    }
 }
 
 

@@ -23,30 +23,18 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
     const [showRegister, setShowRegister] = useState(false);
 
     const handleLogin = async (event: React.FormEvent) => {
-        event.preventDefault()
-        const response = await fetch("http://localhost:8080/login/authenticate", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: formData.username,
-                password: formData.password,
-                email: formData.email
-            }),
-        });
-        if (response.ok) {
-            showSuccess('Erfolgreich angemeldet');
-            onSubmit(formData)
-        }
-        else {
-            showError('Anmeldung fehlgeschlagen')
-        }
-    };
+        event.preventDefault();
+        onSubmit(formData);
+    }
 
     const handleRegister = async (event: React.FormEvent) => {
         event.preventDefault();
-        const response = await fetch("http://localhost:8080/users/add", {
+        if (formData.password !== formData.repeatPassword) {
+            showError('Passwort und wiederholtes Passwort stimmen nicht überein');
+            return;
+        }
+
+        const response = await fetch("http://localhost:8080/register", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -59,9 +47,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
         });
         if (response.ok) {
             showSuccess('Erfolgreich registriert');
-        }
-        else {
+            console.log(response)
+        } else {
             showError('Registrierung fehlgeschlagen')
+            console.log(response)
         }
     };
 
@@ -70,7 +59,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
+        const {name, value} = event.target;
         setFormData(prevState => ({
             ...prevState,
             [name]: value
@@ -104,7 +93,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSubmit }) => {
             }
         });
     };
-
     return (
         <div className="login-container">
             {/* Animated background and title container */}

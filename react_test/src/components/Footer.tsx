@@ -1,6 +1,6 @@
 import "../styles/FooterStyle.css";
 import { Typography } from "@mui/material";
-import { useAuth } from "./AuthContext.tsx";
+import { useAuth } from "../context/AuthContext.tsx";
 
 function Footer() {
     const { username } = useAuth();

@@ -5,7 +5,10 @@ export interface AuthContext {
     username: string,
     password: string,
     email: string,
-    logout: () => void
+    logout: () => void,
+    updateUser: (userData: { username: string; email: string }) => void;
+
+
 }
 
 const defaultState: AuthContext = {
@@ -13,12 +16,16 @@ const defaultState: AuthContext = {
     username: "",
     password: "",
     email: "",
-    logout: () => {}
-}
+    logout: () => {},
+    updateUser: () => {},
 
-const AuthContext = React.createContext<AuthContext>(defaultState)
+
+}
 
 export function useAuth() {
     return useContext(AuthContext)
 }
+
+const AuthContext = React.createContext<AuthContext>(defaultState)
+
 export default AuthContext

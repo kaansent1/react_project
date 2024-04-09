@@ -6,15 +6,23 @@ interface AuthOverlayProps {
     children?: React.ReactElement
 }
 
+export interface User {
+    username: string;
+    email: string;
+}
+
 const AuthOverlay = ({ children }: AuthOverlayProps) => {
     const [authenticated, setAuthenticated] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
-
+    const updateUser = ({ username, email }: { username: string; email: string }) => {
+        setUsername(username);
+        setEmail(email);
+    };
     async function onSubmit(data: LoginFormData) {
         try {
-            const response = await fetch("http://localhost:8080/login/authenticate", {
+            const response = await fetch("http://localhost:8080/login", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -22,8 +30,6 @@ const AuthOverlay = ({ children }: AuthOverlayProps) => {
                 body: JSON.stringify({
                     username: data.username,
                     password: data.password,
-                    email: data.email
-
                 }),
             });
 
@@ -33,26 +39,28 @@ const AuthOverlay = ({ children }: AuthOverlayProps) => {
                 setPassword(data.password)
                 setEmail(data.email)
             } else {
-                console.error("Login failed.")
+                console.error("Login failed.", response)
             }
         } catch (error) {
             console.error("An error occurred during login:", error)
         }
     }
 
+
     function logout() {
         setAuthenticated(false);
-        setUsername("")
-        setPassword("")
-        setEmail("")
+        setUsername("");
+        setPassword("");
+        setEmail("");
     }
+
 
     return (
         <>
             {!authenticated ? (
                 <LoginPage onSubmit={onSubmit} />
             ) : (
-                <AuthContext.Provider value={{ authenticated, username, password, email, logout }}>
+                <AuthContext.Provider value={{ authenticated, username, password, email, logout, updateUser }}>
                     {children}
                 </AuthContext.Provider>
             )}
