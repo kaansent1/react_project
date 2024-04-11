@@ -7,16 +7,13 @@ data class UpdateUserParams(
     val userId: Long,
     val username: String,
     val email: String,
-    val image: String? = null
 )
 
 @Serializable
 data class Profile(
-    val id: Long,
+    val userId: Long,
     val username: String,
     val email: String,
-    val image: String? = null,
-    val isOwnProfile: Boolean
 )
 
 @Serializable

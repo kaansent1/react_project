@@ -3,8 +3,9 @@ import Button from "@mui/material/Button";
 import { Box, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { db } from "../api/db.ts";
 import { User } from "../api/user.ts";
+import axios from "axios";
+import { useClient } from '../context/ClientContext';
 
 interface PostFormData {
     postId: string;
@@ -14,15 +15,31 @@ interface PostFormData {
 }
 
 const PostForm = () => {
-    const { handleSubmit, register } = useForm<PostFormData>();
+    const { handleSubmit, register, reset } = useForm<PostFormData>();
     const navigate = useNavigate();
+    const { client } = useClient();
 
-    function onSubmit(data: PostFormData) {
-        const imageData = data.image?.[0];
-        const postData = { ...data, image: imageData ? URL.createObjectURL(imageData) : undefined };
-        db.posts.add(postData).then(() => navigate("/home"));
+
+    async function onSubmit(data: PostFormData) {
+        const formData = new FormData();
+        if (data.image && data.image[0]) {
+            formData.append('image', data.image[0]);
+        }
+        formData.append('post_data', JSON.stringify({ text: data.text, userId: client.userId }));
+
+            const response = await axios.post('http://localhost:8080/post/create', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            if (response.data.success) {
+                navigate("/home");
+            } else {
+                console.error('Ein Fehler ist aufgetreten: ', response.data.message);
+            }
+
+        reset();
     }
-
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}

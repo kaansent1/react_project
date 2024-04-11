@@ -17,4 +17,7 @@ interface PostRepository {
     suspend fun getPost(postId: Long, currentUserId: Long): Response<PostResponse>
 
     suspend fun deletePost(postId: Long): Response<PostResponse>
+
+    suspend fun getAllPosts(): Response<PostsResponse>
+
 }

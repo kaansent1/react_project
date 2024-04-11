@@ -21,7 +21,7 @@ data class PostRow(
 object PostsTable : Table(name = "posts") {
 
     val postId = long("postId").uniqueIndex()
-    val userId = long(name = "user_id").references(ref = UserTable.userId, onDelete = ReferenceOption.CASCADE)
+    val userId = long("userId").references(ref = UserTable.userId, onDelete = ReferenceOption.CASCADE)
     val text = varchar("text", 128)
     val image = varchar("image", 1024)
     val createdAt = datetime(name = "created_at").defaultExpression(defaultValue = CurrentDateTime)

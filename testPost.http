@@ -1,25 +1,14 @@
 ###
-POST http://localhost:8080/posts/add
-Content-Type: application/json
+POST http://localhost:8080/post/create
+Content-Type: multipart/form-data; boundary=WebAppBoundary
 
-{
-  "userId": 8,
-  "text": "Deez Nuts"
-}
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="example.png"
+Content-Type: image/png
 
+< .backend/src/main/kotlin/de/kaan/assets/post_images/
+--WebAppBoundary
+Content-Disposition: form-data; name="post_data"
 
-###
-PUT http://localhost:8080/posts/3
-Content-Type: application/json
-
-{
-  "userId": 8,
-  "text": "Got' em"
-}
-
-
-###
-DELETE http://localhost:8080/posts/3
-
-###
-GET http://localhost:8080/posts/allPosts
+{"text":"Das ist ein Beispieltext", "userId":566175986081599488}
+--WebAppBoundary--

@@ -20,10 +20,8 @@ class ProfileRepositoryImpl(
                 data = ProfileResponse(success = false, message = "Could not find user with id: $userId")
             )
         } else {
-            val isOwnProfile = userId == currentUserId
-
             Response.Success(
-                data = ProfileResponse(success = true, profile = toProfile(userRow, isOwnProfile))
+                data = ProfileResponse(success = true, profile = toProfile(userRow))
             )
         }
     }
@@ -36,7 +34,6 @@ class ProfileRepositoryImpl(
                 userId = updateUserParams.userId,
                 username = updateUserParams.username,
                 email = updateUserParams.email,
-                image = updateUserParams.image
             )
 
             return if (userUpdated) {
@@ -60,13 +57,31 @@ class ProfileRepositoryImpl(
         }
     }
 
-    private fun toProfile(userRow: UserRow, isOwnProfile: Boolean): Profile {
+    override suspend fun deleteUser(userId: Long): Response<ProfileResponse> {
+        val userIsDeleted = userDao.deleteUser(
+            userId = userId
+        )
+
+        return if (userIsDeleted){
+            Response.Success(
+                data = ProfileResponse(success = true)
+            )
+        }else{
+            Response.Error(
+                code = HttpStatusCode.InternalServerError,
+                data = ProfileResponse(
+                    success = false,
+                    message = "User could not be deleted from the db"
+                )
+            )
+        }
+    }
+
+    private fun toProfile(userRow: UserRow): Profile {
         return Profile(
-            id = userRow.userId,
+            userId = userRow.userId,
             username = userRow.username,
             email = userRow.email,
-            image = userRow.image,
-            isOwnProfile = isOwnProfile
         )
     }
 }

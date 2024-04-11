@@ -91,6 +91,25 @@ class PostRepositoryImpl(
         }
     }
 
+    override suspend fun getAllPosts(): Response<PostsResponse> {
+        val postsRows = postDao.getAllPosts()
+
+        val posts = postsRows.map {
+            toPost(
+                postRow = it,
+                isOwnPost = false
+            )
+        }
+
+        return Response.Success(
+            data = PostsResponse(
+                success = true,
+                posts = posts
+            )
+        )
+    }
+
+
     private fun toPost(postRow: PostRow, isOwnPost: Boolean): Post {
         return Post(
             postId = postRow.postId,

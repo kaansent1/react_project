@@ -14,4 +14,6 @@ interface PostDao {
 
     suspend fun deletePost(postId: Long): Boolean
 
+    suspend fun getAllPosts(): List<PostRow>
+
 }

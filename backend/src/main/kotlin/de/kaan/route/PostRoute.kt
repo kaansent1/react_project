@@ -77,7 +77,7 @@ fun Routing.postRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = PostResponse(
                         success = false,
-                        message = "An unexpected error has occured, try again!"
+                        message = "Unexpected error"
                     )
                 )
             }
@@ -98,8 +98,7 @@ fun Routing.postRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = PostResponse(
                         success = false,
-                        message = "An unexpected error has occured, try again!"
-                    )
+                        message = "Unexpected error"                    )
                 )
             }
         }
@@ -128,7 +127,24 @@ fun Routing.postRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = PostsResponse(
                         success = false,
-                        message = "An unexpected error has occurred, try again!"
+                        message = "Unexpected error"                    )
+                )
+            }
+        }
+
+        get(path = "/all") {
+            try {
+                val result = postRepository.getAllPosts()
+                call.respond(
+                    status = result.code,
+                    message = result.data
+                )
+            } catch (anyError: Throwable) {
+                call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = PostsResponse(
+                        success = false,
+                        message = "Unexpected error"
                     )
                 )
             }

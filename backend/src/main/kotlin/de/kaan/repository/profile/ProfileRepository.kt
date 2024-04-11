@@ -9,4 +9,6 @@ interface ProfileRepository {
     suspend fun getUserById(userId: Long, currentUserId: Long): Response<ProfileResponse>
 
     suspend fun updateUser(updateUserParams: UpdateUserParams): Response<ProfileResponse>
+
+    suspend fun deleteUser(userId: Long): Response<ProfileResponse>
 }

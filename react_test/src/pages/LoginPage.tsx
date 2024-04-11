@@ -41,7 +41,7 @@ function LoginPage() {
         if (response.ok) {
             const responseData = await response.json();
             const userData = responseData.data;
-            console.log(responseData)
+            console.log(userData)
             setClient({
                 userId: userData.userId,
                 username: userData.username,

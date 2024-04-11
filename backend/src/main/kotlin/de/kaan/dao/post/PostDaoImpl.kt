@@ -15,7 +15,7 @@ class PostDaoImpl : PostDao {
             text = row[PostsTable.text],
             image = row[PostsTable.image],
             createdAt = row[PostsTable.createdAt].toString(),
-            userId = row[PostsTable.userId],
+            userId = row[UserTable.userId],
             username = row[UserTable.username],
             userImage = row[UserTable.image]
         )
@@ -74,4 +74,18 @@ class PostDaoImpl : PostDao {
         }
     }
 
+    override suspend fun getAllPosts(): List<PostRow> {
+        return dbQuery {
+            PostsTable
+                .join(
+                    otherTable = UserTable,
+                    onColumn = PostsTable.userId,
+                    otherColumn = UserTable.userId,
+                    joinType = JoinType.INNER
+                )
+                .selectAll()
+                .orderBy(column = PostsTable.createdAt, order = SortOrder.DESC)
+                .map { postToRow(it) }
+        }
+    }
 }

@@ -17,11 +17,3 @@ Content-Type: application/json
   "email": "tbecke@progeek.de",
   "password": "test"
 }
-
-
-###
-DELETE http://localhost:8080/users/9
-
-
-###
-GET http://localhost:8080/users/allUsers
