@@ -16,7 +16,8 @@ class PostRepositoryImpl(
         val postIsCreated = postDao.createPost(
             text = postTextParams.text,
             image = image,
-            userId = postTextParams.userId
+            userId = postTextParams.userId,
+            username = postTextParams.username
         )
 
         return if (postIsCreated) {

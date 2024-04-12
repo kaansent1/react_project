@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PostTextParams(
     val text: String,
-    val userId: Long
+    val userId: Long,
+    val username: String,
 )
 
 @Serializable

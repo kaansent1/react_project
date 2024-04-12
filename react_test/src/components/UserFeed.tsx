@@ -1,34 +1,41 @@
-import {Container, Grid, Typography, TextField, InputAdornment, useMediaQuery} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import SearchIcon from '@mui/icons-material/Search';
-import { useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
+import { useState, useEffect } from 'react';
+import { Container, Grid, InputAdornment, TextField, Typography, useMediaQuery } from "@mui/material";
 import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from '@mui/icons-material/Search';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { Post } from '../api/post';
 
-interface Post {
-    postId: string;
-    text: string;
-    image?: string;
-}
-
-interface UserFeedProps {
-    posts: Post[];
-}
-
-function UserFeed({ posts }: UserFeedProps) {
+function UserFeed() {
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
     const isSmallScreen = useMediaQuery('(max-width:950px)');
 
-    let displayedPosts = posts;
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get('http://192.168.1.113:8080/posts/all');
+                setPosts(response.data.posts);
+            } catch (error) {
+                console.error('Fehler beim Abrufen der Posts:', error);
+            }
+        };
 
-    if (search !== '') {
-        displayedPosts = posts.filter((p) => {
-            return p.text.includes(search);
-        });
-    }
+        fetchPosts();
+    }, []);
 
-    const reversedPosts = [...displayedPosts].reverse();
+
+    useEffect(() => {
+        if (search === '') {
+            setFilteredPosts(posts);
+        } else {
+            const filtered = posts.filter(post => post.text.toLowerCase().includes(search.toLowerCase()));
+            setFilteredPosts(filtered);
+        }
+    }, [search, posts]);
 
     return (
         <div>
@@ -48,15 +55,14 @@ function UserFeed({ posts }: UserFeedProps) {
                 }}
                 sx={{ marginBottom: 2 }}
             />
-            {reversedPosts.length === 0 ? (
-                <Typography variant="body1" align="center" sx={{ fontSize: 20, marginTop: 4 }}>
-                    Keine Posts vorhanden
+            {filteredPosts.length === 0 ? (
+                <Typography variant="h6" sx={{ marginBottom: 2, marginTop: 3 }}>
+                    Keine Posts gefunden
                 </Typography>
             ) : (
-                reversedPosts.map((post) => (
+                filteredPosts.map((post) => (
                     <Container
                         key={post.postId}
-                        onClick={() => navigate(`/details/post/${post.postId}`)}
                         sx={{
                             width: 600,
                             padding: 2,
@@ -72,10 +78,13 @@ function UserFeed({ posts }: UserFeedProps) {
                     >
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <Typography variant="body1" align="left">
+                                <Typography variant="body1" align="left" sx={{ color: 'white',fontWeight: 'bold', marginBottom: 1 }}>
+                                    {post.username}
+                                </Typography>
+                                <Typography variant="body2" align="left" sx={{color: 'white', marginBottom: 1 }}>
                                     {post.text}
                                 </Typography>
-                                {post.image && <img src={post.image} style={{ maxWidth: '100%', marginTop: '10px' }} alt="" />}
+                                {post.image}
                             </Grid>
                         </Grid>
                     </Container>

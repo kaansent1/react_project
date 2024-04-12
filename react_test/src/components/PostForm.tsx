@@ -11,7 +11,7 @@ interface PostFormData {
     postId: string;
     text: string;
     user: User;
-    image?: FileList
+    image?: string
 }
 
 const PostForm = () => {
@@ -25,18 +25,19 @@ const PostForm = () => {
         if (data.image && data.image[0]) {
             formData.append('image', data.image[0]);
         }
-        formData.append('post_data', JSON.stringify({ text: data.text, userId: client.userId }));
+        formData.append('post_data', JSON.stringify({ text: data.text, userId: client.userId, username: client.username}));
 
-            const response = await axios.post('http://localhost:8080/post/create', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            if (response.data.success) {
-                navigate("/home");
-            } else {
-                console.error('Ein Fehler ist aufgetreten: ', response.data.message);
-            }
+        const response = await axios.post('http://192.168.1.113:8080/post/create', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        if (response.data.success) {
+            console.log(data.image)
+            navigate("/home");
+        } else {
+            console.error('Ein Fehler ist aufgetreten: ', response.data.message);
+        }
 
         reset();
     }
@@ -51,7 +52,14 @@ const PostForm = () => {
             }}
         >
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1, width: "40vh" }}>
-                <TextField label="Was möchtest du sagen..." {...register("text")} />
+                <TextField
+                    label="Was möchtest du sagen..."
+                    {...register("text")}
+                    multiline
+                    rows={8}
+                    variant="outlined"
+                    sx={{ marginBottom: 2, height: "auto" }}
+                />
                 <input
                     type="file"
                     accept="image/*"

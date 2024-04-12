@@ -2,7 +2,6 @@ package de.kaan.dao.user
 
 import de.kaan.models.RegisterCredentials
 import de.kaan.security.hashPassword
-import de.kaan.utils.IdGenerator
 import de.kaan.utils.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -13,7 +12,6 @@ class UserDaoImpl : UserDao {
     override suspend fun insert(params: RegisterCredentials): UserRow? {
         return dbQuery {
             val insertStatement = UserTable.insert {
-                it[userId] = IdGenerator.generateId()
                 it[username] = params.username
                 it[email] = params.email
                 it[password] = hashPassword(params.password)
@@ -24,6 +22,7 @@ class UserDaoImpl : UserDao {
             }
         }
     }
+
 
 
     override suspend fun findByUsername(username: String): UserRow? {

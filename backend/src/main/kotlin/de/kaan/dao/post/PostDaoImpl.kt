@@ -1,7 +1,6 @@
 package de.kaan.dao.post
 
 import de.kaan.dao.user.UserTable
-import de.kaan.utils.IdGenerator
 import de.kaan.utils.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -40,14 +39,13 @@ class PostDaoImpl : PostDao {
             .map { postToRow(it) }
     }
 
-
-    override suspend fun createPost(text: String, image: String, userId: Long): Boolean {
-        return dbQuery{
+    override suspend fun createPost(text: String, image: String, userId: Long, username: String): Boolean {
+        return dbQuery {
             val insertStatement = PostsTable.insert {
-                it[postId] = IdGenerator.generateId()
                 it[PostsTable.text] = text
                 it[PostsTable.image] = image
-                it[PostsTable.userId] = userId
+                it[UserTable.userId] = userId
+                it[UserTable.username] = username
             }
             insertStatement.resultedValues?.singleOrNull() != null
         }

@@ -15,7 +15,7 @@ data class UserRow (
 
 object UserTable : Table(name = "users") {
     val userId = long("userId").autoIncrement()
-    val username = varchar("username", 32)
+    val username = varchar("username", 32).uniqueIndex()
     val password = varchar("password", 64)
     val email = varchar("email", 64)
     val image= text(name = "image").nullable()

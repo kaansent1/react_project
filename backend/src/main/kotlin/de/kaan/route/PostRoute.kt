@@ -10,7 +10,6 @@ import de.kaan.utils.saveFile
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
 import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -45,7 +44,7 @@ fun Routing.postRouting() {
                 partData.dispose()
             }
 
-            val imageUrl = "${Constants.BASE_URL}${Constants.POST_IMAGES_FOLDER}$fileName"
+            val imageUrl = "http://192.168.1.113:${Constants.POST_IMAGES_FOLDER_PATH}$fileName"
 
             if (postTextParams == null) {
                 File("${Constants.POST_IMAGES_FOLDER_PATH}/$fileName").delete()

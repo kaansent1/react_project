@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 interface PostDao {
-    suspend fun createPost(text: String, image: String, userId: Long): Boolean
+    suspend fun createPost(text: String, image: String, userId: Long, username: String): Boolean
 
     suspend fun getPostByUser(userId: Long): List<PostRow>
 

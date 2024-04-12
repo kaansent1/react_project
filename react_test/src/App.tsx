@@ -1,7 +1,6 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import HomePage from "./pages/HomePage.tsx";
 import AddPostPage from "./pages/AddPostPage.tsx"
-import PostDetailPage from "./pages/PostDetailPage.tsx"
 import React, {useState} from "react";
 import UserDetailPage from "./pages/UserDetailPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
@@ -27,7 +26,6 @@ const App: React.FC = () => {
                     <Route path="/" element={<LoginPage/>}/>
                     <Route path="/home" element={<HomePage/>}/>
                     <Route path="/new" element={<AddPostPage/>}/>
-                    <Route path="/details/post/:postId" element={<PostDetailPage/>}/>
                     <Route path="/account" element={<UserDetailPage/>}/>
                 </Routes>
             </BrowserRouter>
