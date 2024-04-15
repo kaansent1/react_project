@@ -75,14 +75,12 @@ const PostDetailPage: React.FC = () => {
                 <Typography variant="h5" align="center">
                     {post.text}
                 </Typography>
-                {post.isOwnPost && (
                     <img src={post.image} alt="" style={{
                         width: 'auto',
                         maxHeight: '40vh',
                         marginBottom: '1rem',
                         marginTop: '1rem'
                     }}/>
-                )}
                 <Typography variant="body1" align="center">
                     {post.createdAt}
                 </Typography>
