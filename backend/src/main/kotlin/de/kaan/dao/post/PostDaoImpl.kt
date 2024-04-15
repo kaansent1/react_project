@@ -5,10 +5,11 @@ import de.kaan.utils.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
+import org.jetbrains.exposed.sql.transactions.transaction
 
 class PostDaoImpl : PostDao {
 
-    private fun postToRow(row: ResultRow): PostRow{
+    private fun postToRow(row: ResultRow): PostRow {
         return PostRow(
             postId = row[PostsTable.postId],
             text = row[PostsTable.text],
@@ -26,7 +27,7 @@ class PostDaoImpl : PostDao {
         }
     }
 
-    private fun getPosts(users: List<Long>): List<PostRow>{
+    private fun getPosts(users: List<Long>): List<PostRow> {
         return PostsTable
             .join(
                 otherTable = UserTable,
@@ -84,6 +85,14 @@ class PostDaoImpl : PostDao {
                 .selectAll()
                 .orderBy(column = PostsTable.createdAt, order = SortOrder.DESC)
                 .map { postToRow(it) }
+        }
+    }
+
+    override suspend fun editPost(postId: Long, newText: String): Boolean {
+        return transaction {
+            PostsTable.update({ PostsTable.postId eq postId }) {
+                it[text] = newText
+            } > 0
         }
     }
 }

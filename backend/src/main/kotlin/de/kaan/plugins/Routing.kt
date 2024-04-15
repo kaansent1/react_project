@@ -6,14 +6,13 @@ import de.kaan.route.profileRouting
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
 import io.ktor.server.routing.*
+import java.io.File
 
 fun Application.configureRouting() {
     routing {
         authRouting()
         postRouting()
         profileRouting()
-        static {
-            resources("static")
-        }
+        staticFiles("/static", File("/home/kaans/react_project/backend/src/main/kotlin/de/kaan/assets"))
     }
 }

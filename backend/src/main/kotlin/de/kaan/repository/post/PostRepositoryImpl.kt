@@ -64,7 +64,7 @@ class PostRepositoryImpl(
                 data = PostResponse(success = false, message = "Could not retrieve post from the database")
             )
         }else{
-            val isOwnPost = post.postId == currentUserId
+            val isOwnPost = post.userId == currentUserId
             Response.Success(
                 data = PostResponse(success = true, toPost(post, isOwnPost = isOwnPost))
             )
@@ -109,6 +109,25 @@ class PostRepositoryImpl(
             )
         )
     }
+
+    override suspend fun editPost(postId: Long, newText: String): Response<PostResponse> {
+        val postIsEdited = postDao.editPost(postId, newText)
+
+        return if (postIsEdited) {
+            Response.Success(
+                data = PostResponse(success = true)
+            )
+        } else {
+            Response.Error(
+                code = HttpStatusCode.InternalServerError,
+                data = PostResponse(
+                    success = false,
+                    message = "Post could not be edited in the db"
+                )
+            )
+        }
+    }
+
 
 
     private fun toPost(postRow: PostRow, isOwnPost: Boolean): Post {

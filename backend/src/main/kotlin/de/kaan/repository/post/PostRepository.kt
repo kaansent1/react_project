@@ -20,4 +20,5 @@ interface PostRepository {
 
     suspend fun getAllPosts(): Response<PostsResponse>
 
+    suspend fun editPost(postId: Long, newText: String): Response<PostResponse>
 }

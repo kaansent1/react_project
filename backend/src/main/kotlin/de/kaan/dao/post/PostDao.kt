@@ -16,4 +16,5 @@ interface PostDao {
 
     suspend fun getAllPosts(): List<PostRow>
 
+    suspend fun editPost(postId: Long, newText: String): Boolean
 }

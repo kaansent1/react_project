@@ -3,4 +3,7 @@ export interface Post {
     username: string;
     text: string;
     image?: string;
+    createdAt: string;
+    isOwnPost: boolean
+    userId: number
 }

@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { Container, Grid, InputAdornment, TextField, Typography, useMediaQuery } from "@mui/material";
+import {useState, useEffect} from 'react';
+import {Container, Grid, InputAdornment, TextField, Typography, useMediaQuery} from "@mui/material";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
-import { Post } from '../api/post';
+import {useNavigate} from "react-router-dom";
+import {Post} from '../api/post';
 
 function UserFeed() {
     const navigate = useNavigate();
@@ -16,17 +16,12 @@ function UserFeed() {
 
     useEffect(() => {
         const fetchPosts = async () => {
-            try {
-                const response = await axios.get('http://192.168.1.113:8080/posts/all');
-                setPosts(response.data.posts);
-            } catch (error) {
-                console.error('Fehler beim Abrufen der Posts:', error);
-            }
+            const response = await axios.get('http://192.168.1.113:8080/posts/all');
+            setPosts(response.data.posts);
         };
 
         fetchPosts();
     }, []);
-
 
     useEffect(() => {
         if (search === '') {
@@ -36,6 +31,10 @@ function UserFeed() {
             setFilteredPosts(filtered);
         }
     }, [search, posts]);
+
+    const handlePostClick = (postId: number) => {
+        navigate(`/detail/${postId}`);
+    };
 
     return (
         <div>
@@ -49,14 +48,14 @@ function UserFeed() {
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                            <SearchIcon />
+                            <SearchIcon/>
                         </InputAdornment>
                     ),
                 }}
-                sx={{ marginBottom: 2 }}
+                sx={{marginBottom: 2}}
             />
             {filteredPosts.length === 0 ? (
-                <Typography variant="h6" sx={{ marginBottom: 2, marginTop: 3 }}>
+                <Typography variant="h6" sx={{marginBottom: 2, marginTop: 3}}>
                     Keine Posts gefunden
                 </Typography>
             ) : (
@@ -75,16 +74,28 @@ function UserFeed() {
                                 width: '80%',
                             },
                         }}
+                        onClick={() => handlePostClick(post.postId)}
                     >
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <Typography variant="body1" align="left" sx={{ color: 'white',fontWeight: 'bold', marginBottom: 1 }}>
+                                <Typography variant="h5" align="left"
+                                            sx={{color: 'white', fontWeight: 'bold', marginBottom: 1}}>
                                     {post.username}
                                 </Typography>
-                                <Typography variant="body2" align="left" sx={{color: 'white', marginBottom: 1 }}>
+                                <Typography variant="body1" align="left" sx={{color: 'white', marginBottom: 1}}>
                                     {post.text}
                                 </Typography>
-                                {post.image}
+                                {post.image && (
+                                    <div style={{
+                                        width: '100%',
+                                        height: 'auto',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <img src={post.image} alt="" style={{maxWidth: '100%', maxHeight: '100%', marginBottom: '1rem'}}/>
+                                    </div>
+                                )}
                             </Grid>
                         </Grid>
                     </Container>
@@ -93,7 +104,7 @@ function UserFeed() {
             <Button
                 color="success"
                 variant="contained"
-                startIcon={isSmallScreen ? null : <AddIcon />}
+                startIcon={isSmallScreen ? null : <AddIcon/>}
                 onClick={() => navigate('/new')}
                 sx={{
                     position: 'fixed',
@@ -107,7 +118,7 @@ function UserFeed() {
                     fontSize: '15px',
                 }}
             >
-                {isSmallScreen ? <AddIcon /> : 'Hinzufügen'}
+                {isSmallScreen ? <AddIcon/> : 'Hinzufügen'}
             </Button>
         </div>
     );

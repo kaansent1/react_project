@@ -10,6 +10,7 @@ import de.kaan.utils.saveFile
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
+import io.ktor.server.http.content.*
 import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -22,6 +23,7 @@ fun Routing.postRouting() {
     val postRepository by inject<PostRepository>()
 
     route(path = "/post") {
+        staticFiles("/static", File("/assets"))
         post(path = "/create") {
             var fileName = ""
             var postTextParams: PostTextParams? = null
@@ -30,7 +32,7 @@ fun Routing.postRouting() {
             multiPartData.forEachPart { partData ->
                 when (partData) {
                     is PartData.FileItem -> {
-                        fileName = partData.saveFile(folderPath = Constants.POST_IMAGES_FOLDER_PATH)
+                        fileName = partData.saveFile(Constants.POST_IMAGES_FOLDER_PATH)
                     }
 
                     is PartData.FormItem -> {
@@ -44,7 +46,7 @@ fun Routing.postRouting() {
                 partData.dispose()
             }
 
-            val imageUrl = "http://192.168.1.113:${Constants.POST_IMAGES_FOLDER_PATH}$fileName"
+            val imageUrl = "http://0.0.0.0:8080/static/post_images/$fileName"
 
             if (postTextParams == null) {
                 File("${Constants.POST_IMAGES_FOLDER_PATH}/$fileName").delete()
@@ -71,6 +73,26 @@ fun Routing.postRouting() {
                 call.respond(status = result.code, message = result.data)
             } catch (badRequestError: BadRequestException) {
                 return@get
+            } catch (anyError: Throwable) {
+                call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = PostResponse(
+                        success = false,
+                        message = "Unexpected error"
+                    )
+                )
+            }
+        }
+
+        put(path = "/{postId}/edit") {
+            try {
+                val postId = call.getLongParameter(name = "postId")
+                val postTextParams = call.receive<PostTextParams>()
+
+                val result = postRepository.editPost(postId, postTextParams.text)
+                call.respond(status = result.code, message = result.data)
+            } catch (badRequestError: BadRequestException) {
+                return@put
             } catch (anyError: Throwable) {
                 call.respond(
                     status = HttpStatusCode.InternalServerError,

@@ -6,6 +6,7 @@ import UserDetailPage from "./pages/UserDetailPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import {ClientContext} from "./context/ClientContext.tsx";
 import {User} from "./api/user.ts";
+import PostDetailPage from "./pages/PostDetailPage.tsx";
 /*
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -27,6 +28,7 @@ const App: React.FC = () => {
                     <Route path="/home" element={<HomePage/>}/>
                     <Route path="/new" element={<AddPostPage/>}/>
                     <Route path="/account" element={<UserDetailPage/>}/>
+                    <Route path="/detail/:postId" element={<PostDetailPage/>}/>
                 </Routes>
             </BrowserRouter>
         </ClientContext.Provider>
