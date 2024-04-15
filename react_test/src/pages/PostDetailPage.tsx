@@ -59,7 +59,7 @@ const PostDetailPage: React.FC = () => {
             <Container sx={{
                 width: '100%',
                 padding: 4,
-                marginTop: 2,
+                marginTop: '5rem',
                 backgroundColor: '#3a5169',
                 color: 'white',
                 borderRadius: 4,
@@ -77,8 +77,8 @@ const PostDetailPage: React.FC = () => {
                 </Typography>
                 {post.isOwnPost && (
                     <img src={post.image} alt="" style={{
-                        maxWidth: '100%',
-                        height: 'auto',
+                        width: 'auto',
+                        maxHeight: '40vh',
                         marginBottom: '1rem',
                         marginTop: '1rem'
                     }}/>

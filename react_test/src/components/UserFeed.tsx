@@ -93,7 +93,7 @@ function UserFeed() {
                                         justifyContent: 'center',
                                         alignItems: 'center'
                                     }}>
-                                        <img src={post.image} alt="" style={{maxWidth: '100%', maxHeight: '100%', marginBottom: '1rem'}}/>
+                                        <img src={post.image} alt="" style={{maxWidth: '80%', maxHeight: '90%', marginBottom: '1rem'}}/>
                                     </div>
                                 )}
                             </Grid>
