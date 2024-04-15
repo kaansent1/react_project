@@ -28,7 +28,7 @@ const PostDetailPage: React.FC = () => {
 
             fetchPost();
         }
-    }, [postId]);
+    }, [client.client.userId, postId]);
 
     const handleEditButtonClick = async () => {
 
