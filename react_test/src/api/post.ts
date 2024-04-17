@@ -4,6 +4,8 @@ export interface Post {
     text: string;
     image?: string;
     createdAt: string;
-    isOwnPost: boolean
-    userId: number
+    isOwnPost: boolean;
+    userId: number;
+    isLiked: boolean;
+    likesCount: number;
 }

@@ -1,6 +1,7 @@
 package de.kaan.plugins
 
 import de.kaan.route.authRouting
+import de.kaan.route.postLikesRouting
 import de.kaan.route.postRouting
 import de.kaan.route.profileRouting
 import io.ktor.server.application.*
@@ -12,6 +13,7 @@ fun Application.configureRouting() {
     routing {
         authRouting()
         postRouting()
+        postLikesRouting()
         profileRouting()
         staticFiles("/static", File("/home/kaans/react_project/backend/src/main/kotlin/de/kaan/assets"))
     }

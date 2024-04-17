@@ -2,6 +2,7 @@ package de.kaan.repository.post
 
 import de.kaan.dao.post.PostDao
 import de.kaan.dao.post.PostRow
+import de.kaan.dao.post_likes.PostLikesDao
 import de.kaan.models.Post
 import de.kaan.models.PostResponse
 import de.kaan.models.PostTextParams
@@ -11,6 +12,8 @@ import io.ktor.http.*
 
 class PostRepositoryImpl(
     private val postDao: PostDao,
+    private val postLikesDao: PostLikesDao
+
 ) : PostRepository {
     override suspend fun createPost(image: String, postTextParams: PostTextParams): Response<PostResponse> {
         val postIsCreated = postDao.createPost(
@@ -42,7 +45,8 @@ class PostRepositoryImpl(
         val posts = postsRows.map {
             toPost(
                 postRow = it,
-                isOwnPost = it.userId == currentUserId
+                isOwnPost = it.userId == currentUserId,
+                isPostLiked = postLikesDao.isPostLikedByUser(postId = it.postId, userId = currentUserId)
             )
         }
 
@@ -64,9 +68,10 @@ class PostRepositoryImpl(
                 data = PostResponse(success = false, message = "Could not retrieve post from the database")
             )
         }else{
+            val isPostLiked = postLikesDao.isPostLikedByUser(postId,currentUserId)
             val isOwnPost = post.userId == currentUserId
             Response.Success(
-                data = PostResponse(success = true, toPost(post, isOwnPost = isOwnPost))
+                data = PostResponse(success = true, toPost(post, isPostLiked = isPostLiked, isOwnPost = isOwnPost))
             )
         }
     }
@@ -98,7 +103,8 @@ class PostRepositoryImpl(
         val posts = postsRows.map {
             toPost(
                 postRow = it,
-                isOwnPost = false
+                isOwnPost = false,
+                isPostLiked = postLikesDao.isPostLikedByUser(postId = it.postId, userId = it.userId),
             )
         }
 
@@ -130,7 +136,7 @@ class PostRepositoryImpl(
 
 
 
-    private fun toPost(postRow: PostRow, isOwnPost: Boolean): Post {
+    private fun toPost(postRow: PostRow, isOwnPost: Boolean, isPostLiked: Boolean): Post {
         return Post(
             postId = postRow.postId,
             text = postRow.text,
@@ -140,6 +146,8 @@ class PostRepositoryImpl(
             userImage = postRow.userImage,
             username = postRow.username,
             isOwnPost = isOwnPost,
+            isLiked = isPostLiked,
+            likesCount = postRow.likesCount
         )
     }
 }

@@ -18,8 +18,10 @@ data class Post(
     val userId: Long,
     val username: String,
     val userImage: String?,
-    val isOwnPost: Boolean
-)
+    val isOwnPost: Boolean,
+    val likesCount: Int,
+    val isLiked: Boolean
+    )
 
 @Serializable
 data class PostResponse(

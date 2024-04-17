@@ -6,24 +6,30 @@ import {useParams} from "react-router-dom";
 import axios from "axios";
 import {useClient} from "../context/ClientContext.tsx";
 import {Post} from "../api/post.ts";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const PostDetailPage: React.FC = () => {
     const [post, setPost] = useState<Post | null>(null);
     const [editingText, setEditingText] = useState<string>("");
     const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [isLiked, setIsLiked] = useState<boolean>(false);
     const {postId} = useParams<{ postId?: string }>();
-    const client = useClient();
+    const { client } = useClient();
 
     useEffect(() => {
         if (postId) {
             const postIdAsNumber = parseInt(postId, 10);
-            const currentUserId = client.client.userId;
+            const currentUserId = client.userId;
             const fetchPost = async () => {
                 try {
                     const response =
                         await axios.get(`http://192.168.1.113:8080/post/${postIdAsNumber}?currentUserId=${currentUserId}`);
                     setPost(response.data.post);
                     setEditingText(response.data.post.text);
+                    setIsLiked(response.data.post.isLiked);
+
                 } catch (error) {
                     console.error('Fehler beim Abrufen des Posts:', error);
                 }
@@ -31,13 +37,13 @@ const PostDetailPage: React.FC = () => {
 
             fetchPost();
         }
-    }, [client.client.userId, postId]);
+    }, [client.userId, postId]);
 
     const handleEditButtonClick = async () => {
         if (post) {
             if (isEditing) {
                 const newData =
-                    {text: editingText, userId: client.client.userId, username: client.client.username};
+                    {text: editingText, userId: client.userId, username: client.username};
 
                 try {
                     await axios.put(`http://192.168.1.113:8080/post/${post.postId}/edit`, newData);
@@ -45,7 +51,7 @@ const PostDetailPage: React.FC = () => {
                     setIsEditing(false);
 
                     const updatedPostResponse =
-                        await axios.get(`http://192.168.1.113:8080/post/${post.postId}?currentUserId=${client.client.userId}`);
+                        await axios.get(`http://192.168.1.113:8080/post/${post.postId}?currentUserId=${client.userId}`);
                     setPost(updatedPostResponse.data.post);
                 } catch (error) {
                     console.error('Fehler beim Bearbeiten des Posts:', error);
@@ -56,6 +62,16 @@ const PostDetailPage: React.FC = () => {
         }
     };
 
+    const handleLikeButtonClick = async () => {
+        const userId = client.userId;
+
+        if (isLiked) {
+            await axios.delete('http://192.168.1.113:8080/post/likes/remove', { data: { userId, postId } });
+        } else {
+            await axios.post('http://192.168.1.113:8080/post/likes/add', { userId, postId });
+        }
+        setIsLiked(!isLiked);
+    };
 
     if (!post) {
         return (
@@ -84,11 +100,12 @@ const PostDetailPage: React.FC = () => {
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    maxHeight: '80vh',
+                    maxHeight: '70vh',
                     textAlign: 'left',
                 }}
             >
-                <Typography variant="h4" align="center" sx={{mb: 5, fontWeight: 'bold'}}>
+                <AccountCircleIcon sx={{width: 80, height: 80}}/>
+                <Typography variant="h4" align="center" sx={{mb: 1, fontWeight: 'bold'}}>
                     {post.username}
                 </Typography>
                 {isEditing ? (
@@ -100,12 +117,12 @@ const PostDetailPage: React.FC = () => {
                         onChange={(e) => setEditingText(e.target.value)}
                         multiline
                         fullWidth
-                        sx={{ mb: 2 }}
+                        sx={{mb: 2}}
                         InputProps={{
-                            style: { color: 'white', borderColor: 'white', fontSize: '1.4rem' }
+                            style: {color: 'white', borderColor: 'white', fontSize: '1.4rem'}
                         }}
                         InputLabelProps={{
-                            style: { color: 'white' }
+                            style: {color: 'white'}
                         }}
                     />
                 ) : (
@@ -121,6 +138,11 @@ const PostDetailPage: React.FC = () => {
                     marginTop: '1rem'
                 }}/>
                 <Typography variant="body1" align="center">
+                    {isLiked ? (
+                        <FavoriteIcon onClick={handleLikeButtonClick} style={{ color: 'red' }} />
+                    ) : (
+                        <FavoriteBorderIcon onClick={handleLikeButtonClick} />
+                    )}
                     {post.createdAt}
                 </Typography>
                 {post.isOwnPost && (
@@ -142,6 +164,7 @@ const PostDetailPage: React.FC = () => {
                     </Button>
                 )}
             </Container>
+
 
             <Footer/>
         </>

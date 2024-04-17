@@ -12,4 +12,7 @@ interface PostDao {
     suspend fun getAllPosts(): List<PostRow>
 
     suspend fun editPost(postId: Long, newText: String): Boolean
+
+    suspend fun updateLikesCount(postId: Long, decrement: Boolean = false): Boolean
+
 }

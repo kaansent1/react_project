@@ -1,14 +1,19 @@
-import {useState, useEffect} from 'react';
-import {Container, Grid, InputAdornment, TextField, Typography, useMediaQuery} from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import { Container, Grid, InputAdornment, TextField, Typography, useMediaQuery } from "@mui/material";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from '@mui/icons-material/Search';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import axios from 'axios';
-import {useNavigate} from "react-router-dom";
-import {Post} from '../api/post';
+import { useNavigate } from "react-router-dom";
+import { Post } from '../api/post';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useClient } from "../context/ClientContext.tsx";
 
 function UserFeed() {
     const navigate = useNavigate();
+    const { client } = useClient();
     const [search, setSearch] = useState('');
     const [posts, setPosts] = useState<Post[]>([]);
     const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
@@ -36,6 +41,39 @@ function UserFeed() {
         navigate(`/detail/${postId}`);
     };
 
+    const handleLikeClick = async (postId: number, e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+
+        const userId = client.userId;
+        const isLiked = filteredPosts.find(post => post.postId === postId)?.isLiked;
+
+        let response;
+
+        if (isLiked) {
+            response = await axios.delete('http://192.168.1.113:8080/post/likes/remove', { data: { userId, postId } });
+        } else {
+            response = await axios.post('http://192.168.1.113:8080/post/likes/add', { userId, postId });
+        }
+
+        if (response.data.success) {
+            const updatedPosts = filteredPosts.map(post => {
+                if (post.postId === postId) {
+                    return {
+                        ...post,
+                        isLiked: !isLiked,
+                        likesCount: isLiked ? post.likesCount - 1 : post.likesCount + 1
+                    };
+                }
+                return post;
+            });
+
+            setFilteredPosts(updatedPosts);
+        } else {
+            console.error(response.data.message);
+        }
+    };
+
+
     return (
         <div>
             <TextField
@@ -54,6 +92,7 @@ function UserFeed() {
                 }}
                 sx={{marginBottom: 2}}
             />
+
             {filteredPosts.length === 0 ? (
                 <Typography variant="h6" sx={{marginBottom: 2, marginTop: 3}}>
                     Keine Posts gefunden
@@ -78,13 +117,20 @@ function UserFeed() {
                     >
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <Typography variant="h4" align="left"
-                                            sx={{color: 'white', fontWeight: 'bold', marginBottom: 1}}>
-                                    {post.username}
+                                <Typography variant="h5" align="left" sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                    marginBottom: 1
+                                }}>
+                                    <AccountCircleIcon sx={{marginRight: 1, fontSize: '3.5rem'}}/> {post.username}
                                 </Typography>
-                                <Typography variant="body1" align="left" sx={{color: 'white', marginBottom: 1}}>
+                                <Typography variant="body1" align="left"
+                                            sx={{color: 'white', marginBottom: 1, marginLeft: 1}}>
                                     {post.text}
                                 </Typography>
+
                                 {post.image && (
                                     <div style={{
                                         width: '100%',
@@ -93,14 +139,25 @@ function UserFeed() {
                                         justifyContent: 'center',
                                         alignItems: 'center'
                                     }}>
-                                        <img src={post.image} alt="" style={{maxWidth: '90%', maxHeight: '50vh', marginBottom: '1rem'}}/>
+                                        <img src={post.image} alt=""
+                                             style={{maxWidth: '90%', maxHeight: '50vh', marginBottom: '1rem'}}/>
                                     </div>
                                 )}
+
+                                <Button
+                                    onClick={(e) => handleLikeClick(post.postId, e)}
+                                    startIcon={post.isLiked ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
+                                    sx={{color: post.isLiked ? 'red' : 'white'}}
+                                >
+                                    {post.likesCount}
+                                </Button>
                             </Grid>
                         </Grid>
                     </Container>
                 ))
             )}
+
+            {/* Add Button */}
             <Button
                 color="success"
                 variant="contained"

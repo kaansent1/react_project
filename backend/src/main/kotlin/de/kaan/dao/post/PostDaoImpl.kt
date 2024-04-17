@@ -5,6 +5,7 @@ import de.kaan.utils.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class PostDaoImpl : PostDao {
@@ -17,8 +18,10 @@ class PostDaoImpl : PostDao {
             createdAt = row[PostsTable.createdAt].toString(),
             userId = row[UserTable.userId],
             username = row[UserTable.username],
-            userImage = row[UserTable.image]
-        )
+            userImage = row[UserTable.image],
+            likesCount = row[PostsTable.likesCount],
+
+            )
     }
 
     override suspend fun getPostByUser(userId: Long): List<PostRow> {
@@ -47,6 +50,8 @@ class PostDaoImpl : PostDao {
                 it[PostsTable.image] = image
                 it[UserTable.userId] = userId
                 it[UserTable.username] = username
+                it[likesCount] = 0
+
             }
             insertStatement.resultedValues?.singleOrNull() != null
         }
@@ -95,4 +100,14 @@ class PostDaoImpl : PostDao {
             } > 0
         }
     }
+
+    override suspend fun updateLikesCount(postId: Long, decrement: Boolean): Boolean {
+        return dbQuery {
+            val value = if (decrement) -1 else 1
+            PostsTable.update(where = {PostsTable.postId eq postId}){
+                it.update(column = likesCount, value = likesCount.plus(value))
+            } > 0
+        }
+    }
+
 }

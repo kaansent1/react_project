@@ -1,4 +1,5 @@
 import de.kaan.dao.post.PostsTable
+import de.kaan.dao.post_likes.PostLikesTable
 import de.kaan.dao.user.UserTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -12,7 +13,7 @@ object DatabaseInitializer {
         val database = Database.connect(jdbcURL, "org.postgresql.Driver", user = username, password = password)
 
         transaction(database) {
-            SchemaUtils.create(UserTable, PostsTable)
+            SchemaUtils.create(UserTable, PostsTable, PostLikesTable)
         }
     }
 

@@ -47,7 +47,6 @@ fun Routing.profileRouting() {
                 val params = call.receive<UpdateUserParams>()
 
                 val result = repository.updateUser(params.copy(userId = userId))
-
                 call.respond(status = result.code, message = result.data)
             } catch (badRequestError: BadRequestException) {
                 return@put
