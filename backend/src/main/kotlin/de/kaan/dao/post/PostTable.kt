@@ -22,11 +22,10 @@ object PostsTable : Table(name = "posts") {
 
     val postId = long("postId").autoIncrement()
     val userId = long("userId").references(ref = UserTable.userId, onDelete = ReferenceOption.CASCADE)
-    val username = varchar("username", 32).references(ref = UserTable.username, onDelete = ReferenceOption.CASCADE)
+    val username = varchar("username", 32).references(ref = UserTable.username, onUpdate = ReferenceOption.CASCADE)
     val text = varchar("text", 512)
     val image = varchar("image", 1024)
     val createdAt = datetime(name = "created_at").defaultExpression(defaultValue = CurrentDateTime)
-
 
     override val primaryKey = PrimaryKey(postId)
 

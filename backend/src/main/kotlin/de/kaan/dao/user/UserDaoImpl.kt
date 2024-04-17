@@ -1,5 +1,6 @@
 package de.kaan.dao.user
 
+import de.kaan.dao.post.PostsTable
 import de.kaan.models.RegisterCredentials
 import de.kaan.security.hashPassword
 import de.kaan.utils.dbQuery
@@ -43,12 +44,24 @@ class UserDaoImpl : UserDao {
 
     override suspend fun updateUser(userId: Long, username: String, email: String): Boolean {
         return dbQuery {
-            UserTable.update(where = { UserTable.userId eq userId }) {
+            val userUpdated = UserTable.update(where = { UserTable.userId eq userId }) {
                 it[UserTable.username] = username
                 it[UserTable.email] = email
             } > 0
+
+            if (userUpdated) {
+                PostsTable.update(where = { PostsTable.userId eq userId }) {
+                    it[PostsTable.username] = username
+                }
+            }
+
+            userUpdated
         }
     }
+
+
+
+
 
     override suspend fun getUsers(ids: List<Long>): List<UserRow> {
         return dbQuery {
