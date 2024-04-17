@@ -45,7 +45,7 @@ function LoginPage() {
             setClient({
                 userId: userData.userId,
                 username: userData.username,
-                avatar: userData.avatar,
+                image: userData.image,
                 email: userData.email
             });
             navigate("/home");

@@ -82,6 +82,7 @@ class ProfileRepositoryImpl(
             userId = userRow.userId,
             username = userRow.username,
             email = userRow.email,
+            image = userRow.image
         )
     }
 }

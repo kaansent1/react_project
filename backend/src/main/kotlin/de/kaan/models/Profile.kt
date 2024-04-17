@@ -14,6 +14,8 @@ data class Profile(
     val userId: Long,
     val username: String,
     val email: String,
+    val image: String?
+
 )
 
 @Serializable

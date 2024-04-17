@@ -33,7 +33,6 @@ const PostForm = () => {
             },
         });
         if (response.data.success) {
-            console.log(data.image)
             navigate("/home");
         } else {
             console.error('Ein Fehler ist aufgetreten: ', response.data.message);

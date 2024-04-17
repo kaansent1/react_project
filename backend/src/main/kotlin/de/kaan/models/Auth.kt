@@ -25,6 +25,6 @@ data class AuthResponse(
 data class AuthResponseData(
     val userId: Long,
     val username: String,
-    val avatar: String? = null,
+    val image: String? = null,
     val email: String
 )

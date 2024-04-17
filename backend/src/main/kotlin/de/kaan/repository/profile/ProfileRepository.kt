@@ -11,4 +11,5 @@ interface ProfileRepository {
     suspend fun updateUser(updateUserParams: UpdateUserParams): Response<ProfileResponse>
 
     suspend fun deleteUser(userId: Long): Response<ProfileResponse>
+
 }

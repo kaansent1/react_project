@@ -16,7 +16,7 @@ const App: React.FC = () => {
     const [client, setClient] = useState<User>({
         username: "",
         email: "",
-        avatar: "",
+        image: "",
         userId: 0
     })
     return (

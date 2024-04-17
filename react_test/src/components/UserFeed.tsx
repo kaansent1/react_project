@@ -63,7 +63,7 @@ function UserFeed() {
                     <Container
                         key={post.postId}
                         sx={{
-                            width: 600,
+                            width: 900,
                             padding: 2,
                             marginBottom: 2,
                             backgroundColor: '#3a5169',
@@ -78,7 +78,7 @@ function UserFeed() {
                     >
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <Typography variant="h5" align="left"
+                                <Typography variant="h4" align="left"
                                             sx={{color: 'white', fontWeight: 'bold', marginBottom: 1}}>
                                     {post.username}
                                 </Typography>
@@ -93,7 +93,7 @@ function UserFeed() {
                                         justifyContent: 'center',
                                         alignItems: 'center'
                                     }}>
-                                        <img src={post.image} alt="" style={{maxWidth: '80%', maxHeight: '50vh', marginBottom: '1rem'}}/>
+                                        <img src={post.image} alt="" style={{maxWidth: '90%', maxHeight: '50vh', marginBottom: '1rem'}}/>
                                     </div>
                                 )}
                             </Grid>

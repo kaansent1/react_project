@@ -5,7 +5,7 @@ import {User} from "../api/user.ts";
 const initialClientState: User = {
     userId: 0,
     username: '',
-    avatar: '',
+    image: '',
     email: ''
 };
 

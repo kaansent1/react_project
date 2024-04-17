@@ -69,7 +69,7 @@ class UserDaoImpl : UserDao {
             username = row[UserTable.username],
             email = row[UserTable.email],
             password = row[UserTable.password],
-            image = row[UserTable.image],
+            image = row[UserTable.image]
         )
     }
 }

@@ -119,7 +119,8 @@ fun Routing.postRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = PostResponse(
                         success = false,
-                        message = "Unexpected error"                    )
+                        message = "Unexpected error"
+                    )
                 )
             }
         }
@@ -148,7 +149,8 @@ fun Routing.postRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = PostsResponse(
                         success = false,
-                        message = "Unexpected error"                    )
+                        message = "Unexpected error"
+                    )
                 )
             }
         }

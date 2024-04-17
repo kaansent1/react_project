@@ -4,6 +4,7 @@ import de.kaan.models.RegisterCredentials
 
 interface UserDao {
         suspend fun insert(params: RegisterCredentials): UserRow?
+
         suspend fun findByUsername(username: String): UserRow?
 
         suspend fun findById(userId: Long): UserRow?
