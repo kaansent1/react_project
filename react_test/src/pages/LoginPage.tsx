@@ -62,6 +62,10 @@ function LoginPage() {
             return;
         }
 
+        if (!formData.email.includes('@')) {
+            showError('Die Email-Adresse ist ungültig');
+            return;
+        }
 
         const response = await fetch("http://192.168.1.113:8080/register", {
             method: 'POST',
@@ -81,6 +85,7 @@ function LoginPage() {
             showError('Registrierung fehlgeschlagen');
         }
     };
+
 
     const handleToggleRegister = () => {
         setShowRegister(!showRegister);
@@ -112,7 +117,7 @@ function LoginPage() {
         Swal.fire({
             title: 'Fehler',
             text: message,
-            icon: 'info',
+            icon: 'error',
             showCloseButton: false,
             confirmButtonText: 'Schließen',
         }).then(result => {
