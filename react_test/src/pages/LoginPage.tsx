@@ -57,6 +57,12 @@ function LoginPage() {
     const handleRegister = async (event: React.FormEvent) => {
         event.preventDefault();
 
+        if (formData.password !== formData.repeatPassword) {
+            showError('Die Passwörter stimmen nicht überein');
+            return;
+        }
+
+
         const response = await fetch("http://192.168.1.113:8080/register", {
             method: 'POST',
             headers: {
