@@ -21,7 +21,7 @@ function UserFeed() {
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const response = await axios.get('http://192.168.1.113:8080/posts/all');
+            const response = await axios.get('http://192.168.1.125:8080/posts/all');
             setPosts(response.data.posts);
         };
 
@@ -50,9 +50,9 @@ function UserFeed() {
         let response;
 
         if (isLiked) {
-            response = await axios.delete('http://192.168.1.113:8080/post/likes/remove', { data: { userId, postId } });
+            response = await axios.delete('http://192.168.1.125:8080/post/likes/remove', { data: { userId, postId } });
         } else {
-            response = await axios.post('http://192.168.1.113:8080/post/likes/add', { userId, postId });
+            response = await axios.post('http://192.168.1.125:8080/post/likes/add', { userId, postId });
         }
 
         if (response.data.success) {
@@ -124,7 +124,12 @@ function UserFeed() {
                                     fontWeight: 'bold',
                                     marginBottom: 1
                                 }}>
-                                    <AccountCircleIcon sx={{marginRight: 1, fontSize: '3.5rem'}}/> {post.username}
+                                    {client.image ? (
+                                        <img src={client.image} alt="Profile" style={{ marginRight: '1rem', width: '5rem', height: '5rem', borderRadius: '50%' }} />
+                                    ) : (
+                                        <AccountCircleIcon sx={{ marginRight: '1rem', fontSize: '3.5rem' }} />
+                                    )}
+                                    {post.username}
                                 </Typography>
                                 <Typography variant="body1" align="left"
                                             sx={{color: 'white', marginBottom: 1, marginLeft: 1}}>

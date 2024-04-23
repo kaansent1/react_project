@@ -17,3 +17,25 @@ Content-Type: application/json
   "email": "tbecke@progeek.de",
   "password": "test"
 }
+
+
+###
+PUT /profile/update HTTP/1.1
+Host: 192.168.1.125:8080
+Content-Type: multipart/form-data; boundary=boundary123
+
+--boundary123
+Content-Disposition: form-data; name="image"; filename="673f0b05-74e6-4348-95f6-8b5d2e1b6268.gif"
+Content-Type: image/*
+
+[Binary data of the image]
+
+--boundary123
+Content-Disposition: form-data;
+
+{
+  "userId": 1,
+  "username": "Kaan",
+  "email": "example@example.com"
+}
+--boundary123--

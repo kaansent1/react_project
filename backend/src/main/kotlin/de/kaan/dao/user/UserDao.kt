@@ -9,7 +9,9 @@ interface UserDao {
 
         suspend fun findById(userId: Long): UserRow?
 
-        suspend fun updateUser(userId: Long, username: String, email: String): Boolean
+        suspend fun updateUser(userId: Long, username: String, email: String, image: String?): Boolean
+
+        suspend fun updateUserImage(userId: Long, image: String?): Boolean
 
         suspend fun getUsers(ids: List<Long>): List<UserRow>
 

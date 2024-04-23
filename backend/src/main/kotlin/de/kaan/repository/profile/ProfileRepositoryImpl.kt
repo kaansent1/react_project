@@ -26,7 +26,7 @@ class ProfileRepositoryImpl(
         }
     }
 
-    override suspend fun updateUser(updateUserParams: UpdateUserParams): Response<ProfileResponse> {
+    override suspend fun updateUser(image: String?, updateUserParams: UpdateUserParams): Response<ProfileResponse> {
         val userExists = userDao.findById(userId = updateUserParams.userId) != null
 
         if (userExists) {
@@ -34,11 +34,20 @@ class ProfileRepositoryImpl(
                 userId = updateUserParams.userId,
                 username = updateUserParams.username,
                 email = updateUserParams.email,
+                image = image
             )
 
             return if (userUpdated) {
                 Response.Success(
-                    data = ProfileResponse(success = true)
+                    data = ProfileResponse(
+                        success = true,
+                        profile = Profile(
+                            userId = updateUserParams.userId,
+                            username = updateUserParams.username,
+                            email = updateUserParams.email,
+                            image = image
+                        )
+                    )
                 )
             } else {
                 Response.Error(
@@ -62,11 +71,11 @@ class ProfileRepositoryImpl(
             userId = userId
         )
 
-        return if (userIsDeleted){
+        return if (userIsDeleted) {
             Response.Success(
                 data = ProfileResponse(success = true)
             )
-        }else{
+        } else {
             Response.Error(
                 code = HttpStatusCode.InternalServerError,
                 data = ProfileResponse(
@@ -76,6 +85,7 @@ class ProfileRepositoryImpl(
             )
         }
     }
+
 
     private fun toProfile(userRow: UserRow): Profile {
         return Profile(

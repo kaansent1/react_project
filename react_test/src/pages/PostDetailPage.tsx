@@ -25,7 +25,7 @@ const PostDetailPage: React.FC = () => {
             const fetchPost = async () => {
                 try {
                     const response =
-                        await axios.get(`http://192.168.1.113:8080/post/${postIdAsNumber}?currentUserId=${currentUserId}`);
+                        await axios.get(`http://192.168.1.125:8080/post/${postIdAsNumber}?currentUserId=${currentUserId}`);
                     setPost(response.data.post);
                     setEditingText(response.data.post.text);
                     setIsLiked(response.data.post.isLiked);
@@ -46,12 +46,12 @@ const PostDetailPage: React.FC = () => {
                     {text: editingText, userId: client.userId, username: client.username};
 
                 try {
-                    await axios.put(`http://192.168.1.113:8080/post/${post.postId}/edit`, newData);
+                    await axios.put(`http://192.168.1.125:8080/post/${post.postId}/edit`, newData);
                     console.log("Post erfolgreich bearbeitet!");
                     setIsEditing(false);
 
                     const updatedPostResponse =
-                        await axios.get(`http://192.168.1.113:8080/post/${post.postId}?currentUserId=${client.userId}`);
+                        await axios.get(`http://192.168.1.125:8080/post/${post.postId}?currentUserId=${client.userId}`);
                     setPost(updatedPostResponse.data.post);
                 } catch (error) {
                     console.error('Fehler beim Bearbeiten des Posts:', error);
@@ -66,9 +66,9 @@ const PostDetailPage: React.FC = () => {
         const userId = client.userId;
 
         if (isLiked) {
-            await axios.delete('http://192.168.1.113:8080/post/likes/remove', { data: { userId, postId } });
+            await axios.delete('http://192.168.1.125:8080/post/likes/remove', { data: { userId, postId } });
         } else {
-            await axios.post('http://192.168.1.113:8080/post/likes/add', { userId, postId });
+            await axios.post('http://192.168.1.125:8080/post/likes/add', { userId, postId });
         }
         setIsLiked(!isLiked);
     };

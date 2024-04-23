@@ -27,7 +27,7 @@ const PostForm = () => {
         }
         formData.append('post_data', JSON.stringify({ text: data.text, userId: client.userId, username: client.username}));
 
-        const response = await axios.post('http://192.168.1.113:8080/post/create', formData, {
+        const response = await axios.post('http://192.168.1.125:8080/post/create', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

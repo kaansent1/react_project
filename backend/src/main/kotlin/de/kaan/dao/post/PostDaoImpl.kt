@@ -104,7 +104,7 @@ class PostDaoImpl : PostDao {
     override suspend fun updateLikesCount(postId: Long, decrement: Boolean): Boolean {
         return dbQuery {
             val value = if (decrement) -1 else 1
-            PostsTable.update(where = {PostsTable.postId eq postId}){
+            PostsTable.update(where = { PostsTable.postId eq postId }) {
                 it.update(column = likesCount, value = likesCount.plus(value))
             } > 0
         }

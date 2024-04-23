@@ -6,6 +6,7 @@ import de.kaan.security.hashPassword
 import de.kaan.utils.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.transactions.transaction
 
 
 class UserDaoImpl : UserDao {
@@ -25,7 +26,6 @@ class UserDaoImpl : UserDao {
     }
 
 
-
     override suspend fun findByUsername(username: String): UserRow? {
         return dbQuery {
             UserTable.select { UserTable.username eq username }
@@ -42,25 +42,23 @@ class UserDaoImpl : UserDao {
         }
     }
 
-    override suspend fun updateUser(userId: Long, username: String, email: String): Boolean {
-        return dbQuery {
-            val userUpdated = UserTable.update(where = { UserTable.userId eq userId }) {
+    override suspend fun updateUser(userId: Long, username: String, email: String, image: String?): Boolean {
+        return transaction {
+            UserTable.update(where = { UserTable.userId eq userId }) {
                 it[UserTable.username] = username
                 it[UserTable.email] = email
+                it[UserTable.image] = image
             } > 0
-
-            if (userUpdated) {
-                PostsTable.update(where = { PostsTable.userId eq userId }) {
-                    it[PostsTable.username] = username
-                }
-            }
-
-            userUpdated
         }
     }
 
-
-
+    override suspend fun updateUserImage(userId: Long, image: String?): Boolean {
+        return dbQuery {
+            UserTable.update(where = { UserTable.userId eq userId }) {
+                it[UserTable.image] = image
+            } > 0
+        }
+    }
 
 
     override suspend fun getUsers(ids: List<Long>): List<UserRow> {
