@@ -124,8 +124,8 @@ function UserFeed() {
                                     fontWeight: 'bold',
                                     marginBottom: 1
                                 }}>
-                                    {client.image ? (
-                                        <img src={client.image} alt="Profile" style={{ marginRight: '1rem', width: '5rem', height: '5rem', borderRadius: '50%' }} />
+                                    {post.userImage ? (
+                                        <img src={post.userImage} alt="Profile" style={{ marginRight: '1rem', width: '5rem', height: '5rem', borderRadius: '50%' }} />
                                     ) : (
                                         <AccountCircleIcon sx={{ marginRight: '1rem', fontSize: '3.5rem' }} />
                                     )}

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import Header from "./HeaderPage.tsx";
-import {Container, Typography, Button, TextField} from "@mui/material";
+import {Container, Typography, Button, TextField, Grid} from "@mui/material";
 import Footer from "../components/Footer.tsx";
 import {useParams} from "react-router-dom";
 import axios from "axios";
@@ -16,7 +16,7 @@ const PostDetailPage: React.FC = () => {
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [isLiked, setIsLiked] = useState<boolean>(false);
     const {postId} = useParams<{ postId?: string }>();
-    const { client } = useClient();
+    const {client} = useClient();
 
     useEffect(() => {
         if (postId) {
@@ -24,12 +24,10 @@ const PostDetailPage: React.FC = () => {
             const currentUserId = client.userId;
             const fetchPost = async () => {
                 try {
-                    const response =
-                        await axios.get(`http://192.168.1.125:8080/post/${postIdAsNumber}?currentUserId=${currentUserId}`);
+                    const response = await axios.get(`http://192.168.1.125:8080/post/${postIdAsNumber}?currentUserId=${currentUserId}`);
                     setPost(response.data.post);
                     setEditingText(response.data.post.text);
                     setIsLiked(response.data.post.isLiked);
-
                 } catch (error) {
                     console.error('Fehler beim Abrufen des Posts:', error);
                 }
@@ -42,16 +40,12 @@ const PostDetailPage: React.FC = () => {
     const handleEditButtonClick = async () => {
         if (post) {
             if (isEditing) {
-                const newData =
-                    {text: editingText, userId: client.userId, username: client.username};
-
+                const newData = {text: editingText, userId: client.userId, username: client.username};
                 try {
                     await axios.put(`http://192.168.1.125:8080/post/${post.postId}/edit`, newData);
                     console.log("Post erfolgreich bearbeitet!");
                     setIsEditing(false);
-
-                    const updatedPostResponse =
-                        await axios.get(`http://192.168.1.125:8080/post/${post.postId}?currentUserId=${client.userId}`);
+                    const updatedPostResponse = await axios.get(`http://192.168.1.125:8080/post/${post.postId}?currentUserId=${client.userId}`);
                     setPost(updatedPostResponse.data.post);
                 } catch (error) {
                     console.error('Fehler beim Bearbeiten des Posts:', error);
@@ -66,9 +60,9 @@ const PostDetailPage: React.FC = () => {
         const userId = client.userId;
 
         if (isLiked) {
-            await axios.delete('http://192.168.1.125:8080/post/likes/remove', { data: { userId, postId } });
+            await axios.delete('http://192.168.1.125:8080/post/likes/remove', {data: {userId, postId}});
         } else {
-            await axios.post('http://192.168.1.125:8080/post/likes/add', { userId, postId });
+            await axios.post('http://192.168.1.125:8080/post/likes/add', {userId, postId});
         }
         setIsLiked(!isLiked);
     };
@@ -100,51 +94,73 @@ const PostDetailPage: React.FC = () => {
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    maxHeight: '70vh',
                     textAlign: 'left',
                 }}
             >
-                <AccountCircleIcon sx={{width: 80, height: 80}}/>
-                <Typography variant="h4" align="center" sx={{mb: 1, fontWeight: 'bold'}}>
-                    {post.username}
-                </Typography>
-                {isEditing ? (
-                    <TextField
-                        id="edit-post-text"
-                        label="Neuer Post Text"
-                        variant="outlined"
-                        value={editingText}
-                        onChange={(e) => setEditingText(e.target.value)}
-                        multiline
-                        fullWidth
-                        sx={{mb: 2}}
-                        InputProps={{
-                            style: {color: 'white', borderColor: 'white', fontSize: '1.4rem'}
-                        }}
-                        InputLabelProps={{
-                            style: {color: 'white'}
-                        }}
-                    />
-                ) : (
-                    <Typography variant="h5">
-                        {post.text}
-                    </Typography>
-                )}
-                <img src={post.image} alt="" style={{
-                    width: 'auto',
-                    maxWidth: '30vw',
-                    maxHeight: '40vh',
-                    marginBottom: '1rem',
-                    marginTop: '1rem'
-                }}/>
-                <Typography variant="body1" align="center">
-                    {isLiked ? (
-                        <FavoriteIcon onClick={handleLikeButtonClick} style={{ color: 'red' }} />
-                    ) : (
-                        <FavoriteBorderIcon onClick={handleLikeButtonClick} />
-                    )}
-                    {post.createdAt}
-                </Typography>
+                <Grid container alignItems="center" spacing={1}>
+                    <Grid item xs={1}>
+                        {post.userImage ? (
+                            <img src={post.userImage} alt="Profile"
+                                 style={{width: 80, height: 80, borderRadius: '50%'}}/>
+                        ) : (
+                            <AccountCircleIcon sx={{width: 80, height: 80}}/>
+                        )}
+                    </Grid>
+                    <Grid item xs={3} md={4}>
+                        <Typography variant="h4">
+                            {post.username}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        {isEditing ? (
+                            <TextField
+                                id="edit-post-text"
+                                label="Neuer Post Text"
+                                variant="outlined"
+                                value={editingText}
+                                onChange={(e) => setEditingText(e.target.value)}
+                                multiline
+                                fullWidth
+                                sx={{mb: 2}}
+                                InputProps={{
+                                    style: {color: 'white', borderColor: 'white', fontSize: '1.8em'}
+                                }}
+                                InputLabelProps={{
+                                    style: {color: 'white'}
+                                }}
+                            />
+                        ) : (
+                            <Typography variant="body1" style={{ fontSize: '1.8em' }}>
+                                {post.text}
+                            </Typography>
+                        )}
+                    </Grid>
+                    <Grid item xs={12}>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <img src={post.image} alt="" style={{
+                                width: 'auto',
+                                maxWidth: '100%',
+                                maxHeight: '40vh',
+                                marginBottom: '1rem',
+                                marginTop: '1rem'
+                            }} />
+                        </div>
+                    </Grid>
+                </Grid>
+                <Grid container alignItems="center" justifyContent="space-between">
+                    <Grid item>
+                        <Typography variant="body2">
+                            {isLiked ? (
+                                <FavoriteIcon onClick={handleLikeButtonClick} style={{color: 'red'}}/>
+                            ) : (
+                                <FavoriteBorderIcon onClick={handleLikeButtonClick}/>
+                            )}
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="body2">{post.createdAt}</Typography>
+                    </Grid>
+                </Grid>
                 {post.isOwnPost && (
                     <Button
                         variant="contained"
@@ -164,8 +180,6 @@ const PostDetailPage: React.FC = () => {
                     </Button>
                 )}
             </Container>
-
-
             <Footer/>
         </>
     );
