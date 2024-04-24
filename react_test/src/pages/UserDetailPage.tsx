@@ -4,7 +4,7 @@ import {
     Container,
     Typography,
     Grid,
-    Button
+    Button,
 } from "@mui/material";
 import Footer from "../components/Footer.tsx";
 import { useNavigate, useParams } from "react-router-dom";
@@ -20,32 +20,28 @@ import BackButton from "../components/BackButton";
 const UserDetailPage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
+    const [, setLoading] = useState(true);
     const { client } = useClient();
     const navigate = useNavigate();
     const { userId } = useParams<{ userId?: string }>();
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
-                setUser(response.data.profile);
+                setLoading(true);
+                const userResponse = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
+                setUser(userResponse.data.profile);
+                const postResponse = await axios.get(`http://192.168.1.125:8080/posts/${userId}?currentUserId=${client.userId}`);
+                setPosts(postResponse.data.posts);
             } catch (error) {
-                console.error('Fehler beim Abrufen des Benutzers:', error);
-            }
-        };
-
-        const fetchPosts = async () => {
-            try {
-                const response = await axios.get(`http://192.168.1.125:8080/posts/${userId}?currentUserId=${client.userId}`);
-                setPosts(response.data.posts);
-            } catch (error) {
-                console.error('Fehler beim Abrufen der Posts:', error);
+                console.error('Fehler beim Abrufen der Daten:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
         if (userId) {
-            fetchUser();
-            fetchPosts();
+            fetchData();
         }
     }, [client.userId, userId]);
 
@@ -64,29 +60,33 @@ const UserDetailPage: React.FC = () => {
             return;
         }
 
-        let response;
+        try {
+            let response;
 
-        if (post.isLiked) {
-            response = await axios.delete('http://192.168.1.125:8080/post/likes/remove', { data: { userId, postId } });
-        } else {
-            response = await axios.post('http://192.168.1.125:8080/post/likes/add', { userId, postId });
-        }
+            if (post.isLiked) {
+                response = await axios.delete('http://192.168.1.125:8080/post/likes/remove', { data: { userId, postId } });
+            } else {
+                response = await axios.post('http://192.168.1.125:8080/post/likes/add', { userId, postId });
+            }
 
-        if (response.data.success) {
-            const updatedPosts = posts.map(p => {
-                if (p.postId === postId) {
-                    return {
-                        ...p,
-                        isLiked: !post.isLiked,
-                        likesCount: post.isLiked ? p.likesCount - 1 : p.likesCount + 1
-                    };
-                }
-                return p;
-            });
+            if (response.data.success) {
+                const updatedPosts = posts.map(p => {
+                    if (p.postId === postId) {
+                        return {
+                            ...p,
+                            isLiked: !post.isLiked,
+                            likesCount: post.isLiked ? p.likesCount - 1 : p.likesCount + 1
+                        };
+                    }
+                    return p;
+                });
 
-            setPosts(updatedPosts);
-        } else {
-            console.error(response.data.message);
+                setPosts(updatedPosts);
+            } else {
+                console.error(response.data.message);
+            }
+        } catch (error) {
+            console.error('Fehler beim Verarbeiten des Like:', error);
         }
     };
 
