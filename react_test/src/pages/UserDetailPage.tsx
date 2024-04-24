@@ -1,122 +1,177 @@
-import React, { useState } from 'react';
-import AddIcon from "@mui/icons-material/Add";
-import Button from "@mui/material/Button";
-import { Avatar, Box, TextField, Typography } from "@mui/material";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { useClient } from '../context/ClientContext';
-import Footer from "../components/Footer.tsx";
+import React, { useState, useEffect } from "react";
 import Header from "./HeaderPage.tsx";
+import {
+    Container,
+    Typography,
+    Grid,
+    Button
+} from "@mui/material";
+import Footer from "../components/Footer.tsx";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { useClient } from "../context/ClientContext.tsx";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { User } from "../api/user.ts";
+import { Post } from "../api/post.ts";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import BackButton from "../components/BackButton";
 
-interface ProfileFormData {
-    userId: string;
-    username: string;
-    email: string;
-    image?: string
-}
+const UserDetailPage: React.FC = () => {
+    const [user, setUser] = useState<User | null>(null);
+    const [posts, setPosts] = useState<Post[]>([]);
+    const { client } = useClient();
+    const navigate = useNavigate();
+    const { userId } = useParams<{ userId?: string }>();
 
-const UserDetailPage = () => {
-    const { handleSubmit, register, reset } = useForm<ProfileFormData>();
-    const { client, setClient } = useClient();
-    const [editMode, setEditMode] = useState(false);
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
+                setUser(response.data.profile);
+            } catch (error) {
+                console.error('Fehler beim Abrufen des Benutzers:', error);
+            }
+        };
 
-    async function onSubmit(data: ProfileFormData) {
-        const formData = new FormData();
-        if (data.image && data.image[0]) {
-            formData.append('image', data.image[0]);
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get(`http://192.168.1.125:8080/posts/${userId}?currentUserId=${client.userId}`);
+                setPosts(response.data.posts);
+            } catch (error) {
+                console.error('Fehler beim Abrufen der Posts:', error);
+            }
+        };
+
+        if (userId) {
+            fetchUser();
+            fetchPosts();
         }
-        formData.append('profile_data', JSON.stringify({ email: data.email, userId: client.userId, username: data.username}));
+    }, [client.userId, userId]);
 
-        const response = await axios.put('http://192.168.1.125:8080/profile/update', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-        if (response.data.success) {
-            const userData = response.data.profile
-            setClient({
-                userId: userData.userId,
-                username: userData.username,
-                image: userData.image,
-                email: userData.email
-            });
-        } else {
-            console.error('Ein Fehler ist aufgetreten: ', response.data.message);
-        }
-
-        reset();
-        setEditMode(false);
-    }
-
-    const toggleEditMode = () => {
-        setEditMode(prevMode => !prevMode);
+    const handlePostClick = (postId: number) => {
+        navigate(`/detail/${postId}`);
     };
 
-    const handleEditButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        toggleEditMode();
+    const handleLikeClick = async (postId: number, e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+
+        const userId = client.userId;
+        const post = posts.find(post => post.postId === postId);
+
+        if (!post) {
+            console.error('Post not found.');
+            return;
+        }
+
+        let response;
+
+        if (post.isLiked) {
+            response = await axios.delete('http://192.168.1.125:8080/post/likes/remove', { data: { userId, postId } });
+        } else {
+            response = await axios.post('http://192.168.1.125:8080/post/likes/add', { userId, postId });
+        }
+
+        if (response.data.success) {
+            const updatedPosts = posts.map(p => {
+                if (p.postId === postId) {
+                    return {
+                        ...p,
+                        isLiked: !post.isLiked,
+                        likesCount: post.isLiked ? p.likesCount - 1 : p.likesCount + 1
+                    };
+                }
+                return p;
+            });
+
+            setPosts(updatedPosts);
+        } else {
+            console.error(response.data.message);
+        }
     };
 
     return (
         <>
-            <Header />
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    minHeight: "40vh",
-                    marginTop: "20px",
-                }}
-            >
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 2, alignItems: "center" }}>
-                    <Avatar alt="Profilbild" src={client.image} sx={{ width: 120, height: 120 }} />
-                    <Typography variant="h5">{client.username}</Typography>
-                    <Typography variant="body1">{client.email}</Typography>
-                </Box>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1, width: "40vh" }}>
-                        <TextField
-                            label="Username"
-                            {...register("username")}
-                            multiline
-                            rows={1}
-                            variant="outlined"
-                            defaultValue={client.username}
-                            sx={{ marginBottom: 2, height: "auto" }}
-                            disabled={!editMode}
-                        />
-                        <TextField
-                            label="Email"
-                            {...register("email")}
-                            multiline
-                            rows={1}
-                            variant="outlined"
-                            defaultValue={client.email}
-                            sx={{ marginBottom: 2, height: "auto" }}
-                            disabled={!editMode}
-                        />
-                        <input
-                            type="file"
-                            accept="image/*"
-                            {...register("image")}
-                            disabled={!editMode}
-                        />
-                        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                            {editMode ? (
-                                <Button color="primary" type="submit">
-                                    Speichern
-                                </Button>
+            <Header/>
+            <div style={{ overflow: 'auto',height: 'calc(100vh - 170px)', padding: '20px' }}>
+                <Grid container justifyContent="center">
+                    <Grid item xs={12} alignItems="center" justifyContent="center">
+                        <Container sx={{ borderRadius: '4px', width: 'fit-content', maxWidth: '200px' }}>
+                            {user?.image ? (
+                                <img src={user.image} alt="Profilbild" style={{ width: '10rem', height: '10rem', borderRadius: '50%' }} />
                             ) : (
-                                <Button color="success" startIcon={<AddIcon />} onClick={handleEditButtonClick}>
-                                    {editMode ? "Speichern" : "Bearbeiten"}
-                                </Button>
+                                <AccountCircleIcon style={{ marginRight: '1rem', fontSize: '3.5rem' }} />
                             )}
-                        </Box>
-                    </Box>
-                </form>
-            </Box>
-            <Footer />
+                        </Container>
+                    </Grid>
+                    <Grid container justifyContent="center" alignItems="center" direction="column">
+                        <Typography variant="h4" gutterBottom>
+                            {user?.username}
+                        </Typography>
+                        <Typography variant="h6" gutterBottom>
+                            {user?.email}
+                        </Typography>
+                    </Grid>
+                </Grid>
+                {posts.length > 0 ? (
+                    <Container maxWidth="md" style={{ marginTop: '20px' }}>
+                        {posts.map((post) => (
+                            <Container
+                                key={post.postId}
+                                sx={{
+                                    padding: '20px',
+                                    marginBottom: '20px',
+                                    backgroundColor: '#3a5169',
+                                    color: 'white',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                }}
+                                onClick={() => handlePostClick(post.postId)}
+                            >
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        {post.userImage ? (
+                                            <img src={post.userImage} alt="Profile" style={{ marginRight: '1rem', width: '5rem', height: '5rem', borderRadius: '50%' }} />
+                                        ) : (
+                                            <AccountCircleIcon sx={{ marginRight: '1rem', fontSize: '3.5rem' }} />
+                                        )}
+                                        <Typography variant="h5" style={{ fontWeight: 'bold', marginBottom: '5px' }}>
+                                            {post.username}
+                                        </Typography>
+                                        <Typography variant="body1" style={{ marginBottom: '10px' }}>
+                                            {post.text}
+                                        </Typography>
+                                        {post.image && (
+                                            <div style={{
+                                                width: '100%',
+                                                height: 'auto',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center'
+                                            }}>
+                                                <img src={post.image} alt="" style={{ maxWidth: '90%', maxHeight: '50vh', marginBottom: '1rem' }} />
+                                            </div>
+                                        )}
+                                        <Button
+                                            onClick={(e) => handleLikeClick(post.postId, e)}
+                                            startIcon={post.isLiked ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
+                                            style={{ color: post.isLiked ? 'red' : 'white' }}
+                                        >
+                                            {post.likesCount}
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Container>
+                        ))}
+                    </Container>
+                ) : (
+                    <Typography variant="h6" style={{ marginTop: '20px' }}>
+                        Dieser Nutzer hat noch keine Posts
+                    </Typography>
+                )}
+            </div>
+            <BackButton />
+            <Footer/>
         </>
     );
 };

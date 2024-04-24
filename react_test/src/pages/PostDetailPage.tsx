@@ -1,22 +1,24 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./HeaderPage.tsx";
-import {Container, Typography, Button, TextField, Grid} from "@mui/material";
+import { Container, Typography, Button, TextField, Grid } from "@mui/material";
 import Footer from "../components/Footer.tsx";
-import {useParams} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import {useClient} from "../context/ClientContext.tsx";
-import {Post} from "../api/post.ts";
+import { useClient } from "../context/ClientContext.tsx";
+import { Post } from "../api/post.ts";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import BackButton from "../components/BackButton.tsx";
 
 const PostDetailPage: React.FC = () => {
     const [post, setPost] = useState<Post | null>(null);
     const [editingText, setEditingText] = useState<string>("");
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [isLiked, setIsLiked] = useState<boolean>(false);
-    const {postId} = useParams<{ postId?: string }>();
-    const {client} = useClient();
+    const { postId } = useParams<{ postId?: string }>();
+    const { client } = useClient();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (postId) {
@@ -40,7 +42,7 @@ const PostDetailPage: React.FC = () => {
     const handleEditButtonClick = async () => {
         if (post) {
             if (isEditing) {
-                const newData = {text: editingText, userId: client.userId, username: client.username};
+                const newData = { text: editingText, userId: client.userId, username: client.username };
                 try {
                     await axios.put(`http://192.168.1.125:8080/post/${post.postId}/edit`, newData);
                     console.log("Post erfolgreich bearbeitet!");
@@ -60,9 +62,9 @@ const PostDetailPage: React.FC = () => {
         const userId = client.userId;
 
         if (isLiked) {
-            await axios.delete('http://192.168.1.125:8080/post/likes/remove', {data: {userId, postId}});
+            await axios.delete('http://192.168.1.125:8080/post/likes/remove', { data: { userId, postId } });
         } else {
-            await axios.post('http://192.168.1.125:8080/post/likes/add', {userId, postId});
+            await axios.post('http://192.168.1.125:8080/post/likes/add', { userId, postId });
         }
         setIsLiked(!isLiked);
     };
@@ -70,18 +72,18 @@ const PostDetailPage: React.FC = () => {
     if (!post) {
         return (
             <div>
-                <Header/>
-                <Typography variant="h4" align="center" sx={{mb: 2, mt: 4}}>
+                <Header />
+                <Typography variant="h4" align="center" sx={{ mb: 2, mt: 4 }}>
                     Laden...
                 </Typography>
-                <Footer/>
+                <Footer />
             </div>
         );
     }
 
     return (
         <>
-            <Header/>
+            <Header />
             <Container
                 sx={{
                     width: '100%',
@@ -100,14 +102,14 @@ const PostDetailPage: React.FC = () => {
                 <Grid container alignItems="center" spacing={1}>
                     <Grid item xs={1}>
                         {post.userImage ? (
-                            <img src={post.userImage} alt="Profile"
-                                 style={{width: 80, height: 80, borderRadius: '50%'}}/>
+                            <img src={post.userImage} alt="Profile" style={{ width: 80, height: 80, borderRadius: '50%', cursor: 'pointer' }} onClick={() => navigate(`/user/${post.userId}`)} />
                         ) : (
-                            <AccountCircleIcon sx={{width: 80, height: 80}}/>
+                            <AccountCircleIcon sx={{ width: 80, height: 80 }} />
                         )}
                     </Grid>
                     <Grid item xs={3} md={4}>
-                        <Typography variant="h4">
+                        {/* Verwende navigate für die Navigation zur UserDetailPage */}
+                        <Typography variant="h4" style={{ cursor: 'pointer' }} onClick={() => navigate(`/user/${post.userId}`)}>
                             {post.username}
                         </Typography>
                     </Grid>
@@ -121,12 +123,12 @@ const PostDetailPage: React.FC = () => {
                                 onChange={(e) => setEditingText(e.target.value)}
                                 multiline
                                 fullWidth
-                                sx={{mb: 2}}
+                                sx={{ mb: 2 }}
                                 InputProps={{
-                                    style: {color: 'white', borderColor: 'white', fontSize: '1.8em'}
+                                    style: { color: 'white', borderColor: 'white', fontSize: '1.8em' }
                                 }}
                                 InputLabelProps={{
-                                    style: {color: 'white'}
+                                    style: { color: 'white' }
                                 }}
                             />
                         ) : (
@@ -151,9 +153,9 @@ const PostDetailPage: React.FC = () => {
                     <Grid item>
                         <Typography variant="body2">
                             {isLiked ? (
-                                <FavoriteIcon onClick={handleLikeButtonClick} style={{color: 'red'}}/>
+                                <FavoriteIcon onClick={handleLikeButtonClick} style={{ color: 'red' }} />
                             ) : (
-                                <FavoriteBorderIcon onClick={handleLikeButtonClick}/>
+                                <FavoriteBorderIcon onClick={handleLikeButtonClick} />
                             )}
                         </Typography>
                     </Grid>
@@ -180,7 +182,9 @@ const PostDetailPage: React.FC = () => {
                     </Button>
                 )}
             </Container>
-            <Footer/>
+            <BackButton />
+
+            <Footer />
         </>
     );
 };
