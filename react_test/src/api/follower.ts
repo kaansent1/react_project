@@ -1,5 +1,5 @@
 export interface Follower {
-    userId: number
+    id: number
     name: string
     image: string
     email: string

@@ -6,7 +6,9 @@ const initialClientState: User = {
     userId: 0,
     username: '',
     image: '',
-    email: ''
+    email: '',
+    followingCount: 0,
+    followersCount: 0
 };
 
 export const ClientContext = createContext<{

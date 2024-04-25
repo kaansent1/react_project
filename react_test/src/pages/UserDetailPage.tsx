@@ -111,6 +111,12 @@ const UserDetailPage: React.FC = () => {
                         <Typography variant="h6" gutterBottom>
                             {user?.email}
                         </Typography>
+                        <Typography variant="body1" gutterBottom>
+                            Followers: {user?.followersCount}
+                        </Typography>
+                        <Typography variant="body1" gutterBottom>
+                            Following: {user?.followingCount}
+                        </Typography>
                     </Grid>
                 </Grid>
                 {posts.length > 0 ? (
@@ -165,9 +171,11 @@ const UserDetailPage: React.FC = () => {
                         ))}
                     </Container>
                 ) : (
-                    <Typography variant="h6" style={{ marginTop: '20px' }}>
-                        Dieser Nutzer hat noch keine Posts
-                    </Typography>
+                    <Grid container justifyContent="center">
+                        <Typography variant="h6" style={{ marginTop: '20px' }}>
+                            Dieser Nutzer hat noch keine Posts
+                        </Typography>
+                    </Grid>
                 )}
             </div>
             <BackButton />
