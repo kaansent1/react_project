@@ -35,7 +35,7 @@ Content-Disposition: form-data;
 
 {
   "userId": 1,
-  "username": "Kaan",
+  "username": "Hallo",
   "email": "example@example.com"
 }
 --boundary123--

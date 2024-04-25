@@ -25,7 +25,7 @@ function DropdownMenu() {
 
     const goToFollowers = () => {
         closeDropdown();
-        navigate("/follower");
+        navigate("/followers");
     };
 
     const closeDropdown = () => {

@@ -1,12 +1,13 @@
 package de.kaan.dao.user
 
-import de.kaan.dao.post.PostsTable
 import de.kaan.models.RegisterCredentials
 import de.kaan.security.hashPassword
 import de.kaan.utils.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
+
 
 
 class UserDaoImpl : UserDao {
@@ -74,13 +75,31 @@ class UserDaoImpl : UserDao {
         }
     }
 
+    override suspend fun updateFollowsCount(follower: Long, following: Long, isFollowing: Boolean): Boolean {
+        return dbQuery {
+            val count = if (isFollowing) +1 else -1
+
+            val success1 = UserTable.update({ UserTable.userId eq follower}){
+                it.update(column = followingCount, value = followingCount.plus(count))
+            } > 0
+
+            val success2 = UserTable.update({ UserTable.userId eq following}){
+                it.update(column = followersCount, value = followersCount.plus(count))
+            } > 0
+
+            success1 && success2
+        }
+    }
+
     private fun rowToUser(row: ResultRow): UserRow {
         return UserRow(
             userId = row[UserTable.userId],
             username = row[UserTable.username],
             email = row[UserTable.email],
             password = row[UserTable.password],
-            image = row[UserTable.image]
+            image = row[UserTable.image],
+            followersCount = row[UserTable.followersCount],
+            followingCount = row[UserTable.followingCount],
         )
     }
 }

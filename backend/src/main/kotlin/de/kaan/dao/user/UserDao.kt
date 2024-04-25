@@ -16,4 +16,6 @@ interface UserDao {
         suspend fun getUsers(ids: List<Long>): List<UserRow>
 
         suspend fun deleteUser(userId: Long): Boolean
+
+        suspend fun updateFollowsCount(follower: Long, following: Long, isFollowing: Boolean): Boolean
 }

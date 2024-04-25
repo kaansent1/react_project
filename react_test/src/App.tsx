@@ -9,6 +9,7 @@ import {User} from "./api/user.ts";
 import PostDetailPage from "./pages/PostDetailPage.tsx";
 import UserDetailPage from "./pages/UserDetailPage.tsx";
 import CreditsPage from "./pages/CreditsPage.tsx";
+import FollowersPage from "./pages/FollowersPage.tsx";
 
 const App: React.FC = () => {
     const [client, setClient] = useState<User>({
@@ -29,6 +30,7 @@ const App: React.FC = () => {
                     <Route path="/detail/:postId" element={<PostDetailPage/>}/>
                     <Route path="/user/:userId" element={<UserDetailPage/>}/>
                     <Route path="/credits" element={<CreditsPage/>}/>
+                    <Route path="/followers" element={<FollowersPage/>}/>
                 </Routes>
             </BrowserRouter>
         </ClientContext.Provider>
