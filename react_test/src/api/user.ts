@@ -5,4 +5,5 @@ export interface User {
     email: string
     followersCount: number
     followingCount: number
+    isFollowing: boolean
 }

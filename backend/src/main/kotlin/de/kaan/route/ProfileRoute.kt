@@ -2,6 +2,7 @@ package de.kaan.route
 
 import de.kaan.models.ProfileResponse
 import de.kaan.models.UpdateUserParams
+import de.kaan.models.UsersResponse
 import de.kaan.repository.profile.ProfileRepository
 import de.kaan.utils.Constants
 import de.kaan.utils.getLongParameter
@@ -81,6 +82,24 @@ fun Routing.profileRouting() {
                     message = ProfileResponse(
                         success = false,
                         message = "An unexpected error has occurred, try again!"
+                    )
+                )
+            }
+        }
+
+        get(path = "/all") {
+            try {
+                val result = repository.getAllUsers()
+                call.respond(
+                    status = result.code,
+                    message = result.data
+                )
+            } catch (anyError: Throwable) {
+                call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = UsersResponse(
+                        success = false,
+                        message = "Unexpected error"
                     )
                 )
             }

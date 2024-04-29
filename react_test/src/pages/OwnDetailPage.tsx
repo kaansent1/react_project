@@ -17,7 +17,7 @@ interface ProfileFormData {
 
 const OwnDetailPage = () => {
     const { handleSubmit, register, reset } = useForm<ProfileFormData>();
-    const { client, setClient } = useClient();
+    const { client } = useClient();
     const [editMode, setEditMode] = useState(false);
 
     async function onSubmit(data: ProfileFormData) {
@@ -32,19 +32,7 @@ const OwnDetailPage = () => {
                 'Content-Type': 'multipart/form-data',
             },
         });
-        if (response.data.success) {
-            const userData = response.data.profile
-            setClient({
-                userId: userData.userId,
-                username: userData.username,
-                image: userData.image,
-                email: userData.email,
-                followingCount: client.followingCount,
-                followersCount: client.followersCount
-            });
-        } else {
-            console.error('Ein Fehler ist aufgetreten: ', response.data.message);
-        }
+        console.log(response)
 
         reset();
         setEditMode(false);

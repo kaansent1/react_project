@@ -91,6 +91,14 @@ class UserDaoImpl : UserDao {
         }
     }
 
+    override suspend fun getAllUsers(): List<UserRow> {
+        return dbQuery {
+            UserTable.selectAll()
+                .map { rowToUser(it) }
+        }
+    }
+
+
     private fun rowToUser(row: ResultRow): UserRow {
         return UserRow(
             userId = row[UserTable.userId],

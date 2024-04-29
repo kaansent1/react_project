@@ -29,6 +29,7 @@ function UserFeed() {
         fetchPosts();
     }, []);
 
+
     useEffect(() => {
         if (search === '') {
             setFilteredPosts(posts);
@@ -107,7 +108,7 @@ function UserFeed() {
                             backgroundColor: '#3a5169',
                             color: 'white',
                             marginBottom: 4,
-                            borderRadius: 8,
+                            borderRadius: '4px',
                             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
                             padding: 3,
                             transition: 'transform 0.3s ease-in-out',

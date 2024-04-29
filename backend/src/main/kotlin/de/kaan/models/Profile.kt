@@ -28,3 +28,10 @@ data class ProfileResponse(
     val profile: Profile? = null,
     val message: String? = null
 )
+
+@Serializable
+data class UsersResponse(
+    val success: Boolean,
+    val users: List<Profile> = listOf(),
+    val message: String? = null
+)

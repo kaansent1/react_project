@@ -64,6 +64,7 @@ class AuthRepositoryImpl(
                             userId = user.userId,
                             username = user.username,
                             email = user.email,
+                            image = user.image
                         )
                     )
                 )

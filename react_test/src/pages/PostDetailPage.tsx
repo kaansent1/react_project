@@ -91,6 +91,7 @@ const PostDetailPage: React.FC = () => {
                     marginTop: '5rem',
                     backgroundColor: '#3a5169',
                     color: 'white',
+                    maxHeight: '70vh',
                     borderRadius: 4,
                     display: 'flex',
                     flexDirection: 'column',
@@ -102,14 +103,13 @@ const PostDetailPage: React.FC = () => {
                 <Grid container alignItems="center" spacing={1}>
                     <Grid item xs={1}>
                         {post.userImage ? (
-                            <img src={post.userImage} alt="Profilbild" style={{ width: 80, height: 80, borderRadius: '50%', cursor: 'pointer' }} onClick={() => navigate(`/user/${post.userId}`)} />
+                            <img src={post.userImage} alt="Profilbild" style={{ width: 80, height: 80, borderRadius: '50%', cursor: 'pointer' , marginTop: '2%'}} onClick={() => navigate(`/user/${post.userId}`)} />
                         ) : (
                             <AccountCircleIcon sx={{ width: 80, height: 80 }} />
                         )}
                     </Grid>
                     <Grid item xs={3} md={4}>
-                        {/* Verwende navigate für die Navigation zur UserDetailPage */}
-                        <Typography variant="h4" style={{ cursor: 'pointer' }} onClick={() => navigate(`/user/${post.userId}`)}>
+                        <Typography variant="h4" style={{ cursor: 'pointer' }} onClick={() => navigate(post.userId === client.userId ? '/account' : `/user/${post.userId}`)}>
                             {post.username}
                         </Typography>
                     </Grid>
@@ -170,6 +170,7 @@ const PostDetailPage: React.FC = () => {
                         onClick={handleEditButtonClick}
                         sx={{
                             mt: 3,
+                            mb: 2,
                             backgroundColor: '#1976d2',
                             color: 'white',
                             width: '25%',

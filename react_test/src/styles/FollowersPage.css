@@ -1,7 +1,4 @@
-/* Button-Styling */
 .follow-button {
-    background-color: #4caf50;
-    color: white;
     font-size: 16px;
     font-weight: bold;
     padding: 12px 24px;
@@ -9,7 +6,6 @@
     border-radius: 30px;
     cursor: pointer;
     outline: none;
-    transition: background-color 0.3s ease-in-out, transform 0.2s ease-out;
 }
 
 .follow-button:hover {
@@ -19,28 +15,19 @@
 .follow-button:active {
     transform: translateY(2px);
 }
+.list-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
 
-/* Container für die Buttons */
 .buttons-container {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
 }
 
-/* Stil für die Follower- und Folgende-Listen */
 .followers-list, .following-list {
-    padding: 0;
     height: calc(100vh - 300px);
     overflow: auto;
-}
-
-.follower-item, .following-item {
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-}
-
-.follower-item:hover, .following-item:hover {
-    transform: scale(1.02);
 }

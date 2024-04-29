@@ -6,6 +6,7 @@ import de.kaan.dao.user.UserRow
 import de.kaan.models.Profile
 import de.kaan.models.ProfileResponse
 import de.kaan.models.UpdateUserParams
+import de.kaan.models.UsersResponse
 import de.kaan.utils.Response
 import io.ktor.http.*
 
@@ -84,6 +85,25 @@ class ProfileRepositoryImpl(
                 )
             )
         }
+    }
+
+    override suspend fun getAllUsers(): Response<UsersResponse> {
+        val usersRows = userDao.getAllUsers()
+
+        val users = usersRows.map {
+            toProfile(
+                userRow = it,
+                isFollowing = followsDao.isAlreadyFollowing(follower = it.userId, following = it.userId),
+                isOwnProfile = false
+            )
+        }
+
+        return Response.Success(
+            data = UsersResponse(
+                success = true,
+                users = users
+            )
+        )
     }
 
 

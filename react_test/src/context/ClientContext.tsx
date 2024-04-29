@@ -8,7 +8,8 @@ const initialClientState: User = {
     image: '',
     email: '',
     followingCount: 0,
-    followersCount: 0
+    followersCount: 0,
+    isFollowing: false
 };
 
 export const ClientContext = createContext<{

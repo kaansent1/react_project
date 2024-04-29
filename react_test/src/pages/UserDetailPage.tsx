@@ -16,6 +16,7 @@ import { Post } from "../api/post.ts";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import BackButton from "../components/BackButton";
+import Swal from "sweetalert2";
 
 const UserDetailPage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
@@ -91,6 +92,52 @@ const UserDetailPage: React.FC = () => {
         }
     };
 
+    const handleFollowClick = async () => {
+        try {
+            const response = await axios.post('http://192.168.1.125:8080/follows/follow', {
+                following: userId,
+                follower: client.userId
+            });
+
+            if (response.data.success) {
+                const userResponse = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
+                setUser(userResponse.data.profile);
+            } else {
+                console.error(response.data.message);
+            }
+        } catch (error) {
+            console.error('Fehler beim Verarbeiten des Follow:', error);
+        }
+    };
+
+    const handleUnfollowClick = async () => {
+        const confirmation = await Swal.fire({
+            title: 'Möchtest du diesem Nutzer wirklich entfolgen?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ja, entfolgen',
+            cancelButtonText: 'Abbrechen'
+        });
+
+        if (confirmation.isConfirmed) {
+            try {
+                const response = await axios.post('http://192.168.1.125:8080/follows/unfollow', {
+                    following: userId,
+                    follower: client.userId
+                });
+
+                if (response.data.success) {
+                    const userResponse = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
+                    setUser(userResponse.data.profile);
+                } else {
+                    console.error(response.data.message);
+                }
+            } catch (error) {
+                console.error('Fehler beim Verarbeiten des Unfollow:', error);
+            }
+        }
+    };
+
     return (
         <>
             <Header/>
@@ -119,6 +166,18 @@ const UserDetailPage: React.FC = () => {
                             Following: {user?.followingCount}
                         </Typography>
                     </Grid>
+                    <Grid container justifyContent="center" width="auto">
+                        {user?.isFollowing ? (
+                            <Button onClick={handleUnfollowClick}>Unfollow</Button>
+                        ) : (
+                            <Button onClick={handleFollowClick}>Follow</Button>
+                        )}
+                    </Grid>
+                </Grid>
+                <Grid container justifyContent="center">
+                    <Typography variant="h5" style={{ marginTop: '20px' }}>
+                        {user?.username}'s Posts:
+                    </Typography>
                 </Grid>
                 {posts.length > 0 ? (
                     <Container maxWidth="md" style={{ marginTop: '20px' }}>
@@ -137,12 +196,18 @@ const UserDetailPage: React.FC = () => {
                             >
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
-                                        {post.userImage ? (
-                                            <img src={post.userImage} alt="Profile" style={{ marginRight: '1rem', width: '5rem', height: '5rem' }} />
-                                        ) : (
-                                            <AccountCircleIcon sx={{ marginRight: '1rem', fontSize: '3.5rem' }} />
-                                        )}
-                                        <Typography variant="h5" style={{ fontWeight: 'bold', marginBottom: '5px' }}>
+                                        <Typography variant="h5" align="left" sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            color: 'white',
+                                            fontWeight: 'bold',
+                                            marginBottom: 1
+                                        }}>
+                                            {post.userImage ? (
+                                                <img src={post.userImage} alt="Profile" style={{ marginRight: '1rem', width: '5rem', height: '5rem', borderRadius: '50%'}} />
+                                            ) : (
+                                                <AccountCircleIcon sx={{ marginRight: '1rem', fontSize: '3.5rem' }} />
+                                            )}
                                             {post.username}
                                         </Typography>
                                         <Typography variant="body1" style={{ marginBottom: '10px' }}>

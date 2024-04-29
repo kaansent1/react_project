@@ -48,7 +48,8 @@ function LoginPage() {
                 image: userData.image,
                 email: userData.email,
                 followingCount: userData.following_count,
-                followersCount: userData.followers_count
+                followersCount: userData.followers_count,
+                isFollowing: userData.isFollowing
             });
             navigate("/home");
         } else {
