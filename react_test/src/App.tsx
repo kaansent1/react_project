@@ -16,7 +16,9 @@ const App: React.FC = () => {
         username: "",
         email: "",
         image: "",
-        userId: 0
+        userId: 0,
+        followersCount: 0,
+        followingCount: 0
     })
     return (
         //<QueryClientProvider client={queryClient}>

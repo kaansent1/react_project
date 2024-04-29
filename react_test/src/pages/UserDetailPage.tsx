@@ -31,6 +31,7 @@ const UserDetailPage: React.FC = () => {
                 setLoading(true);
                 const userResponse = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
                 setUser(userResponse.data.profile);
+                console.log(userResponse.data.profile)
                 const postResponse = await axios.get(`http://192.168.1.125:8080/posts/${userId}?currentUserId=${client.userId}`);
                 setPosts(postResponse.data.posts);
             } catch (error) {
@@ -96,7 +97,7 @@ const UserDetailPage: React.FC = () => {
             <div style={{ overflow: 'auto',height: 'calc(100vh - 170px)', padding: '20px' }}>
                 <Grid container justifyContent="center">
                     <Grid item xs={12} alignItems="center" justifyContent="center">
-                        <Container sx={{ borderRadius: '4px', width: 'fit-content', maxWidth: '200px' }}>
+                        <Container sx={{ borderRadius: '50%', width: 'fit-content', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             {user?.image ? (
                                 <img src={user.image} alt="Profilbild" style={{ width: '10rem', height: '10rem', borderRadius: '50%' }} />
                             ) : (
@@ -137,7 +138,7 @@ const UserDetailPage: React.FC = () => {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         {post.userImage ? (
-                                            <img src={post.userImage} alt="Profile" style={{ marginRight: '1rem', width: '5rem', height: '5rem', borderRadius: '50%' }} />
+                                            <img src={post.userImage} alt="Profile" style={{ marginRight: '1rem', width: '5rem', height: '5rem' }} />
                                         ) : (
                                             <AccountCircleIcon sx={{ marginRight: '1rem', fontSize: '3.5rem' }} />
                                         )}

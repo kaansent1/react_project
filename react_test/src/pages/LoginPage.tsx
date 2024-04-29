@@ -46,7 +46,9 @@ function LoginPage() {
                 userId: userData.userId,
                 username: userData.username,
                 image: userData.image,
-                email: userData.email
+                email: userData.email,
+                followingCount: userData.following_count,
+                followersCount: userData.followers_count
             });
             navigate("/home");
         } else {

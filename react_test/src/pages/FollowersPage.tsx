@@ -90,9 +90,11 @@ function FollowersPage() {
                                             primary={follower.name}
                                             secondary={follower.email}
                                         />
-                                        <Button onClick={() => handleProfileClick(follower.id)} size="small" className="profile-button">
-                                            <PersonIcon fontSize="small" />
-                                        </Button>
+                                        <div style={{display: "flex"}}>
+                                            <Button onClick={() => handleProfileClick(follower.id)} size="small" className="profile-button" style={{marginLeft: "auto"}} >
+                                                <PersonIcon fontSize="small" />
+                                            </Button>
+                                        </div>
                                     </ListItem>
                                 ))}
                             </List>
@@ -118,9 +120,12 @@ function FollowersPage() {
                                             primary={followedUser.name}
                                             secondary={followedUser.email}
                                         />
-                                        <Button onClick={() => handleProfileClick(followedUser.id)} size="small" className="profile-button">
-                                            <PersonIcon fontSize="small" />
-                                        </Button>
+                                        <div style={{display: "flex"}}>
+                                            <Button onClick={() => handleProfileClick(followedUser.id)} size="small"
+                                                    className="profile-button" style={{marginLeft: "auto"}}>
+                                                <PersonIcon fontSize="small"/>
+                                            </Button>
+                                        </div>
                                     </ListItem>
                                 ))}
                             </List>

@@ -14,7 +14,11 @@ data class Profile(
     val userId: Long,
     val username: String,
     val email: String,
-    val image: String? = null
+    val image: String? = null,
+    val followersCount: Int = 0,
+    val followingCount: Int = 0,
+    val isFollowing: Boolean,
+    val isOwnProfile: Boolean
 
 )
 

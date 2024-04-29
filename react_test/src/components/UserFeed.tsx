@@ -23,6 +23,7 @@ function UserFeed() {
         const fetchPosts = async () => {
             const response = await axios.get('http://192.168.1.125:8080/posts/all');
             setPosts(response.data.posts);
+            setFilteredPosts(response.data.posts)
         };
 
         fetchPosts();
@@ -103,14 +104,16 @@ function UserFeed() {
                         key={post.postId}
                         sx={{
                             width: 900,
-                            padding: 2,
-                            marginBottom: 2,
                             backgroundColor: '#3a5169',
                             color: 'white',
-                            borderRadius: 4,
-                            cursor: 'pointer',
-                            '@media (max-width: 768px)': {
-                                width: '80%',
+                            marginBottom: 4,
+                            borderRadius: 8,
+                            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                            padding: 3,
+                            transition: 'transform 0.3s ease-in-out',
+                            '&:hover': {
+                                transform: 'scale(1.01)',
+                                cursor: 'pointer',
                             },
                         }}
                         onClick={() => handlePostClick(post.postId)}

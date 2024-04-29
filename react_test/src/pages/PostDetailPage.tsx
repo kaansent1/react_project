@@ -102,7 +102,7 @@ const PostDetailPage: React.FC = () => {
                 <Grid container alignItems="center" spacing={1}>
                     <Grid item xs={1}>
                         {post.userImage ? (
-                            <img src={post.userImage} alt="Profile" style={{ width: 80, height: 80, borderRadius: '50%', cursor: 'pointer' }} onClick={() => navigate(`/user/${post.userId}`)} />
+                            <img src={post.userImage} alt="Profilbild" style={{ width: 80, height: 80, borderRadius: '50%', cursor: 'pointer' }} onClick={() => navigate(`/user/${post.userId}`)} />
                         ) : (
                             <AccountCircleIcon sx={{ width: 80, height: 80 }} />
                         )}

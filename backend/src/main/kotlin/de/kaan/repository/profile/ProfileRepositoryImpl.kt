@@ -1,5 +1,6 @@
 package de.kaan.repository.profile
 
+import de.kaan.dao.follows.FollowsDao
 import de.kaan.dao.user.UserDao
 import de.kaan.dao.user.UserRow
 import de.kaan.models.Profile
@@ -10,6 +11,7 @@ import io.ktor.http.*
 
 class ProfileRepositoryImpl(
     private val userDao: UserDao,
+    private val followsDao: FollowsDao
 ) : ProfileRepository {
     override suspend fun getUserById(userId: Long, currentUserId: Long): Response<ProfileResponse> {
         val userRow = userDao.findById(userId = userId)
@@ -20,8 +22,12 @@ class ProfileRepositoryImpl(
                 data = ProfileResponse(success = false, message = "Could not find user with id: $userId")
             )
         } else {
+            val isFollowing = followsDao.isAlreadyFollowing(follower = currentUserId, following = userId)
+            val isOwnProfile = userId == currentUserId
+
+
             Response.Success(
-                data = ProfileResponse(success = true, profile = toProfile(userRow))
+                data = ProfileResponse(success = true, profile = toProfile(userRow,  isFollowing, isOwnProfile))
             )
         }
     }
@@ -41,12 +47,6 @@ class ProfileRepositoryImpl(
                 Response.Success(
                     data = ProfileResponse(
                         success = true,
-                        profile = Profile(
-                            userId = updateUserParams.userId,
-                            username = updateUserParams.username,
-                            email = updateUserParams.email,
-                            image = image
-                        )
                     )
                 )
             } else {
@@ -87,12 +87,16 @@ class ProfileRepositoryImpl(
     }
 
 
-    private fun toProfile(userRow: UserRow): Profile {
+    private fun toProfile(userRow: UserRow, isFollowing: Boolean, isOwnProfile: Boolean): Profile{
         return Profile(
             userId = userRow.userId,
             username = userRow.username,
             email = userRow.email,
-            image = userRow.image
+            image = userRow.image,
+            followersCount = userRow.followersCount,
+            followingCount = userRow.followingCount,
+            isFollowing = isFollowing,
+            isOwnProfile = isOwnProfile
         )
     }
 }

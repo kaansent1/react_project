@@ -3,6 +3,6 @@ export interface User {
     username: string
     image: string
     email: string
-    followersCount: number,
+    followersCount: number
     followingCount: number
 }

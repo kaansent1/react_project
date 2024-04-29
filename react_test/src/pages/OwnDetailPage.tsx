@@ -38,7 +38,9 @@ const OwnDetailPage = () => {
                 userId: userData.userId,
                 username: userData.username,
                 image: userData.image,
-                email: userData.email
+                email: userData.email,
+                followingCount: client.followingCount,
+                followersCount: client.followersCount
             });
         } else {
             console.error('Ein Fehler ist aufgetreten: ', response.data.message);
