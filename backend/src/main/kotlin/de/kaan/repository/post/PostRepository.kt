@@ -21,4 +21,8 @@ interface PostRepository {
     suspend fun getAllPosts(): Response<PostsResponse>
 
     suspend fun editPost(postId: Long, newText: String): Response<PostResponse>
+
+    suspend fun getFollowedUsers(userId: Long): List<Long>
+
+    suspend fun getPostsByFollowedUsers(userId: Long, currentUserId: Long): Response<PostsResponse>
 }

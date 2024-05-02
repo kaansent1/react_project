@@ -21,13 +21,13 @@ function UserFeed() {
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const response = await axios.get('http://192.168.1.125:8080/posts/all');
+            const response = await axios.get(`http://192.168.1.125:8080/posts/feed?userId=${client.userId}`);
             setPosts(response.data.posts);
             setFilteredPosts(response.data.posts)
         };
 
         fetchPosts();
-    }, []);
+    }, [client.userId]);
 
 
     useEffect(() => {

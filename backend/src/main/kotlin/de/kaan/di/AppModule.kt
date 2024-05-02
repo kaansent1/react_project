@@ -24,7 +24,7 @@ val appModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get()) }
     single<UserDao> { UserDaoImpl() }
     single<PostDao> { PostDaoImpl() }
-    single<PostRepository> { PostRepositoryImpl(get(), get()) }
+    single<PostRepository> { PostRepositoryImpl(get(), get(), get()) }
     single<ProfileRepository> { ProfileRepositoryImpl(get(), get()) }
     single<PostLikesDao> { PostLikesDaoImpl() }
     single<PostLikesRepository> { PostLikesRepositoryImpl(get(), get()) }

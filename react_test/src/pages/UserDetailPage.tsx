@@ -168,11 +168,26 @@ const UserDetailPage: React.FC = () => {
                     </Grid>
                     <Grid container justifyContent="center" width="auto">
                         {user?.isFollowing ? (
-                            <Button onClick={handleUnfollowClick}>Unfollow</Button>
+                            <Button
+                                onClick={handleUnfollowClick}
+                                variant="contained"
+                                color="error"
+                                sx={{ borderRadius: '20px', marginTop: '10px' }}
+                            >
+                                Unfollow
+                            </Button>
                         ) : (
-                            <Button onClick={handleFollowClick}>Follow</Button>
+                            <Button
+                                onClick={handleFollowClick}
+                                variant="contained"
+                                color="primary"
+                                sx={{ borderRadius: '20px', marginTop: '10px' }}
+                            >
+                                Follow
+                            </Button>
                         )}
                     </Grid>
+
                 </Grid>
                 <Grid container justifyContent="center">
                     <Typography variant="h5" style={{ marginTop: '20px' }}>

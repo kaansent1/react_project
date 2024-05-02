@@ -172,5 +172,28 @@ fun Routing.postRouting() {
                 )
             }
         }
+
+        get(path = "/feed") {
+            try {
+                val userId = call.getLongParameter(name = "userId", isQueryParameter = true)
+                val result = postRepository.getPostsByFollowedUsers(userId, currentUserId = userId)
+
+                call.respond(
+                    status = result.code,
+                    message = result.data
+                )
+            } catch (badRequestError: BadRequestException) {
+                return@get
+            } catch (anyError: Throwable) {
+                call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = PostsResponse(
+                        success = false,
+                        message = "An unexpected error has occurred, try again!"
+                    )
+                )
+            }
+        }
+
     }
 }

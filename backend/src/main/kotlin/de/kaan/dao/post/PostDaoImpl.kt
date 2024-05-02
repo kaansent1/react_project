@@ -101,6 +101,24 @@ class PostDaoImpl : PostDao {
         }
     }
 
+    override suspend fun getFeedsPost(userIds: List<Long>, currentUserId: Long): List<PostRow> {
+        return dbQuery {
+            val followedAndCurrentUserIds = userIds + currentUserId
+
+            PostsTable
+                .join(
+                    otherTable = UserTable,
+                    onColumn = PostsTable.userId,
+                    otherColumn = UserTable.userId,
+                    joinType = JoinType.INNER
+                )
+                .select { PostsTable.userId inList followedAndCurrentUserIds }
+                .orderBy(column = PostsTable.createdAt, order = SortOrder.DESC)
+                .map { postToRow(it) }
+        }
+    }
+
+
     override suspend fun updateLikesCount(postId: Long, decrement: Boolean): Boolean {
         return dbQuery {
             val value = if (decrement) -1 else 1
@@ -109,5 +127,4 @@ class PostDaoImpl : PostDao {
             } > 0
         }
     }
-
 }

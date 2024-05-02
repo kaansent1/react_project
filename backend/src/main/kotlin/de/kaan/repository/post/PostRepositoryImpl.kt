@@ -1,5 +1,6 @@
 package de.kaan.repository.post
 
+import de.kaan.dao.follows.FollowsDao
 import de.kaan.dao.post.PostDao
 import de.kaan.dao.post.PostRow
 import de.kaan.dao.post_likes.PostLikesDao
@@ -12,7 +13,8 @@ import io.ktor.http.*
 
 class PostRepositoryImpl(
     private val postDao: PostDao,
-    private val postLikesDao: PostLikesDao
+    private val postLikesDao: PostLikesDao,
+    private val followsDao: FollowsDao
 
 ) : PostRepository {
     override suspend fun createPost(image: String, postTextParams: PostTextParams): Response<PostResponse> {
@@ -134,6 +136,33 @@ class PostRepositoryImpl(
         }
     }
 
+    override suspend fun getFollowedUsers(userId: Long): List<Long> {
+        return followsDao.getFollowing(userId)
+    }
+
+
+    override suspend fun getPostsByFollowedUsers(userId: Long, currentUserId: Long): Response<PostsResponse> {
+        val followerUserIds = getFollowedUsers(userId)
+        val postsRows = postDao.getFeedsPost(
+            userIds = followerUserIds,
+            currentUserId = currentUserId
+        )
+
+        val posts = postsRows.map {
+            toPost(
+                postRow = it,
+                isPostLiked = postLikesDao.isPostLikedByUser(postId = it.postId, userId = userId),
+                isOwnPost = it.userId == userId
+            )
+        }
+
+        return Response.Success(
+            data = PostsResponse(
+                success = true,
+                posts = posts
+            )
+        )
+    }
 
 
     private fun toPost(postRow: PostRow, isOwnPost: Boolean, isPostLiked: Boolean): Post {
