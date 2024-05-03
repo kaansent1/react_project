@@ -24,7 +24,7 @@ fun Routing.authRouting(){
                 call.respond(
                     status = HttpStatusCode.BadRequest,
                     message = AuthResponse(
-                        errorMessage = "Invalid credentials!"
+                        errorMessage = "Registrierung nicht erfolgreich"
                     )
                 )
 
@@ -49,7 +49,7 @@ fun Routing.authRouting(){
                 call.respond(
                     status = HttpStatusCode.BadRequest,
                     message = AuthResponse(
-                        errorMessage = "Invalid credentials!"
+                        errorMessage = "Login nicht erfolgreich"
                     )
                 )
 

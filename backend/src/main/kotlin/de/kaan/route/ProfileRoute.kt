@@ -40,7 +40,7 @@ fun Routing.profileRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = ProfileResponse(
                         success = false,
-                        message = "Unexpected error"
+                        message = "Fehlgeschlagen"
                     )
                 )
             }
@@ -81,7 +81,7 @@ fun Routing.profileRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = ProfileResponse(
                         success = false,
-                        message = "An unexpected error has occurred, try again!"
+                        message = "Fehlgeschlagen"
                     )
                 )
             }
@@ -99,7 +99,7 @@ fun Routing.profileRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = UsersResponse(
                         success = false,
-                        message = "Unexpected error"
+                        message = "Fehlgeschlagen"
                     )
                 )
             }
@@ -120,7 +120,7 @@ fun Routing.profileRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = ProfileResponse(
                         success = false,
-                        message = "Unexpected error"
+                        message = "Fehlgeschlagen"
                     )
                 )
             }

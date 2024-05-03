@@ -55,7 +55,7 @@ fun Routing.postRouting() {
                     status = HttpStatusCode.BadRequest,
                     message = PostResponse(
                         success = false,
-                        message = "Could not parse post data"
+                        message = "post data fehlerhaft"
                     )
                 )
             } else {
@@ -78,7 +78,7 @@ fun Routing.postRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = PostResponse(
                         success = false,
-                        message = "Unexpected error"
+                        message = "Fehlerhaft"
                     )
                 )
             }
@@ -98,7 +98,7 @@ fun Routing.postRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = PostResponse(
                         success = false,
-                        message = "Unexpected error"
+                        message = "Fehlerhaft"
                     )
                 )
             }
@@ -119,7 +119,7 @@ fun Routing.postRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = PostResponse(
                         success = false,
-                        message = "Unexpected error"
+                        message = "Fehlerhaft"
                     )
                 )
             }
@@ -149,7 +149,7 @@ fun Routing.postRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = PostsResponse(
                         success = false,
-                        message = "Unexpected error"
+                        message = "Fehlerhaft"
                     )
                 )
             }
@@ -167,7 +167,7 @@ fun Routing.postRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = PostsResponse(
                         success = false,
-                        message = "Unexpected error"
+                        message = "Fehlerhaft"
                     )
                 )
             }
@@ -189,7 +189,7 @@ fun Routing.postRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = PostsResponse(
                         success = false,
-                        message = "An unexpected error has occurred, try again!"
+                        message = "Fehlerhaft"
                     )
                 )
             }

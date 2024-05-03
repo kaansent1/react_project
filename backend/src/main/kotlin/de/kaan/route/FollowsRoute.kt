@@ -25,7 +25,7 @@ fun Routing.followsRouting() {
                         status = HttpStatusCode.BadRequest,
                         message = FollowAndUnfollowResponse(
                             success = false,
-                            message = "missing parameters"
+                            message = "Parameter fehlt"
                         )
                     )
                     return@post
@@ -42,7 +42,7 @@ fun Routing.followsRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = FollowAndUnfollowResponse(
                         success = false,
-                        message = "unexpected error"
+                        message = "Fehlgeschlagen"
                     )
                 )
             }
@@ -56,7 +56,7 @@ fun Routing.followsRouting() {
                         status = HttpStatusCode.BadRequest,
                         message = FollowAndUnfollowResponse(
                             success = false,
-                            message = "missing parameters"
+                            message = "Parameter fehlt"
                         )
                     )
                     return@post
@@ -70,7 +70,7 @@ fun Routing.followsRouting() {
             } catch (anyError: Throwable) {
                 call.respond(
                     status = HttpStatusCode.InternalServerError,
-                    message = "unexpected error"
+                    message = "Fehlgeschlagen"
                 )
             }
         }
@@ -88,12 +88,12 @@ fun Routing.followsRouting() {
             } catch (badRequestError: BadRequestException) {
                 call.respond(
                     status = HttpStatusCode.BadRequest,
-                    message = "missing parameters"
+                    message = "Parameter fehlt"
                 )
             } catch (anyError: Throwable) {
                 call.respond(
                     status = HttpStatusCode.InternalServerError,
-                    message = "unexpected error"
+                    message = "Fehlgeschlagen"
                 )
             }
         }
@@ -110,12 +110,12 @@ fun Routing.followsRouting() {
             } catch (badRequestException: BadRequestException) {
                 call.respond(
                     status = HttpStatusCode.BadRequest,
-                    message = "missing parameters"
+                    message = "Parameter fehlt"
                 )
             } catch (anyError: Throwable) {
                 call.respond(
                     status = HttpStatusCode.InternalServerError,
-                    message = "unexpected error"
+                    message = "Fehlgeschlagen"
                 )
             }
         }

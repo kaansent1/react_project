@@ -22,7 +22,7 @@ fun Routing.postLikesRouting() {
                         status = HttpStatusCode.BadRequest,
                         message = LikeResponse(
                             success = false,
-                            message = "Could not parse like parameters"
+                            message = "Parameter nicht gültig"
                         )
                     )
                     return@post
@@ -35,7 +35,7 @@ fun Routing.postLikesRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = LikeResponse(
                         success = false,
-                        message = "An unexpected error occurred, try again!"
+                        message = "Fehlgeschlagen"
                     )
                 )
             }
@@ -49,7 +49,7 @@ fun Routing.postLikesRouting() {
                         status = HttpStatusCode.BadRequest,
                         message = LikeResponse(
                             success = false,
-                            message = "Could not parse like parameters"
+                            message = "Parameter nicht gültig"
                         )
                     )
                     return@delete
@@ -62,7 +62,7 @@ fun Routing.postLikesRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = LikeResponse(
                         success = false,
-                        message = "An unexpected error occurred, try again!"
+                        message = "Fehlgeschlagen"
                     )
                 )
             }

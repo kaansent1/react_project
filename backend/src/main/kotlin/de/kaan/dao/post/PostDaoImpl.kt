@@ -7,6 +7,14 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
+private val dateFormatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy")
+
+private fun formatDate(dateTime: LocalDateTime): String {
+    return dateTime.format(dateFormatter)
+}
 
 class PostDaoImpl : PostDao {
 
@@ -15,7 +23,7 @@ class PostDaoImpl : PostDao {
             postId = row[PostsTable.postId],
             text = row[PostsTable.text],
             image = row[PostsTable.image],
-            createdAt = row[PostsTable.createdAt].toString(),
+            createdAt = formatDate(row[PostsTable.createdAt]),
             userId = row[UserTable.userId],
             username = row[UserTable.username],
             userImage = row[UserTable.image],
