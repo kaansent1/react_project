@@ -177,7 +177,7 @@ function UserFeed() {
                                                          style={{ maxWidth: '90%', maxHeight: '50vh', marginBottom: '1rem' }} />
                                                 </div>
                                             )}
-
+                                            <div style={{display: "flex"}}>
                                             <Button
                                                 onClick={(e) => handleLikeClick(post.postId, e)}
                                                 startIcon={post.isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
@@ -185,6 +185,7 @@ function UserFeed() {
                                             >
                                                 {post.likesCount}
                                             </Button>
+                                            </div>
                                         </Grid>
                                     </Grid>
                                 </Container>

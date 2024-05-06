@@ -28,6 +28,10 @@ function DropdownMenu() {
         navigate("/followers");
     };
 
+    const goToMessenger = () => {
+        closeDropdown()
+        navigate("/messenger")
+    }
     const closeDropdown = () => {
         setIsDropdownOpen(false);
     };
@@ -43,6 +47,7 @@ function DropdownMenu() {
             {isDropdownOpen && (
                 <div className="overlay">
                     <button onClick={goToAccount} className="menu-item">Account Info</button>
+                    <button onClick={goToMessenger} className="menu-item">Messenger</button>
                     <button onClick={goToFollowers} className="menu-item">Your Followers</button>
                     <button onClick={goToCredits} className="menu-item">Credits</button>
                     <button type="submit" onClick={logout} className="menu-item">Logout</button>

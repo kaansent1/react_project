@@ -1,4 +1,5 @@
 import de.kaan.dao.follows.FollowsTable
+import de.kaan.dao.message.MessageTable
 import de.kaan.dao.post.PostsTable
 import de.kaan.dao.post_likes.PostLikesTable
 import de.kaan.dao.user.UserTable
@@ -14,7 +15,7 @@ object DatabaseInitializer {
         val database = Database.connect(jdbcURL, "org.postgresql.Driver", user = username, password = password)
 
         transaction(database) {
-            SchemaUtils.create(UserTable, PostsTable, PostLikesTable, FollowsTable)
+            SchemaUtils.create(UserTable, PostsTable, PostLikesTable, FollowsTable, MessageTable)
         }
     }
 

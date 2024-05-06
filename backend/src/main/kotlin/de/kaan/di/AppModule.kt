@@ -2,6 +2,8 @@ package de.kaan.di
 
 import de.kaan.dao.follows.FollowsDao
 import de.kaan.dao.follows.FollowsDaoImpl
+import de.kaan.dao.message.MessageDao
+import de.kaan.dao.message.MessageDaoImpl
 import de.kaan.dao.post.PostDao
 import de.kaan.dao.post.PostDaoImpl
 import de.kaan.dao.post_likes.PostLikesDao
@@ -12,6 +14,8 @@ import de.kaan.repository.auth.AuthRepository
 import de.kaan.repository.auth.AuthRepositoryImpl
 import de.kaan.repository.follows.FollowsRepository
 import de.kaan.repository.follows.FollowsRepositoryImpl
+import de.kaan.repository.message.MessageRepository
+import de.kaan.repository.message.MessageRepositoryImpl
 import de.kaan.repository.post.PostRepository
 import de.kaan.repository.post.PostRepositoryImpl
 import de.kaan.repository.post_likes.PostLikesRepository
@@ -30,4 +34,6 @@ val appModule = module {
     single<PostLikesRepository> { PostLikesRepositoryImpl(get(), get()) }
     single<FollowsDao> { FollowsDaoImpl() }
     single<FollowsRepository> { FollowsRepositoryImpl(get(), get())}
+    single<MessageDao> { MessageDaoImpl() }
+    single<MessageRepository> { MessageRepositoryImpl(get()) }
 }
