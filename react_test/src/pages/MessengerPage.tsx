@@ -18,17 +18,11 @@ function MessengersPage() {
     const [newMessage, setNewMessage] = useState<string>('');
     const messageListRef = useRef<HTMLDivElement>(null);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const fetchMessages = async () => {
-        if (!selectedUser) return;
-
-        try {
-            const response = await axios.get(`http://192.168.1.125:8080/messages/get?loggedUserId=${client.userId}&recipientId=${selectedUser.userId}`);
-            setMessages(response.data);
-        } catch (error) {
-            console.error('Error fetching messages:', error);
-        }
-    };
+    useEffect(() => {
+        fetchUsers();
+        const intervalId = setInterval(fetchMessages, 5000);
+        return () => clearInterval(intervalId);
+    }, []);
 
     const fetchUsers = async () => {
         try {
@@ -39,12 +33,16 @@ function MessengersPage() {
         }
     };
 
-    useEffect(() => {
-        fetchUsers();
-        const intervalId = setInterval(fetchMessages, 5000);
-        return () => clearInterval(intervalId);
-    }, [fetchMessages]);
+    const fetchMessages = async () => {
+        if (!selectedUser) return;
 
+        try {
+            const response = await axios.get(`http://192.168.1.125:8080/messages/get?loggedUserId=${client.userId}&recipientId=${selectedUser.userId}`);
+            setMessages(response.data);
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    };
 
     useEffect(() => {
         scrollToBottom();
