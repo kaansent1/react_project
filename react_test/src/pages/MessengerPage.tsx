@@ -17,11 +17,11 @@ function MessengersPage() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState<string>('');
     const messageListRef = useRef<HTMLDivElement>(null);
+    //const [search, setSearch] = useState("")
 
     useEffect(() => {
         fetchUsers();
-        const intervalId = setInterval(fetchMessages, 5000);
-        return () => clearInterval(intervalId);
+        fetchMessages();
     }, []);
 
     const fetchUsers = async () => {
@@ -43,6 +43,11 @@ function MessengersPage() {
             console.error('Error fetching messages:', error);
         }
     };
+
+    useEffect(() => {
+        const intervalId = setInterval(fetchMessages, 5000);
+        return () => clearInterval(intervalId);
+    }, [selectedUser]);
 
     useEffect(() => {
         scrollToBottom();
@@ -70,7 +75,7 @@ function MessengersPage() {
 
         try {
             const response = await axios.post('http://192.168.1.125:8080/messages/send', message);
-            setMessages(prevMessages => [...prevMessages, response.data]);
+            setMessages([...messages, response.data]);
             setNewMessage('');
             scrollToBottom();
         } catch (error) {
