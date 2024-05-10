@@ -46,7 +46,7 @@ fun Routing.postRouting() {
                 partData.dispose()
             }
 
-            val imageUrl = "http://0.0.0.0:8080/static/post_images/$fileName"
+            val imageUrl = "http://192.168.1.113:8080/static/post_images/$fileName"
 
             if (postTextParams == null) {
                 File("${Constants.POST_IMAGES_FOLDER_PATH}/$fileName").delete()
