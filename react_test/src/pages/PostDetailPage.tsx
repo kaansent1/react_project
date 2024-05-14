@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "./HeaderPage.tsx";
-import { Container, Typography, Button, TextField, Grid } from "@mui/material";
+import { Container, Typography, Button, TextField, Grid, IconButton } from "@mui/material";
 import Footer from "../components/Footer.tsx";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -9,6 +9,8 @@ import { Post } from "../api/post.ts";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 import BackButton from "../components/BackButton.tsx";
 
 const PostDetailPage: React.FC = () => {
@@ -19,6 +21,12 @@ const PostDetailPage: React.FC = () => {
     const { postId } = useParams<{ postId?: string }>();
     const { client } = useClient();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if(client.userId == 0){
+            navigate("/")
+        }
+    }, [client.userId, navigate]);
 
     useEffect(() => {
         if (postId) {
@@ -108,7 +116,7 @@ const PostDetailPage: React.FC = () => {
                             <AccountCircleIcon sx={{ width: 80, height: 80 }} />
                         )}
                     </Grid>
-                    <Grid item xs={3} md={4}>
+                    <Grid item xs={11}>
                         <Typography variant="h4" style={{ cursor: 'pointer' }} onClick={() => navigate(post.userId === client.userId ? '/account' : `/user/${post.userId}`)}>
                             {post.username}
                         </Typography>
@@ -151,13 +159,13 @@ const PostDetailPage: React.FC = () => {
                 </Grid>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                        <Typography variant="body2">
+                        <IconButton onClick={handleLikeButtonClick}>
                             {isLiked ? (
-                                <FavoriteIcon onClick={handleLikeButtonClick} style={{ color: 'red' }} />
+                                <FavoriteIcon sx={{ color: 'red' }} />
                             ) : (
-                                <FavoriteBorderIcon onClick={handleLikeButtonClick} />
+                                <FavoriteBorderIcon />
                             )}
-                        </Typography>
+                        </IconButton>
                     </Grid>
                     <Grid item>
                         <Typography variant="body2">{post.createdAt}</Typography>
@@ -179,7 +187,7 @@ const PostDetailPage: React.FC = () => {
                             },
                         }}
                     >
-                        {isEditing ? "Speichern" : "Bearbeiten"}
+                        {isEditing ? <SaveIcon /> : <EditIcon />}
                     </Button>
                 )}
             </Container>

@@ -36,6 +36,11 @@ function UserFeed() {
     }, [client.userId]);
 
     useEffect(() => {
+        if(client.userId == 0){
+            navigate("/")
+        }
+    }, [client.userId, navigate]);
+    useEffect(() => {
         if (search === '') {
             setFilteredPosts(posts);
             setFilteredUsers([]);

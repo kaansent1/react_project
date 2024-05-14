@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Swal from 'sweetalert2';
 import "../styles/LoginStyle.css";
 import {useNavigate} from "react-router-dom";
 import {useClient} from "../context/ClientContext.tsx";
+import reactLogo from "../assets/react.svg";
 
 export interface LoginFormData {
     username: string;
@@ -22,8 +23,13 @@ function LoginPage() {
     const [showRegister, setShowRegister] = useState(false);
     const navigate = useNavigate()
 
-    const {setClient} = useClient();
+    const {client, setClient} = useClient();
 
+    useEffect(() => {
+        if (client.userId == 0) {
+            navigate("/")
+        }
+    }, [client.userId, navigate]);
     const handleLogin = async (event: React.FormEvent) => {
         event.preventDefault();
 
@@ -133,6 +139,9 @@ function LoginPage() {
         <div className="login-container">
             {/* Animated background and title container */}
             <div className="animated-background"></div>
+            <a href="https://reactjs.org" target="_blank">
+                <img src={reactLogo} className="logo react" alt="React logo"/>
+            </a>
             <div className="title-container">React-Social</div>
 
             {/* Form container */}

@@ -18,6 +18,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import BackButton from "../components/BackButton";
 import Swal from "sweetalert2";
 
+
 const UserDetailPage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
@@ -25,6 +26,12 @@ const UserDetailPage: React.FC = () => {
     const { client } = useClient();
     const navigate = useNavigate();
     const { userId } = useParams<{ userId?: string }>();
+
+    useEffect(() => {
+        if(client.userId == 0){
+            navigate("/")
+        }
+    }, [client.userId, navigate]);
 
     useEffect(() => {
         const fetchData = async () => {

@@ -5,19 +5,16 @@ import { Message } from "../api/message.ts";
 import Header from "./HeaderPage.tsx";
 import defaultAvatar from "../assets/blank_profile_pic.png";
 import '../styles/MessengerPageStyle.css';
-import Button from "@mui/material/Button";
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import Swal from 'sweetalert2';
-import { User } from "../api/user.ts";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import WarningIcon from '@mui/icons-material/Warning';
 import { IconButton } from '@mui/material';
-
+import { Follower } from "../api/follower.ts";
 
 function MessengersPage() {
     const { client } = useClient();
-    const [users, setUsers] = useState<User[]>([]);
-    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [follows, setFollows] = useState<Follower[]>([]);
+    const [selectedUser, setSelectedUser] = useState<Follower | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState<string>('');
     const messageListRef = useRef<HTMLDivElement>(null);
@@ -28,14 +25,20 @@ function MessengersPage() {
     };
 
     useEffect(() => {
+        if (client.userId == 0) {
+            navigate("/")
+        }
+    }, [client.userId, navigate]);
+
+    useEffect(() => {
         fetchUsers();
         fetchMessages();
     }, []);
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://192.168.1.125:8080/profile/all');
-            setUsers(response.data.users);
+            const response = await axios.get(`http://192.168.1.125:8080/follows/following?userId=${client.userId}`);
+            setFollows(response.data.follows);
         } catch (error) {
             console.error('Error fetching users:', error);
         }
@@ -45,7 +48,7 @@ function MessengersPage() {
         if (!selectedUser) return;
 
         try {
-            const response = await axios.get(`http://192.168.1.125:8080/messages/get?loggedUserId=${client.userId}&recipientId=${selectedUser.userId}`);
+            const response = await axios.get(`http://192.168.1.125:8080/messages/get?loggedUserId=${client.userId}&recipientId=${selectedUser.id}`);
             setMessages(response.data);
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -63,13 +66,13 @@ function MessengersPage() {
 
     const scrollToBottom = () => {
         if (messageListRef.current) {
-            const {scrollHeight, clientHeight} = messageListRef.current;
+            const { scrollHeight, clientHeight } = messageListRef.current;
             messageListRef.current.scrollTop = scrollHeight - clientHeight;
         }
     };
 
-    const handleUserSelect = (user: User) => {
-        setSelectedUser(user);
+    const handleUserSelect = (follows: Follower) => {
+        setSelectedUser(follows);
     };
 
     const handleMessageSend = async () => {
@@ -77,7 +80,7 @@ function MessengersPage() {
 
         const message = {
             senderId: client.userId,
-            receiverId: selectedUser.userId,
+            receiverId: selectedUser.id,
             content: newMessage.trim()
         };
 
@@ -91,45 +94,20 @@ function MessengersPage() {
         }
     };
 
-    const handleInfoButtonClick = () => {
-        Swal.fire({
-            title: 'Information',
-            text: 'Platzhalter.',
-            icon: 'info',
-            confirmButtonText: 'OK'
-        });
-    };
 
     const handleProfileClick = () => {
         if (selectedUser) {
-            navigate(`/user/${selectedUser.userId}`);
+            navigate(`/user/${selectedUser.id}`);
         }
     };
 
     return (
         <>
             <div>
-                <Header/>
+                <Header />
 
                 <div className="messengers-container">
                     <div className="private-messenger">
-                        <Button
-                            variant="contained"
-                            color="inherit"
-                            sx={{
-                                position: 'fixed',
-                                width: 'auto',
-                                maxWidth: '15vw',
-                                margin: '8px',
-                                right: '15px',
-                                transform: 'translateX(-50%)',
-                                zIndex: 99,
-                                fontSize: '15px',
-                            }}
-                            onClick={handleInfoButtonClick}
-                        >
-                            <InfoOutlinedIcon/>
-                        </Button>
                         <div className="users-list">
                             <h2><IconButton
                                 color="primary"
@@ -142,15 +120,15 @@ function MessengersPage() {
                                     fontSize: '15px',
                                 }}
                             >
-                                <ArrowBackIcon/>
+                                <ArrowBackIcon />
                             </IconButton>
                                 Benutzerliste</h2>
                             <ul>
-                                {users.map(user => (
-                                    <li key={user.userId} onClick={() => handleUserSelect(user)}>
-                                        <img src={user.image ? user.image : defaultAvatar} alt=""
-                                             style={{width: "3rem", height: "3rem", borderRadius: '50%'}}/>
-                                        <span>{user.username}</span>
+                                {follows.map(follows => (
+                                    <li key={follows.id} onClick={() => handleUserSelect(follows)}>
+                                        <img src={follows.image ? follows.image : defaultAvatar} alt=""
+                                             style={{ width: "3rem", height: "3rem", borderRadius: '50%' }} />
+                                        <span>{follows.name}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -166,7 +144,7 @@ function MessengersPage() {
                                                 borderRadius: '50%',
                                                 marginRight: '10px',
                                                 cursor: 'pointer'
-                                            }} onClick={handleProfileClick}/>
+                                            }} onClick={handleProfileClick} />
                                         ) : (
                                             <img src={defaultAvatar} alt="Standardbild" style={{
                                                 width: 40,
@@ -174,9 +152,15 @@ function MessengersPage() {
                                                 borderRadius: '50%',
                                                 marginRight: '10px',
                                                 cursor: 'pointer'
-                                            }} onClick={handleProfileClick}/>
+                                            }} onClick={handleProfileClick} />
                                         )}
-                                        {selectedUser.username}
+                                        {selectedUser.name}
+                                        {!selectedUser.isFollowing && (
+                                            <div style={{ display: 'flex', alignItems: 'center', marginLeft: '10px', color: '#b88b00', fontSize: 'medium'}}>
+                                                <WarningIcon sx={{ marginRight: '5px' }} />
+                                                Dieser Benutzer folgt dir nicht
+                                            </div>
+                                        )}
                                     </h2>
                                 </div>
                                 <div className="messages-list" ref={messageListRef}>
@@ -200,7 +184,7 @@ function MessengersPage() {
                                                 handleMessageSend();
                                             }
                                         }}
-                                        placeholder="Nachricht eingeben..."/>
+                                        placeholder="Nachricht eingeben..." />
                                     <button onClick={handleMessageSend}>Senden</button>
                                 </div>
                             </div>

@@ -17,6 +17,12 @@ function FollowersPage() {
     const [showFollowers, setShowFollowers] = useState(true);
 
     useEffect(() => {
+        if(client.userId == 0){
+            navigate("/")
+        }
+    }, [client.userId, navigate]);
+
+    useEffect(() => {
         const loadFollowers = async () => {
             try {
                 const response = await axios.get(`http://192.168.1.125:8080/follows/followers?userId=${client.userId}`);

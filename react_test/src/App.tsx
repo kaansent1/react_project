@@ -23,7 +23,6 @@ const App: React.FC = () => {
         isFollowing: false
     })
     return (
-        //<QueryClientProvider client={queryClient}>
         <ClientContext.Provider value={{client, setClient}}>
             <BrowserRouter>
                 <Routes>

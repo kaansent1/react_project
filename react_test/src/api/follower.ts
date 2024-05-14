@@ -3,4 +3,5 @@ export interface Follower {
     name: string
     image: string
     email: string
+    isFollowing: boolean
 }

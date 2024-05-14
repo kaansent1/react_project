@@ -14,7 +14,7 @@ class FollowsRepositoryImpl(
     private val followDao: FollowsDao
 ) : FollowsRepository {
     override suspend fun followUser(follower: Long, following: Long): Response<FollowAndUnfollowResponse> {
-        return if(followDao.isAlreadyFollowing(follower, following)){
+        return if (followDao.isAlreadyFollowing(follower, following)) {
             Response.Error(
                 code = HttpStatusCode.Forbidden,
                 data = FollowAndUnfollowResponse(
@@ -22,15 +22,15 @@ class FollowsRepositoryImpl(
                     message = "You are already following this user"
                 )
             )
-        }else{
+        } else {
             val success = followDao.followUser(follower, following)
 
-            if (success){
+            if (success) {
                 userDao.updateFollowsCount(follower, following, isFollowing = true)
                 Response.Success(
                     data = FollowAndUnfollowResponse(success = true)
                 )
-            }else{
+            } else {
                 Response.Error(
                     code = HttpStatusCode.InternalServerError,
                     data = FollowAndUnfollowResponse(
@@ -45,12 +45,12 @@ class FollowsRepositoryImpl(
     override suspend fun unfollowUser(follower: Long, following: Long): Response<FollowAndUnfollowResponse> {
         val success = followDao.unfollowUser(follower, following)
 
-        return if (success){
+        return if (success) {
             userDao.updateFollowsCount(follower, following, isFollowing = false)
             Response.Success(
                 data = FollowAndUnfollowResponse(success = true)
             )
-        }else{
+        } else {
             Response.Error(
                 code = HttpStatusCode.InternalServerError,
                 data = FollowAndUnfollowResponse(
@@ -74,15 +74,17 @@ class FollowsRepositoryImpl(
     }
 
     override suspend fun getFollowing(userId: Long): Response<GetFollowsResponse> {
-        val followingIds = followDao.getFollowing(userId)
+        val followingIds = followDao.getAllFollowing(userId)
         val followingRows = userDao.getUsers(ids = followingIds)
         val following = followingRows.map { followingRow ->
-            toFollowUserData(userRow = followingRow, isFollowing = true)
+            val isFollowing = followDao.isAlreadyFollowing(follower = followingRow.userId, following = userId)
+            toFollowUserData(userRow = followingRow, isFollowing = isFollowing)
         }
         return Response.Success(
             data = GetFollowsResponse(success = true, follows = following)
         )
     }
+
 
 
     private fun toFollowUserData(userRow: UserRow, isFollowing: Boolean): FollowUserData {
