@@ -86,8 +86,7 @@ button:hover {
 
 
 .logo {
-    height: 6em;
-    padding: 1.5em;
+    height: 7em;
     will-change: filter;
     animation: logo-spin infinite 20s linear;
 }

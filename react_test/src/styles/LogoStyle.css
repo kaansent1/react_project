@@ -1,0 +1,5 @@
+.srlogo {
+    height: 1.3em;
+    will-change: filter;
+    animation: logo-spin infinite 20s linear;
+}

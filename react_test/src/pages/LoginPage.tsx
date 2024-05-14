@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 import "../styles/LoginStyle.css";
 import {useNavigate} from "react-router-dom";
 import {useClient} from "../context/ClientContext.tsx";
-import reactLogo from "../assets/react.svg";
+import logo from "../assets/logo.svg";
 
 export interface LoginFormData {
     username: string;
@@ -137,14 +137,12 @@ function LoginPage() {
     };
     return (
         <div className="login-container">
-            {/* Animated background and title container */}
             <div className="animated-background"></div>
             <a href="https://reactjs.org" target="_blank">
-                <img src={reactLogo} className="logo react" alt="React logo"/>
+                <img src={logo} className="logo react" alt="React logo"/>
             </a>
             <div className="title-container">React-Social</div>
 
-            {/* Form container */}
             <div className="form-container">
                 <h1>{showRegister ? 'Registrieren' : 'Login'}</h1>
                 <form onSubmit={showRegister ? handleRegister : handleLogin}>
@@ -176,7 +174,6 @@ function LoginPage() {
                         </>
                     ) : (
                         <>
-                            {/* Register form */}
                             <input
                                 type="text"
                                 name="username"

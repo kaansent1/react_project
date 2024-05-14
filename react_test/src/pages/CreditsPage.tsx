@@ -4,6 +4,7 @@ import '../styles/CreditsPage.css';
 import React, {useEffect} from "react";
 import {useClient} from "../context/ClientContext.tsx";
 import {useNavigate} from "react-router-dom";
+import BackButton from "../components/BackButton.tsx";
 
 
 const CreditsPage: React.FC = () => {
@@ -21,6 +22,7 @@ const CreditsPage: React.FC = () => {
             <div className="credits-container">
                 <span className="contributors">Kaan Sentürk </span>
             </div>
+            <BackButton />
             <Footer />
         </div>
     );
