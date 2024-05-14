@@ -8,7 +8,8 @@ import '../styles/MessengerPageStyle.css';
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import WarningIcon from '@mui/icons-material/Warning';
-import { IconButton } from '@mui/material';
+import { IconButton, TextField, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import { Follower } from "../api/follower.ts";
 
 function MessengersPage() {
@@ -18,6 +19,8 @@ function MessengersPage() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState<string>('');
     const messageListRef = useRef<HTMLDivElement>(null);
+    const [search, setSearch] = useState<string>('');
+    const [filteredFollowers, setFilteredFollowers] = useState<Follower[]>([]);
     const navigate = useNavigate();
 
     const handleGoBack = () => {
@@ -26,9 +29,18 @@ function MessengersPage() {
 
     useEffect(() => {
         if (client.userId == 0) {
-            navigate("/")
+            navigate("/");
         }
     }, [client.userId, navigate]);
+
+    useEffect(() => {
+        if (search === '') {
+            setFilteredFollowers(follows);
+        } else {
+            const filteredUser = follows.filter(follower => follower.name.toLowerCase().includes(search.toLowerCase()));
+            setFilteredFollowers(filteredUser);
+        }
+    }, [search, follows]);
 
     useEffect(() => {
         fetchUsers();
@@ -39,6 +51,7 @@ function MessengersPage() {
         try {
             const response = await axios.get(`http://192.168.1.125:8080/follows/following?userId=${client.userId}`);
             setFollows(response.data.follows);
+            setFilteredFollowers(response.data.follows);
         } catch (error) {
             console.error('Error fetching users:', error);
         }
@@ -94,7 +107,6 @@ function MessengersPage() {
         }
     };
 
-
     const handleProfileClick = () => {
         if (selectedUser) {
             navigate(`/user/${selectedUser.id}`);
@@ -104,34 +116,56 @@ function MessengersPage() {
     return (
         <>
             <div>
-                <Header />
+                <Header/>
 
                 <div className="messengers-container">
                     <div className="private-messenger">
                         <div className="users-list">
-                            <h2><IconButton
-                                color="primary"
-                                onClick={handleGoBack}
-                                sx={{
-                                    width: 'auto',
-                                    maxWidth: '15vw',
-                                    transform: 'translateX(-50%)',
-                                    zIndex: 99,
-                                    fontSize: '15px',
-                                }}
-                            >
-                                <ArrowBackIcon />
-                            </IconButton>
-                                Benutzerliste</h2>
-                            <ul>
-                                {follows.map(follows => (
-                                    <li key={follows.id} onClick={() => handleUserSelect(follows)}>
-                                        <img src={follows.image ? follows.image : defaultAvatar} alt=""
-                                             style={{ width: "3rem", height: "3rem", borderRadius: '50%' }} />
-                                        <span>{follows.name}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                            <div className="header-search">
+                                <h2>
+                                    <IconButton
+                                        color="primary"
+                                        onClick={handleGoBack}
+                                        sx={{
+                                            width: 'auto',
+                                            maxWidth: '15vw',
+                                            transform: 'translateX(-50%)',
+                                            zIndex: 99,
+                                            fontSize: '15px',
+                                        }}
+                                    >
+                                        <ArrowBackIcon/>
+                                    </IconButton>
+                                    Benutzerliste
+                                </h2>
+                                <TextField
+                                    type="text"
+                                    variant="outlined"
+                                    size="small"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    placeholder="Suche nach Follower..."
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <SearchIcon/>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    sx={{ marginBottom: 2 }}
+                                />
+                            </div>
+                            <div className="follower-list">
+                                <ul>
+                                    {filteredFollowers.map(follows => (
+                                        <li key={follows.id} onClick={() => handleUserSelect(follows)}>
+                                            <img src={follows.image ? follows.image : defaultAvatar} alt=""
+                                                 style={{ width: "3rem", height: "3rem", borderRadius: '50%' }}/>
+                                            <span>{follows.name}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </div>
                         {selectedUser && (
                             <div className={`chat-container ${selectedUser}`}>
@@ -144,7 +178,7 @@ function MessengersPage() {
                                                 borderRadius: '50%',
                                                 marginRight: '10px',
                                                 cursor: 'pointer'
-                                            }} onClick={handleProfileClick} />
+                                            }} onClick={handleProfileClick}/>
                                         ) : (
                                             <img src={defaultAvatar} alt="Standardbild" style={{
                                                 width: 40,
@@ -152,12 +186,18 @@ function MessengersPage() {
                                                 borderRadius: '50%',
                                                 marginRight: '10px',
                                                 cursor: 'pointer'
-                                            }} onClick={handleProfileClick} />
+                                            }} onClick={handleProfileClick}/>
                                         )}
                                         {selectedUser.name}
                                         {!selectedUser.isFollowing && (
-                                            <div style={{ display: 'flex', alignItems: 'center', marginLeft: '10px', color: '#b88b00', fontSize: 'medium'}}>
-                                                <WarningIcon sx={{ marginRight: '5px' }} />
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                marginLeft: '10px',
+                                                color: '#b88b00',
+                                                fontSize: 'medium'
+                                            }}>
+                                                <WarningIcon sx={{ marginRight: '5px' }}/>
                                                 Dieser Benutzer folgt dir nicht
                                             </div>
                                         )}
@@ -184,7 +224,7 @@ function MessengersPage() {
                                                 handleMessageSend();
                                             }
                                         }}
-                                        placeholder="Nachricht eingeben..." />
+                                        placeholder="Nachricht eingeben..."/>
                                     <button onClick={handleMessageSend}>Senden</button>
                                 </div>
                             </div>

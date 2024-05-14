@@ -100,7 +100,7 @@ const PostDetailPage: React.FC = () => {
                     backgroundColor: '#3a5169',
                     color: 'white',
                     maxHeight: '70vh',
-                    borderRadius: 4,
+                    borderRadius: '4px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',

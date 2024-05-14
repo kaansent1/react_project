@@ -16,7 +16,7 @@ function UserFeed() {
     const navigate = useNavigate();
     const { client } = useClient();
     const [search, setSearch] = useState('');
-    const [searchType, setSearchType] = useState('posts'); // Default to searching for posts
+    const [searchType, setSearchType] = useState('posts');
     const [posts, setPosts] = useState<Post[]>([]);
     const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
     const [users, setUsers] = useState<User[]>([]);
@@ -40,6 +40,7 @@ function UserFeed() {
             navigate("/")
         }
     }, [client.userId, navigate]);
+
     useEffect(() => {
         if (search === '') {
             setFilteredPosts(posts);
@@ -220,7 +221,7 @@ function UserFeed() {
                                             cursor: 'pointer',
                                         },
                                     }}
-                                    onClick={() => navigate(`/user/${user.userId}`)}
+                                    onClick={() => navigate(user.userId === client.userId ? '/account' : `/user/${user.userId}`)}
                                 >
                                     <Grid container spacing={2}>
                                         <Grid item xs={12}>
