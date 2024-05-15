@@ -14,7 +14,15 @@ const initialClientState: User = {
 
 export const ClientContext = createContext<{
     client: User;
-    setClient: (client: User) => void;
+    setClient: (client: {
+        image: string | undefined;
+        isFollowing: boolean;
+        followersCount: number;
+        userId: number;
+        followingCount: number;
+        email: string;
+        username: string
+    }) => void;
     children?: Element[];
 }>({
     client: initialClientState,

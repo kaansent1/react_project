@@ -69,7 +69,7 @@ fun Routing.profileRouting() {
                     partData.dispose()
                 }
 
-                val imageUrl = "http://0.0.0.0:8080/static/profile_images/$fileName"
+                val imageUrl = "http://192.168.1.125:8080/static/profile_images/$fileName"
 
                 val result = repository.updateUser(imageUrl, updateUserParams!!)
                 call.respond(status = result.code, message = result.data)

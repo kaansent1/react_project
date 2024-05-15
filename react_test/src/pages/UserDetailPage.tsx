@@ -18,7 +18,6 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import BackButton from "../components/BackButton";
 import Swal from "sweetalert2";
 
-
 const UserDetailPage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
@@ -28,8 +27,8 @@ const UserDetailPage: React.FC = () => {
     const { userId } = useParams<{ userId?: string }>();
 
     useEffect(() => {
-        if(client.userId == 0){
-            navigate("/")
+        if (client.userId === 0) {
+            navigate("/");
         }
     }, [client.userId, navigate]);
 
@@ -39,7 +38,7 @@ const UserDetailPage: React.FC = () => {
                 setLoading(true);
                 const userResponse = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
                 setUser(userResponse.data.profile);
-                console.log(userResponse.data.profile)
+                console.log(userResponse.data.profile);
                 const postResponse = await axios.get(`http://192.168.1.125:8080/posts/${userId}?currentUserId=${client.userId}`);
                 setPosts(postResponse.data.posts);
             } catch (error) {
@@ -145,10 +144,12 @@ const UserDetailPage: React.FC = () => {
         }
     };
 
+    const isOwnProfile = userId === client.userId.toString();
+
     return (
         <>
-            <Header/>
-            <div style={{ overflow: 'auto',height: 'calc(100vh - 170px)', padding: '20px' }}>
+            <Header />
+            <div style={{ overflow: 'auto', height: 'calc(100vh - 170px)', padding: '20px' }}>
                 <Grid container justifyContent="center">
                     <Grid item xs={12} alignItems="center" justifyContent="center">
                         <Container sx={{ borderRadius: '50%', width: 'fit-content', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -173,32 +174,33 @@ const UserDetailPage: React.FC = () => {
                             Following: {user?.followingCount}
                         </Typography>
                     </Grid>
-                    <Grid container justifyContent="center" width="auto">
-                        {user?.isFollowing ? (
-                            <Button
-                                onClick={handleUnfollowClick}
-                                variant="contained"
-                                color="error"
-                                sx={{ borderRadius: '20px', marginTop: '10px' }}
-                            >
-                                Unfollow
-                            </Button>
-                        ) : (
-                            <Button
-                                onClick={handleFollowClick}
-                                variant="contained"
-                                color="primary"
-                                sx={{ borderRadius: '20px', marginTop: '10px' }}
-                            >
-                                Follow
-                            </Button>
-                        )}
-                    </Grid>
-
+                    {!isOwnProfile && (
+                        <Grid container justifyContent="center" width="auto">
+                            {user?.isFollowing ? (
+                                <Button
+                                    onClick={handleUnfollowClick}
+                                    variant="contained"
+                                    color="error"
+                                    sx={{ borderRadius: '20px', marginTop: '10px' }}
+                                >
+                                    Unfollow
+                                </Button>
+                            ) : (
+                                <Button
+                                    onClick={handleFollowClick}
+                                    variant="contained"
+                                    color="primary"
+                                    sx={{ borderRadius: '20px', marginTop: '10px' }}
+                                >
+                                    Follow
+                                </Button>
+                            )}
+                        </Grid>
+                    )}
                 </Grid>
                 <Grid container justifyContent="center">
                     <Typography variant="h5" style={{ marginTop: '20px' }}>
-                        {user?.username}'s Posts:
+                        {isOwnProfile ? 'Deine Posts:' : `${user?.username}'s Posts:`}
                     </Typography>
                 </Grid>
                 {posts.length > 0 ? (
@@ -248,7 +250,7 @@ const UserDetailPage: React.FC = () => {
                                         )}
                                         <Button
                                             onClick={(e) => handleLikeClick(post.postId, e)}
-                                            startIcon={post.isLiked ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
+                                            startIcon={post.isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                                             style={{ color: post.isLiked ? 'red' : 'white' }}
                                         >
                                             {post.likesCount}
@@ -261,13 +263,13 @@ const UserDetailPage: React.FC = () => {
                 ) : (
                     <Grid container justifyContent="center">
                         <Typography variant="h6" style={{ marginTop: '20px' }}>
-                            Dieser Nutzer hat noch keine Posts
+                            {isOwnProfile ? 'Du hast keine Posts bisher' : 'Dieser Nutzer hat noch keine Posts'}
                         </Typography>
                     </Grid>
                 )}
             </div>
             <BackButton />
-            <Footer/>
+            <Footer />
         </>
     );
 };

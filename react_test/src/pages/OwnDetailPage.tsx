@@ -18,7 +18,7 @@ interface ProfileFormData {
 
 const OwnDetailPage = () => {
     const {handleSubmit, register, reset} = useForm<ProfileFormData>();
-    const {client} = useClient();
+    const {client, setClient} = useClient();
     const [editMode, setEditMode] = useState(false);
     const navigate = useNavigate()
 
@@ -44,6 +44,13 @@ const OwnDetailPage = () => {
                 'Content-Type': 'multipart/form-data',
             },
         });
+        setClient({
+            ...client,
+            email: data.email,
+            username: data.username,
+            image: data.image
+        });
+
         console.log(response)
 
         reset();

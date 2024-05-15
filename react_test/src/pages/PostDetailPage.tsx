@@ -117,7 +117,7 @@ const PostDetailPage: React.FC = () => {
                         )}
                     </Grid>
                     <Grid item xs={11}>
-                        <Typography variant="h4" style={{ cursor: 'pointer' }} onClick={() => navigate(post.userId === client.userId ? '/account' : `/user/${post.userId}`)}>
+                        <Typography variant="h4" style={{ cursor: 'pointer' }} onClick={() => navigate(`/user/${post.userId}`)}>
                             {post.username}
                         </Typography>
                     </Grid>

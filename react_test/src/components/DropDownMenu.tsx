@@ -1,16 +1,22 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import "../styles/DropDownMenuStyle.css";
+import {useClient} from "../context/ClientContext.tsx";
 
 function DropdownMenu() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
 
+    const {client} = useClient()
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
+    const goToHome = () => {
+        closeDropdown();
+        navigate("/home");
+    }
     const goToCredits = () => {
         closeDropdown();
         navigate("/credits");
@@ -19,7 +25,7 @@ function DropdownMenu() {
 
     const goToAccount = () => {
         closeDropdown();
-        navigate("/account");
+        navigate(`/user/${client.userId}`);
     };
 
 
@@ -46,6 +52,7 @@ function DropdownMenu() {
             <button onClick={toggleDropdown} className="dropdown-button">☰</button>
             {isDropdownOpen && (
                 <div className="overlay">
+                    <button onClick={goToHome} className="menu-item">Home</button>
                     <button onClick={goToAccount} className="menu-item">Account Info</button>
                     <button onClick={goToMessenger} className="menu-item">Messenger</button>
                     <button onClick={goToFollowers} className="menu-item">Your Followers</button>
