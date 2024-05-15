@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 import {Typography, List, ListItem, ListItemText, ListItemAvatar, Avatar, Container, Button, Grid} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { useClient } from '../context/ClientContext.tsx';
+import {useNavigate} from 'react-router-dom';
+import {useClient} from '../context/ClientContext.tsx';
 import axios from 'axios';
-import { Follower } from "../api/follower.ts";
+import {Follower} from "../api/follower.ts";
 import Header from "./HeaderPage.tsx";
 import Footer from "../components/Footer.tsx";
 import PersonIcon from '@mui/icons-material/Person';
@@ -11,13 +11,13 @@ import '../styles/FollowersPage.css';
 
 function FollowersPage() {
     const navigate = useNavigate();
-    const { client } = useClient();
+    const {client} = useClient();
     const [followers, setFollowers] = useState<Follower[]>([]);
     const [following, setFollowing] = useState<Follower[]>([]);
     const [showFollowers, setShowFollowers] = useState(true);
 
     useEffect(() => {
-        if(client.userId == 0){
+        if (client.userId == 0) {
             navigate("/")
         }
     }, [client.userId, navigate]);
@@ -61,7 +61,7 @@ function FollowersPage() {
 
     return (
         <div>
-            <Header />
+            <Header/>
             <Container>
                 <Grid container spacing={2} justifyContent="center" alignItems="center" mt="2px">
                     <Grid item>
@@ -69,7 +69,7 @@ function FollowersPage() {
                             onClick={handleShowFollowers}
                             variant={showFollowers ? "contained" : "outlined"}
                             className="follow-button"
-                            startIcon={<PersonIcon />}
+                            startIcon={<PersonIcon/>}
                         >
                             Follower
                         </Button>
@@ -79,7 +79,7 @@ function FollowersPage() {
                             onClick={handleShowFollowing}
                             variant={showFollowers ? "outlined" : "contained"}
                             className="follow-button"
-                            startIcon={<PersonIcon />}
+                            startIcon={<PersonIcon/>}
                         >
                             Folgende
                         </Button>
@@ -93,25 +93,26 @@ function FollowersPage() {
                         </Typography>
                         {followers.length > 0 ? (
                             <div className="list-container">
-                            <List className="followers-list">
-                                {followers.map((follower) => (
-                                    <ListItem key={follower.id} alignItems="flex-start" className="follower-item">
-                                        <ListItemAvatar>
-                                            <Avatar alt={follower.image} src={follower.image} />
-                                        </ListItemAvatar>
-                                        <ListItemText
-                                            primary={follower.name}
-                                            secondary={follower.email}
-                                        />
-                                        <div style={{display: "flex"}}>
-                                            <Button onClick={() => handleProfileClick(follower.id)} size="small" className="profile-button">
-                                                <PersonIcon fontSize="small" />
-                                            </Button>
-                                        </div>
-                                    </ListItem>
-                                ))}
-                            </List>
-                                </div>
+                                <List className="followers-list">
+                                    {followers.map((follower) => (
+                                        <ListItem key={follower.id} alignItems="flex-start" className="follower-item">
+                                            <ListItemAvatar>
+                                                <Avatar alt={follower.image} src={follower.image}/>
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                primary={follower.name}
+                                                secondary={follower.email}
+                                            />
+                                            <div style={{display: "flex"}}>
+                                                <Button onClick={() => handleProfileClick(follower.id)} size="small"
+                                                        className="profile-button">
+                                                    <PersonIcon fontSize="small"/>
+                                                </Button>
+                                            </div>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </div>
                         ) : (
                             <Typography variant="subtitle1" align="center" gutterBottom>
                                 Du hast keine Follower.
@@ -125,25 +126,26 @@ function FollowersPage() {
                         </Typography>
                         {following.length > 0 ? (
                             <div className="list-container">
-                            <List className="following-list">
-                                {following.map((followedUser) => (
-                                    <ListItem key={followedUser.id} alignItems="flex-start" className="following-item">
-                                        <ListItemAvatar>
-                                            <Avatar alt={followedUser.image} src={followedUser.image} />
-                                        </ListItemAvatar>
-                                        <ListItemText
-                                            primary={followedUser.name}
-                                            secondary={followedUser.email}
-                                        />
-                                        <div style={{display: "flex"}}>
-                                            <Button onClick={() => handleProfileClick(followedUser.id)} size="small"
-                                                    className="profile-button">
-                                                <PersonIcon fontSize="small"/>
-                                            </Button>
-                                        </div>
-                                    </ListItem>
-                                ))}
-                            </List>
+                                <List className="following-list">
+                                    {following.map((followedUser) => (
+                                        <ListItem key={followedUser.id} alignItems="flex-start"
+                                                  className="following-item">
+                                            <ListItemAvatar>
+                                                <Avatar alt={followedUser.image} src={followedUser.image}/>
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                primary={followedUser.name}
+                                                secondary={followedUser.email}
+                                            />
+                                            <div style={{display: "flex"}}>
+                                                <Button onClick={() => handleProfileClick(followedUser.id)} size="small"
+                                                        className="profile-button">
+                                                    <PersonIcon fontSize="small"/>
+                                                </Button>
+                                            </div>
+                                        </ListItem>
+                                    ))}
+                                </List>
                             </div>
                         ) : (
                             <Typography variant="subtitle1" align="center" gutterBottom>
@@ -153,7 +155,7 @@ function FollowersPage() {
                     </div>
                 )}
             </Container>
-            <Footer />
+            <Footer/>
         </div>
     );
 }

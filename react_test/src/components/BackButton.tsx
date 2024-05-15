@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 const BackButton = () => {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ const BackButton = () => {
         <Button
             color="primary"
             variant="contained"
-            startIcon={<ArrowBackIcon />}
+            startIcon={<ArrowBackIcon/>}
             onClick={handleGoBack}
             sx={{
                 position: 'fixed',

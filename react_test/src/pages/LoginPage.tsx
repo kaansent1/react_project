@@ -148,7 +148,6 @@ function LoginPage() {
                 <form onSubmit={showRegister ? handleRegister : handleLogin}>
                     {!showRegister ? (
                         <>
-                            {/* Login form */}
                             <input
                                 type="text"
                                 name="username"

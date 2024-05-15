@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Header from "./HeaderPage.tsx";
 import {
     Container,
@@ -7,12 +7,12 @@ import {
     Button,
 } from "@mui/material";
 import Footer from "../components/Footer.tsx";
-import { useNavigate, useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
-import { useClient } from "../context/ClientContext.tsx";
+import {useClient} from "../context/ClientContext.tsx";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { User } from "../api/user.ts";
-import { Post } from "../api/post.ts";
+import {User} from "../api/user.ts";
+import {Post} from "../api/post.ts";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import BackButton from "../components/BackButton";
@@ -22,9 +22,9 @@ const UserDetailPage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
     const [, setLoading] = useState(true);
-    const { client } = useClient();
+    const {client} = useClient()
     const navigate = useNavigate();
-    const { userId } = useParams<{ userId?: string }>();
+    const {userId} = useParams<{ userId?: string }>();
 
     useEffect(() => {
         if (client.userId === 0) {
@@ -53,6 +53,7 @@ const UserDetailPage: React.FC = () => {
         }
     }, [client.userId, userId]);
 
+
     const handlePostClick = (postId: number) => {
         navigate(`/detail/${postId}`);
     };
@@ -72,9 +73,9 @@ const UserDetailPage: React.FC = () => {
             let response;
 
             if (post.isLiked) {
-                response = await axios.delete('http://192.168.1.125:8080/post/likes/remove', { data: { userId, postId } });
+                response = await axios.delete('http://192.168.1.125:8080/post/likes/remove', {data: {userId, postId}});
             } else {
-                response = await axios.post('http://192.168.1.125:8080/post/likes/add', { userId, postId });
+                response = await axios.post('http://192.168.1.125:8080/post/likes/add', {userId, postId});
             }
 
             if (response.data.success) {
@@ -148,128 +149,138 @@ const UserDetailPage: React.FC = () => {
 
     return (
         <>
-            <Header />
-            <div style={{ overflow: 'auto', height: 'calc(100vh - 170px)', padding: '20px' }}>
-                <Grid container justifyContent="center">
-                    <Grid item xs={12} alignItems="center" justifyContent="center">
-                        <Container sx={{ borderRadius: '50%', width: 'fit-content', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Header/>
+            <Container style={{padding: '20px', minHeight: 'calc(100vh - 170px)'}}>
+                <Grid container justifyContent="center" spacing={2}>
+                    <Grid item xs={12} md={6} lg={4} alignItems="center" justifyContent="center">
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
                             {user?.image ? (
-                                <img src={user.image} alt="Profilbild" style={{ width: '10rem', height: '10rem', borderRadius: '50%' }} />
+                                <img src={user.image} alt="Profilbild"
+                                     style={{width: '10rem', height: '10rem', borderRadius: '50%'}}/>
                             ) : (
-                                <AccountCircleIcon style={{ marginRight: '1rem', fontSize: '3.5rem' }} />
+                                <AccountCircleIcon style={{fontSize: '7rem'}}/>
                             )}
-                        </Container>
-                    </Grid>
-                    <Grid container justifyContent="center" alignItems="center" direction="column">
-                        <Typography variant="h4" gutterBottom>
+                        </div>
+                        <Typography variant="h4" align="center" gutterBottom>
                             {user?.username}
                         </Typography>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h6" align="center" gutterBottom>
                             {user?.email}
                         </Typography>
-                        <Typography variant="body1" gutterBottom>
+                        <Typography variant="body1" align="center" gutterBottom>
                             Followers: {user?.followersCount}
                         </Typography>
-                        <Typography variant="body1" gutterBottom>
+                        <Typography variant="body1" align="center" gutterBottom>
                             Following: {user?.followingCount}
                         </Typography>
+                        {!isOwnProfile && (
+                            <div style={{display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
+                                {user?.isFollowing ? (
+                                    <Button
+                                        onClick={handleUnfollowClick}
+                                        variant="contained"
+                                        color="error"
+                                        sx={{borderRadius: '20px'}}
+                                    >
+                                        Unfollow
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        onClick={handleFollowClick}
+                                        variant="contained"
+                                        color="primary"
+                                        sx={{borderRadius: '20px'}}
+                                    >
+                                        Follow
+                                    </Button>
+                                )}
+                            </div>
+                        )}
                     </Grid>
-                    {!isOwnProfile && (
-                        <Grid container justifyContent="center" width="auto">
-                            {user?.isFollowing ? (
-                                <Button
-                                    onClick={handleUnfollowClick}
-                                    variant="contained"
-                                    color="error"
-                                    sx={{ borderRadius: '20px', marginTop: '10px' }}
-                                >
-                                    Unfollow
-                                </Button>
-                            ) : (
-                                <Button
-                                    onClick={handleFollowClick}
-                                    variant="contained"
-                                    color="primary"
-                                    sx={{ borderRadius: '20px', marginTop: '10px' }}
-                                >
-                                    Follow
-                                </Button>
-                            )}
-                        </Grid>
-                    )}
-                </Grid>
-                <Grid container justifyContent="center">
-                    <Typography variant="h5" style={{ marginTop: '20px' }}>
-                        {isOwnProfile ? 'Deine Posts:' : `${user?.username}'s Posts:`}
-                    </Typography>
-                </Grid>
-                {posts.length > 0 ? (
-                    <Container maxWidth="md" style={{ marginTop: '20px' }}>
-                        {posts.map((post) => (
-                            <Container
-                                key={post.postId}
-                                sx={{
-                                    padding: '20px',
-                                    marginBottom: '20px',
-                                    backgroundColor: '#3a5169',
-                                    color: 'white',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                }}
-                                onClick={() => handlePostClick(post.postId)}
-                            >
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <Typography variant="h5" align="left" sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            color: 'white',
-                                            fontWeight: 'bold',
-                                            marginBottom: 1
-                                        }}>
-                                            {post.userImage ? (
-                                                <img src={post.userImage} alt="Profile" style={{ marginRight: '1rem', width: '5rem', height: '5rem', borderRadius: '50%'}} />
-                                            ) : (
-                                                <AccountCircleIcon sx={{ marginRight: '1rem', fontSize: '3.5rem' }} />
-                                            )}
-                                            {post.username}
-                                        </Typography>
-                                        <Typography variant="body1" style={{ marginBottom: '10px' }}>
-                                            {post.text}
-                                        </Typography>
-                                        {post.image && (
-                                            <div style={{
-                                                width: '100%',
-                                                height: 'auto',
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                alignItems: 'center'
-                                            }}>
-                                                <img src={post.image} alt="" style={{ maxWidth: '90%', maxHeight: '50vh', marginBottom: '1rem' }} />
-                                            </div>
-                                        )}
-                                        <Button
-                                            onClick={(e) => handleLikeClick(post.postId, e)}
-                                            startIcon={post.isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                                            style={{ color: post.isLiked ? 'red' : 'white' }}
-                                        >
-                                            {post.likesCount}
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </Container>
-                        ))}
-                    </Container>
-                ) : (
-                    <Grid container justifyContent="center">
-                        <Typography variant="h6" style={{ marginTop: '20px' }}>
-                            {isOwnProfile ? 'Du hast keine Posts bisher' : 'Dieser Nutzer hat noch keine Posts'}
+                    <Grid item xs={12} md={8} style={{overflowY: 'auto', maxHeight: 'calc(100vh - 180px)'}}>
+                        <Typography variant="h5" align="center" style={{marginTop: '20px'}}>
+                            {isOwnProfile ? 'Deine Posts:' : `${user?.username}'s Posts:`}
                         </Typography>
+                        {posts.length > 0 ? (
+                            <Container maxWidth="md" style={{marginTop: '20px'}}>
+                                {posts.map((post) => (
+                                    <Container
+                                        key={post.postId}
+                                        sx={{
+                                            padding: '20px',
+                                            marginBottom: '20px',
+                                            backgroundColor: '#3a5169',
+                                            color: 'white',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                        }}
+                                        onClick={() => handlePostClick(post.postId)}
+                                    >
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12}>
+                                                <Typography variant="h5" align="left" sx={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    color: 'white',
+                                                    fontWeight: 'bold',
+                                                    marginBottom: 1
+                                                }}>
+                                                    {post.userImage ? (
+                                                        <img src={post.userImage} alt="Profile" style={{
+                                                            marginRight: '1rem',
+                                                            width: '5rem',
+                                                            height: '5rem',
+                                                            borderRadius: '50%'
+                                                        }}/>
+                                                    ) : (
+                                                        <AccountCircleIcon
+                                                            sx={{marginRight: '1rem', fontSize: '3.5rem'}}/>
+                                                    )}
+                                                    {post.username}
+                                                </Typography>
+                                                <Typography variant="body1" style={{marginBottom: '10px'}}>
+                                                    {post.text}
+                                                </Typography>
+                                                {post.image && (
+                                                    <div style={{
+                                                        width: '100%',
+                                                        height: 'auto',
+                                                        display: 'flex',
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center'
+                                                    }}>
+                                                        <img src={post.image} alt="" style={{
+                                                            maxWidth: '90%',
+                                                            maxHeight: '50vh',
+                                                            marginBottom: '1rem'
+                                                        }}/>
+                                                    </div>
+                                                )}
+                                                <Button
+                                                    onClick={(e) => handleLikeClick(post.postId, e)}
+                                                    startIcon={post.isLiked ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
+                                                    style={{color: post.isLiked ? 'red' : 'white'}}
+                                                >
+                                                    {post.likesCount}
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Container>
+                                ))}
+                            </Container>
+                        ) : (
+                            <Grid container justifyContent="center">
+                                <Typography variant="h6" style={{marginTop: '20px'}}>
+                                    {isOwnProfile ? 'Du hast keine Posts bisher' : 'Dieser Nutzer hat noch keine Posts'}
+                                </Typography>
+                            </Grid>
+                        )}
                     </Grid>
-                )}
-            </div>
-            <BackButton />
-            <Footer />
+
+                </Grid>
+            </Container>
+            <BackButton/>
+            <Footer/>
         </>
     );
 };

@@ -1,5 +1,5 @@
 import "../styles/FooterStyle.css";
-import { Typography } from "@mui/material";
+import {Typography} from "@mui/material";
 import {useClient} from "../context/ClientContext.tsx";
 
 

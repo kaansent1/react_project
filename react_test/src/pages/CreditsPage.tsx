@@ -8,22 +8,22 @@ import BackButton from "../components/BackButton.tsx";
 
 
 const CreditsPage: React.FC = () => {
-    const { client } = useClient();
+    const {client} = useClient();
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(client.userId == 0){
+        if (client.userId == 0) {
             navigate("/")
         }
     }, [client.userId, navigate]);
     return (
         <div>
-            <Header />
+            <Header/>
             <div className="credits-container">
                 <span className="contributors">Kaan Sentürk </span>
             </div>
-            <BackButton />
-            <Footer />
+            <BackButton/>
+            <Footer/>
         </div>
     );
 };

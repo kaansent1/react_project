@@ -25,7 +25,7 @@ Host: 192.168.1.125:8080
 Content-Type: multipart/form-data; boundary=boundary123
 
 --boundary123
-Content-Disposition: form-data; name="image"; filename="673f0b05-74e6-4348-95f6-8b5d2e1b6268.gif"
+Content-Disposition: form-data; name="image"; filename="0d1cc102-c298-4647-a3bf-23601b3cc98b.jpg"
 Content-Type: image/*
 
 [Binary data of the image]

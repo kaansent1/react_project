@@ -1,19 +1,19 @@
-import { useState, useEffect, useRef } from 'react';
+import {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
-import { useClient } from "../context/ClientContext.tsx";
-import { Message } from "../api/message.ts";
+import {useClient} from "../context/ClientContext.tsx";
+import {Message} from "../api/message.ts";
 import Header from "./HeaderPage.tsx";
 import defaultAvatar from "../assets/blank_profile_pic.png";
 import '../styles/MessengerPageStyle.css';
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import WarningIcon from '@mui/icons-material/Warning';
-import { IconButton, TextField, InputAdornment } from '@mui/material';
+import {IconButton, TextField, InputAdornment} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { Follower } from "../api/follower.ts";
+import {Follower} from "../api/follower.ts";
 
 function MessengersPage() {
-    const { client } = useClient();
+    const {client} = useClient();
     const [follows, setFollows] = useState<Follower[]>([]);
     const [selectedUser, setSelectedUser] = useState<Follower | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
@@ -79,7 +79,7 @@ function MessengersPage() {
 
     const scrollToBottom = () => {
         if (messageListRef.current) {
-            const { scrollHeight, clientHeight } = messageListRef.current;
+            const {scrollHeight, clientHeight} = messageListRef.current;
             messageListRef.current.scrollTop = scrollHeight - clientHeight;
         }
     };
@@ -152,7 +152,7 @@ function MessengersPage() {
                                             </InputAdornment>
                                         ),
                                     }}
-                                    sx={{ marginBottom: 2 }}
+                                    sx={{marginBottom: 2}}
                                 />
                             </div>
                             <div className="follower-list">
@@ -160,7 +160,7 @@ function MessengersPage() {
                                     {filteredFollowers.map(follows => (
                                         <li key={follows.id} onClick={() => handleUserSelect(follows)}>
                                             <img src={follows.image ? follows.image : defaultAvatar} alt=""
-                                                 style={{ width: "3rem", height: "3rem", borderRadius: '50%' }}/>
+                                                 style={{width: "3rem", height: "3rem", borderRadius: '50%'}}/>
                                             <span>{follows.name}</span>
                                         </li>
                                     ))}
@@ -170,7 +170,7 @@ function MessengersPage() {
                         {selectedUser && (
                             <div className={`chat-container ${selectedUser}`}>
                                 <div className="chat-title">
-                                    <h2 style={{ display: 'flex', alignItems: 'center' }}>
+                                    <h2 style={{display: 'flex', alignItems: 'center'}}>
                                         {selectedUser.image ? (
                                             <img src={selectedUser.image} alt="Profilbild" style={{
                                                 width: 40,
@@ -197,7 +197,7 @@ function MessengersPage() {
                                                 color: '#b88b00',
                                                 fontSize: 'medium'
                                             }}>
-                                                <WarningIcon sx={{ marginRight: '5px' }}/>
+                                                <WarningIcon sx={{marginRight: '5px'}}/>
                                                 Dieser Benutzer folgt dir nicht
                                             </div>
                                         )}
