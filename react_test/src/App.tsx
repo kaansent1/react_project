@@ -1,29 +1,30 @@
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import HomePage from "./pages/HomePage.tsx";
-import AddPostPage from "./pages/AddPostPage.tsx"
-import React, {useState} from "react";
-import OwnDetailPage from "./pages/OwnDetailPage.tsx";
-import LoginPage from "./pages/LoginPage.tsx";
-import {ClientContext} from "./context/ClientContext.tsx";
-import {User} from "./api/user.ts";
-import PostDetailPage from "./pages/PostDetailPage.tsx";
-import UserDetailPage from "./pages/UserDetailPage.tsx";
-import CreditsPage from "./pages/CreditsPage.tsx";
-import FollowersPage from "./pages/FollowersPage.tsx";
-import MessengerPage from "./pages/MessengerPage.tsx"
+import React, { useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import HomePage from './pages/HomePage.tsx';
+import AddPostPage from './pages/AddPostPage.tsx';
+import OwnDetailPage from './pages/OwnDetailPage.tsx';
+import LoginPage from './pages/LoginPage.tsx';
+import { ClientContext } from './context/ClientContext.tsx';
+import { User } from './api/user.ts';
+import PostDetailPage from './pages/PostDetailPage.tsx';
+import UserDetailPage from './pages/UserDetailPage.tsx';
+import CreditsPage from './pages/CreditsPage.tsx';
+import FollowersPage from './pages/FollowersPage.tsx';
+import MessengerPage from './pages/MessengerPage.tsx';
 
 const App: React.FC = () => {
     const [client, setClient] = useState<User>({
-        username: "",
-        email: "",
-        image: "",
+        username: '',
+        email: '',
+        image: '',
         userId: 0,
         followersCount: 0,
         followingCount: 0,
         isFollowing: false
-    })
+    });
+
     return (
-        <ClientContext.Provider value={{client, setClient}}>
+        <ClientContext.Provider value={{ client, setClient }}>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LoginPage/>}/>
@@ -37,7 +38,6 @@ const App: React.FC = () => {
                     <Route path="/messenger" element={<MessengerPage/>}/>
                 </Routes>
             </BrowserRouter>
-
         </ClientContext.Provider>
     );
 };

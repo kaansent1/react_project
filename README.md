@@ -8,6 +8,8 @@ Diese Social Media Applikation wurde entwickelt, um eine Plattform für soziale 
 
 - **Post-Erstellung und -Verwaltung:** Benutzer können Beiträge erstellen, bearbeiten, anzeigen und löschen. Jeder Beitrag kann Text und optional ein Bild enthalten.
 
+- **Messenger-Service:** Ein kleiner Messenger steht zur Verfügung, damit Freunde kleine Nachrichten sich versenden können. 
+
 - **Datenbank-Integration:** Die Anwendung nutzt eine PostgreSQL-Datenbank über das Exposed-Framework für die Persistenz der Benutzer- und Beitragsdaten.
 
 
