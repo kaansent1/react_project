@@ -147,7 +147,7 @@ function UserFeed() {
                                 <Container
                                     key={post.postId}
                                     sx={{
-                                        width: 900,
+                                        width: 800,
                                         backgroundColor: '#3a5169',
                                         color: 'white',
                                         marginBottom: 4,
@@ -174,8 +174,8 @@ function UserFeed() {
                                                 {post.userImage ? (
                                                     <img src={post.userImage} alt="Profile" style={{
                                                         marginRight: '1rem',
-                                                        width: '5rem',
-                                                        height: '5rem',
+                                                        width: '4rem',
+                                                        height: '4rem',
                                                         borderRadius: '50%'
                                                     }}/>
                                                 ) : (
@@ -234,7 +234,7 @@ function UserFeed() {
                                 <Container
                                     key={user.userId}
                                     sx={{
-                                        width: 900,
+                                        width: 800,
                                         backgroundColor: '#3a5169',
                                         color: 'white',
                                         marginBottom: 4,

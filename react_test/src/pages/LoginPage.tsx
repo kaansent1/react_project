@@ -138,7 +138,7 @@ function LoginPage() {
     return (
         <div className="login-container">
             <div className="animated-background"></div>
-            <a href="https://reactjs.org" target="_blank">
+            <a href="https://youtu.be/S4Z-OYtWjIM" target="_blank">
                 <img src={logo} className="logo react" alt="React logo"/>
             </a>
             <div className="title-container">React-Social</div>
