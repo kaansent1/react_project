@@ -28,7 +28,7 @@ class PostDaoImpl : PostDao {
             username = row[UserTable.username],
             userImage = row[UserTable.image],
             likesCount = row[PostsTable.likesCount],
-
+            commentsCount = row[PostsTable.commentsCount],
             )
     }
 
@@ -59,6 +59,7 @@ class PostDaoImpl : PostDao {
                 it[UserTable.userId] = userId
                 it[UserTable.username] = username
                 it[likesCount] = 0
+                it[commentsCount] = 0
 
             }
             insertStatement.resultedValues?.singleOrNull() != null
@@ -132,6 +133,15 @@ class PostDaoImpl : PostDao {
             val value = if (decrement) -1 else 1
             PostsTable.update(where = { PostsTable.postId eq postId }) {
                 it.update(column = likesCount, value = likesCount.plus(value))
+            } > 0
+        }
+    }
+
+    override suspend fun updateCommentsCount(postId: Long, decrement: Boolean): Boolean {
+        return dbQuery {
+            val value = if (decrement) -1 else 1
+            PostsTable.update(where = { PostsTable.postId eq postId }) {
+                it.update(column = commentsCount, value = commentsCount.plus(value))
             } > 0
         }
     }

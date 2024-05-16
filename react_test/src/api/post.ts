@@ -9,4 +9,5 @@ export interface Post {
     userId: number;
     isLiked: boolean;
     likesCount: number;
+    commentsCount: number
 }

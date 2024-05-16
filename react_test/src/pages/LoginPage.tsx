@@ -114,6 +114,7 @@ function LoginPage() {
             text: message,
             icon: 'success',
             showCloseButton: false,
+            confirmButtonColor: '#2c3e50',
             confirmButtonText: 'Schließen',
         }).then(result => {
             if (result.value) {
@@ -128,6 +129,7 @@ function LoginPage() {
             text: message,
             icon: 'error',
             showCloseButton: false,
+            confirmButtonColor: '#2c3e50',
             confirmButtonText: 'Schließen',
         }).then(result => {
             if (result.value) {

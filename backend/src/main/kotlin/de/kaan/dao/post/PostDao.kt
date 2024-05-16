@@ -17,4 +17,5 @@ interface PostDao {
 
     suspend fun updateLikesCount(postId: Long, decrement: Boolean = false): Boolean
 
+    suspend fun updateCommentsCount(postId: Long, decrement: Boolean = false): Boolean
 }

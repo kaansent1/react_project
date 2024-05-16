@@ -6,6 +6,8 @@ import de.kaan.dao.message.MessageDao
 import de.kaan.dao.message.MessageDaoImpl
 import de.kaan.dao.post.PostDao
 import de.kaan.dao.post.PostDaoImpl
+import de.kaan.dao.post_comments.PostCommentsDao
+import de.kaan.dao.post_comments.PostCommentsDaoImpl
 import de.kaan.dao.post_likes.PostLikesDao
 import de.kaan.dao.post_likes.PostLikesDaoImpl
 import de.kaan.dao.user.UserDao
@@ -18,6 +20,8 @@ import de.kaan.repository.message.MessageRepository
 import de.kaan.repository.message.MessageRepositoryImpl
 import de.kaan.repository.post.PostRepository
 import de.kaan.repository.post.PostRepositoryImpl
+import de.kaan.repository.post_comments.PostCommentsRepository
+import de.kaan.repository.post_comments.PostCommentsRepositoryImpl
 import de.kaan.repository.post_likes.PostLikesRepository
 import de.kaan.repository.post_likes.PostLikesRepositoryImpl
 import de.kaan.repository.profile.ProfileRepository
@@ -36,4 +40,7 @@ val appModule = module {
     single<FollowsRepository> { FollowsRepositoryImpl(get(), get())}
     single<MessageDao> { MessageDaoImpl() }
     single<MessageRepository> { MessageRepositoryImpl(get()) }
+    single<PostCommentsDao> { PostCommentsDaoImpl() }
+    single<PostCommentsRepository> { PostCommentsRepositoryImpl(get(), get()) }
+
 }

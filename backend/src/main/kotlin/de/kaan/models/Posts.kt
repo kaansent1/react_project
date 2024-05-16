@@ -20,6 +20,7 @@ data class Post(
     val userImage: String?,
     val isOwnPost: Boolean,
     val likesCount: Int,
+    val commentsCount: Int,
     val isLiked: Boolean
     )
 

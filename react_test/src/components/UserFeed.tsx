@@ -22,6 +22,7 @@ import {Post} from '../api/post';
 import {useClient} from "../context/ClientContext.tsx";
 import {User} from "../api/user.ts";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import CommentIcon from '@mui/icons-material/Comment';
 
 function UserFeed() {
     const navigate = useNavigate();
@@ -209,11 +210,17 @@ function UserFeed() {
                                                          }}/>
                                                 </div>
                                             )}
-                                            <div style={{display: "flex"}}>
+                                            <div style={{display: "flex", justifyContent: 'center'}}>
+                                                <Button
+                                                    sx={{width: 'auto', color: 'white'}}
+                                                    startIcon={<CommentIcon/>}
+                                                >
+                                                    {post.commentsCount}
+                                                </Button>
                                                 <Button
                                                     onClick={(e) => handleLikeClick(post.postId, e)}
                                                     startIcon={post.isLiked ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
-                                                    sx={{color: post.isLiked ? 'red' : 'white'}}
+                                                    sx={{color: post.isLiked ? 'red' : 'white', width: 'auto'}}
                                                 >
                                                     {post.likesCount}
                                                 </Button>

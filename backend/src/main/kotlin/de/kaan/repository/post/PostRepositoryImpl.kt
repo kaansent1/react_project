@@ -64,13 +64,13 @@ class PostRepositoryImpl(
     override suspend fun getPost(postId: Long, currentUserId: Long): Response<PostResponse> {
         val post = postDao.getPost(postId = postId)
 
-        return if (post == null){
+        return if (post == null) {
             Response.Error(
                 code = HttpStatusCode.InternalServerError,
                 data = PostResponse(success = false, message = "Could not retrieve post from the database")
             )
-        }else{
-            val isPostLiked = postLikesDao.isPostLikedByUser(postId,currentUserId)
+        } else {
+            val isPostLiked = postLikesDao.isPostLikedByUser(postId, currentUserId)
             val isOwnPost = post.userId == currentUserId
             Response.Success(
                 data = PostResponse(success = true, toPost(post, isPostLiked = isPostLiked, isOwnPost = isOwnPost))
@@ -84,11 +84,11 @@ class PostRepositoryImpl(
             postId = postId
         )
 
-        return if (postIsDeleted){
+        return if (postIsDeleted) {
             Response.Success(
                 data = PostResponse(success = true)
             )
-        }else{
+        } else {
             Response.Error(
                 code = HttpStatusCode.InternalServerError,
                 data = PostResponse(
@@ -176,7 +176,8 @@ class PostRepositoryImpl(
             username = postRow.username,
             isOwnPost = isOwnPost,
             isLiked = isPostLiked,
-            likesCount = postRow.likesCount
+            likesCount = postRow.likesCount,
+            commentsCount = postRow.commentsCount,
         )
     }
 }

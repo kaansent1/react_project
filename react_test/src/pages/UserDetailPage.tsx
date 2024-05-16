@@ -122,7 +122,8 @@ const UserDetailPage: React.FC = () => {
             title: 'Möchtest du diesem Nutzer wirklich entfolgen?',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonText: 'Ja, entfolgen',
+            confirmButtonText: 'Löschen',
+            confirmButtonColor: '#2c3e50',
             cancelButtonText: 'Abbrechen'
         });
 
@@ -180,7 +181,7 @@ const UserDetailPage: React.FC = () => {
                                         onClick={handleUnfollowClick}
                                         variant="contained"
                                         color="error"
-                                        sx={{borderRadius: '20px'}}
+                                        sx={{borderRadius: '20px', width: 'auto'}}
                                     >
                                         Unfollow
                                     </Button>
@@ -189,7 +190,7 @@ const UserDetailPage: React.FC = () => {
                                         onClick={handleFollowClick}
                                         variant="contained"
                                         color="primary"
-                                        sx={{borderRadius: '20px'}}
+                                        sx={{borderRadius: '20px', width: 'auto'}}
                                     >
                                         Follow
                                     </Button>

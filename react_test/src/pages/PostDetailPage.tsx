@@ -9,9 +9,11 @@ import {Post} from "../api/post.ts";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import BackButton from "../components/BackButton.tsx";
+import Swal from "sweetalert2";
 
 const PostDetailPage: React.FC = () => {
     const [post, setPost] = useState<Post | null>(null);
@@ -63,6 +65,38 @@ const PostDetailPage: React.FC = () => {
             }
         }
     };
+
+    const handleDeleteButtonClick = async () => {
+        const confirmation = await Swal.fire({
+            title: 'Möchtest du diesen Post wirklich löschen?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ja, entfolgen',
+            confirmButtonColor: '#2c3e50',
+            cancelButtonText: 'Abbrechen'
+        });
+        if (confirmation.isConfirmed && post) {
+            try {
+                await axios.delete(`http://192.168.1.125:8080/post/${post.postId}`);
+                navigate("/home");
+            } catch (error) {
+                console.error('Fehler beim Löschen des Posts:', error);
+            }
+        }
+    };
+
+    if (!post) {
+        return (
+            <div>
+                <Header/>
+                <Typography variant="h4" align="center" sx={{mb: 2, mt: 4}}>
+                    Laden...
+                </Typography>
+                <Footer/>
+            </div>
+        );
+    }
+
 
     const handleLikeClick = async (postId: number, e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
@@ -194,13 +228,35 @@ const PostDetailPage: React.FC = () => {
                             mb: 2,
                             backgroundColor: '#1976d2',
                             color: 'white',
-                            width: '25%',
+                            width: '20%',
+                            marginRight: '10px',
                             '&:hover': {
                                 backgroundColor: '#135ba1',
                             },
                         }}
+                        startIcon={isEditing ? <SaveIcon/> : <EditIcon/>}
                     >
-                        {isEditing ? <SaveIcon/> : <EditIcon/>}
+                        {isEditing ? 'Speichern' : 'Bearbeiten'}
+                    </Button>
+                )}
+                {post.isOwnPost && (
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={handleDeleteButtonClick}
+                        startIcon={<DeleteIcon style={{ fontSize: 28 }} />}
+                        sx={{
+                            mt: 3,
+                            mb: 2,
+                            backgroundColor: '#f44336',
+                            color: 'white',
+                            width: '20%',
+                            '&:hover': {
+                                backgroundColor: '#d32f2f',
+                            },
+                        }}
+                    >
+                        Löschen
                     </Button>
                 )}
             </Container>

@@ -17,6 +17,7 @@ data class PostRow(
     val username: String,
     val userImage: String?,
     val likesCount: Int,
+    val commentsCount: Int,
     )
 
 object PostsTable : Table(name = "posts") {
@@ -28,6 +29,7 @@ object PostsTable : Table(name = "posts") {
     val image = varchar("image", 1024)
     val createdAt = datetime(name = "created_at").defaultExpression(defaultValue = CurrentDateTime)
     val likesCount = integer(name = "likes_count")
+    val commentsCount = integer(name = "comments_count")
 
 
     override val primaryKey = PrimaryKey(postId)
