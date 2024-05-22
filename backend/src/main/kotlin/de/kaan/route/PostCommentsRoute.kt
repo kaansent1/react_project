@@ -8,7 +8,6 @@ import de.kaan.repository.post_comments.PostCommentsRepository
 import de.kaan.utils.getLongParameter
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -87,7 +86,7 @@ fun Routing.postCommentsRouting() {
                     status = HttpStatusCode.InternalServerError,
                     message = GetCommentsResponse(
                         success = false,
-                        message = "An unexpected error occurred, try again!"
+                        message = "Fehlgeschlagen"
                     )
                 )
                 return@get

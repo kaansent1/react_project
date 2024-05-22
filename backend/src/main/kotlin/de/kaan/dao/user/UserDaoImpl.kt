@@ -43,12 +43,11 @@ class UserDaoImpl : UserDao {
         }
     }
 
-    override suspend fun updateUser(userId: Long, username: String, email: String, image: String?): Boolean {
+    override suspend fun updateUser(userId: Long, username: String, email: String): Boolean {
         return transaction {
             UserTable.update(where = { UserTable.userId eq userId }) {
                 it[UserTable.username] = username
                 it[UserTable.email] = email
-                it[UserTable.image] = image
             } > 0
         }
     }

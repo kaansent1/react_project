@@ -5,8 +5,29 @@ import de.kaan.dao.user.UserTable
 import de.kaan.utils.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
+private val dateFormatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy")
+
+private fun formatDate(dateTime: LocalDateTime): String {
+    return dateTime.format(dateFormatter)
+}
 
 class PostCommentsDaoImpl : PostCommentsDao {
+
+    private fun toPostCommentRow(resultRow: ResultRow): PostCommentRow {
+        return PostCommentRow(
+            commentId = resultRow[commentId],
+            content = resultRow[PostCommentsTable.content],
+            postId = resultRow[PostCommentsTable.postId],
+            userId = resultRow[PostCommentsTable.userId],
+            username = resultRow[UserTable.username],
+            image = resultRow[UserTable.image],
+            createdAt = formatDate(resultRow[PostCommentsTable.createdAt]),
+        )
+    }
+
     override suspend fun addComment(postId: Long, userId: Long, content: String): PostCommentRow? {
         return dbQuery {
 
@@ -65,18 +86,5 @@ class PostCommentsDaoImpl : PostCommentsDao {
                 .orderBy(column = PostCommentsTable.createdAt, SortOrder.DESC)
                 .map { toPostCommentRow(it) }
         }
-    }
-
-
-    private fun toPostCommentRow(resultRow: ResultRow): PostCommentRow {
-        return PostCommentRow(
-            commentId = resultRow[commentId],
-            content = resultRow[PostCommentsTable.content],
-            postId = resultRow[PostCommentsTable.postId],
-            userId = resultRow[PostCommentsTable.userId],
-            userName = resultRow[UserTable.username],
-            userImageUrl = resultRow[UserTable.image],
-            createdAt = resultRow[PostCommentsTable.createdAt].toString()
-        )
     }
 }

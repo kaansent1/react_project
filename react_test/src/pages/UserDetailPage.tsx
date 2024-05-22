@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, ChangeEvent} from "react";
 import Header from "./HeaderPage.tsx";
 import {
     Container,
     Typography,
     Grid,
     Button,
+    TextField,
 } from "@mui/material";
 import Footer from "../components/Footer.tsx";
 import {useNavigate, useParams} from "react-router-dom";
@@ -17,12 +18,18 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import BackButton from "../components/BackButton";
 import Swal from "sweetalert2";
+import CommentIcon from '@mui/icons-material/Comment';
+
 
 const UserDetailPage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
     const [, setLoading] = useState(true);
-    const {client} = useClient()
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedUsername, setEditedUsername] = useState("");
+    const [editedEmail, setEditedEmail] = useState("");
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const {client, setClient} = useClient();
     const navigate = useNavigate();
     const {userId} = useParams<{ userId?: string }>();
 
@@ -38,7 +45,8 @@ const UserDetailPage: React.FC = () => {
                 setLoading(true);
                 const userResponse = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
                 setUser(userResponse.data.profile);
-                console.log(userResponse.data.profile);
+                setEditedUsername(userResponse.data.profile.username);
+                setEditedEmail(userResponse.data.profile.email);
                 const postResponse = await axios.get(`http://192.168.1.125:8080/posts/${userId}?currentUserId=${client.userId}`);
                 setPosts(postResponse.data.posts);
             } catch (error) {
@@ -52,7 +60,6 @@ const UserDetailPage: React.FC = () => {
             fetchData();
         }
     }, [client.userId, userId]);
-
 
     const handlePostClick = (postId: number) => {
         navigate(`/detail/${postId}`);
@@ -146,6 +153,65 @@ const UserDetailPage: React.FC = () => {
         }
     };
 
+    const handleEditClick = () => {
+        setIsEditing(true);
+    };
+
+    const handleSaveClick = async () => {
+        try {
+            const response = await axios.put('http://192.168.1.125:8080/profile/update', {
+                userId: client.userId,
+                username: editedUsername,
+                email: editedEmail
+            });
+
+            if (response.data.success) {
+                setUser(prevUser => prevUser ? {...prevUser, username: editedUsername, email: editedEmail} : null);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                setClient(prevClient => ({...prevClient, username: editedUsername, email: editedEmail}));
+                setIsEditing(false);
+            } else {
+                console.error(response.data.message);
+            }
+        } catch (error) {
+            console.error('Fehler beim Aktualisieren des Profils:', error);
+        }
+    };
+
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            setSelectedFile(event.target.files[0]);
+        }
+    };
+
+    const handleImageUpload = async () => {
+        if (!selectedFile) return;
+
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        formData.append('userId', client.userId.toString());
+
+        try {
+            const response = await axios.put(`http://192.168.1.125:8080/profile/update/image`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.data.success) {
+                const userResponse = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
+                setUser(userResponse.data.profile);
+                setSelectedFile(null);
+            } else {
+                console.error(response.data.message);
+            }
+        } catch (error) {
+            console.error('Fehler beim Hochladen des Bildes:', error);
+        }
+    };
+
+
     const isOwnProfile = userId === client.userId.toString();
 
     return (
@@ -157,17 +223,94 @@ const UserDetailPage: React.FC = () => {
                         <div style={{display: 'flex', justifyContent: 'center'}}>
                             {user?.image ? (
                                 <img src={user.image} alt="Profilbild"
-                                     style={{width: '10rem', height: '10rem', borderRadius: '50%'}}/>
+                                     style={{width: '7rem', height: '7rem', borderRadius: '50%'}}/>
                             ) : (
                                 <AccountCircleIcon style={{fontSize: '7rem'}}/>
                             )}
                         </div>
-                        <Typography variant="h4" align="center" gutterBottom>
-                            {user?.username}
-                        </Typography>
-                        <Typography variant="h6" align="center" gutterBottom>
-                            {user?.email}
-                        </Typography>
+                        {isOwnProfile && (
+                            <>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    style={{display: 'none'}}
+                                    id="upload-button"
+                                />
+                                <label htmlFor="upload-button">
+                                    <Button
+                                        component="span"
+                                        variant="contained"
+                                        color="primary"
+                                        sx={{borderRadius: '20px', width: 'auto', mb: 1, mt: 1}}
+                                    >
+                                        Bild ändern
+                                    </Button>
+                                </label>
+                                {selectedFile && (
+                                    <Grid container justifyContent="center" style={{marginTop: '20px'}}>
+                                        <Button
+                                            onClick={handleImageUpload}
+                                            variant="contained"
+                                            color="primary"
+                                            sx={{borderRadius: '20px', width: 'auto', mb: 1}}
+                                        >
+                                            Bild hochladen
+                                        </Button>
+                                    </Grid>
+                                )}
+                            </>
+                        )}
+                        {isEditing ? (
+                            <>
+                                <TextField
+                                    label="Username"
+                                    value={editedUsername}
+                                    onChange={(e) => setEditedUsername(e.target.value)}
+                                    fullWidth
+                                    margin="normal"
+                                />
+                                <TextField
+                                    label="Email"
+                                    value={editedEmail}
+                                    onChange={(e) => setEditedEmail(e.target.value)}
+                                    fullWidth
+                                    margin="normal"
+                                />
+                                <Grid container justifyContent="center" style={{marginTop: '20px'}}>
+                                    <Button
+                                        onClick={handleSaveClick}
+                                        variant="contained"
+                                        color="primary"
+                                        sx={{borderRadius: '20px', width: 'auto', mb: 1}}
+                                    >
+                                        Speichern
+                                    </Button>
+                                </Grid>
+                            </>
+                        ) : (
+                            <>
+                                <Typography variant="h4" align="center" gutterBottom>
+                                    {user?.username}
+                                </Typography>
+                                <Typography variant="h6" align="center" gutterBottom>
+                                    {user?.email}
+                                </Typography>
+                                {isOwnProfile && (
+                                    <Grid container justifyContent="center" style={{marginTop: '20px'}}>
+                                        <Button
+                                            onClick={handleEditClick}
+                                            variant="contained"
+                                            color="primary"
+                                            sx={{borderRadius: '20px', width: 'auto', mb: 1}}
+                                        >
+                                            Bearbeiten
+                                        </Button>
+                                    </Grid>
+                                )}
+                            </>
+                        )}
+
                         <Typography variant="body1" align="center" gutterBottom>
                             Followers: {user?.followersCount}
                         </Typography>
@@ -257,13 +400,22 @@ const UserDetailPage: React.FC = () => {
                                                         }}/>
                                                     </div>
                                                 )}
-                                                <Button
-                                                    onClick={(e) => handleLikeClick(post.postId, e)}
-                                                    startIcon={post.isLiked ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
-                                                    style={{color: post.isLiked ? 'red' : 'white'}}
-                                                >
-                                                    {post.likesCount}
-                                                </Button>
+                                                <div style={{display: "flex", justifyContent: 'center'}}>
+                                                    <Button
+                                                        sx={{width: 'auto', color: 'white'}}
+                                                        startIcon={<CommentIcon/>}
+                                                    >
+                                                        {post.commentsCount}
+                                                    </Button>
+                                                    <Button
+                                                        onClick={(e) => handleLikeClick(post.postId, e)}
+                                                        startIcon={post.isLiked ? <FavoriteIcon/> :
+                                                            <FavoriteBorderIcon/>}
+                                                        style={{color: post.isLiked ? 'red' : 'white', width: 'auto'}}
+                                                    >
+                                                        {post.likesCount}
+                                                    </Button>
+                                                </div>
                                             </Grid>
                                         </Grid>
                                     </Container>
@@ -277,7 +429,6 @@ const UserDetailPage: React.FC = () => {
                             </Grid>
                         )}
                     </Grid>
-
                 </Grid>
             </Container>
             <BackButton/>

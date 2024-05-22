@@ -18,12 +18,12 @@ class PostCommentsRepositoryImpl(
             content = params.content
         )
 
-        return if (postCommentRow == null){
+        return if (postCommentRow == null) {
             Response.Error(
                 code = HttpStatusCode.Conflict,
-                data = CommentResponse(success = false, message = "Could not insert comment into the db")
+                data = CommentResponse(success = false, message = "Hinzufügen des Kommentars hat nicht funktioniert")
             )
-        }else{
+        } else {
             postDao.updateCommentsCount(postId = params.postId)
             Response.Success(
                 data = CommentResponse(success = true, comment = toPostComment(postCommentRow))
@@ -34,15 +34,15 @@ class PostCommentsRepositoryImpl(
     override suspend fun removeComment(params: RemoveCommentParams): Response<CommentResponse> {
         val commentRow = commentsDao.findComment(commentId = params.commentId, postId = params.postId)
 
-        return if (commentRow == null){
+        return if (commentRow == null) {
             Response.Error(
                 code = HttpStatusCode.NotFound,
                 data = CommentResponse(success = false, message = "Comment ${params.commentId} not found")
             )
-        }else{
+        } else {
             val postOwnerId = postDao.getPost(postId = params.postId)!!.userId
 
-            if (params.userId != commentRow.userId && params.userId != postOwnerId){
+            if (params.userId != commentRow.userId && params.userId != postOwnerId) {
                 Response.Error(
                     code = HttpStatusCode.Forbidden,
                     data = CommentResponse(
@@ -50,15 +50,15 @@ class PostCommentsRepositoryImpl(
                         message = "User ${params.userId} cannot delete comment ${params.commentId}"
                     )
                 )
-            }else{
+            } else {
                 val commentWasRemoved = commentsDao.removeComment(commentId = params.commentId, postId = params.postId)
 
-                if (commentWasRemoved){
+                if (commentWasRemoved) {
                     postDao.updateCommentsCount(postId = params.postId, decrement = true)
                     Response.Success(
                         data = CommentResponse(success = true)
                     )
-                }else{
+                } else {
                     Response.Error(
                         code = HttpStatusCode.Conflict,
                         data = CommentResponse(
@@ -88,8 +88,8 @@ class PostCommentsRepositoryImpl(
             content = commentRow.content,
             postId = commentRow.postId,
             userId = commentRow.userId,
-            userName = commentRow.userName,
-            userImageUrl = commentRow.userImageUrl,
+            username = commentRow.username,
+            image = commentRow.image,
             createdAt = commentRow.createdAt,
         )
     }

@@ -29,7 +29,7 @@ class PostDaoImpl : PostDao {
             userImage = row[UserTable.image],
             likesCount = row[PostsTable.likesCount],
             commentsCount = row[PostsTable.commentsCount],
-            )
+        )
     }
 
     override suspend fun getPostByUser(userId: Long): List<PostRow> {

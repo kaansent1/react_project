@@ -22,8 +22,8 @@ data class PostComment(
     val content: String,
     val postId: Long,
     val userId: Long,
-    val userName: String,
-    val userImageUrl: String?,
+    val username: String,
+    val image: String?,
     val createdAt: String
 )
 

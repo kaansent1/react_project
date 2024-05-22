@@ -1,8 +1,6 @@
 package de.kaan.route
 
-import de.kaan.models.ProfileResponse
-import de.kaan.models.UpdateUserParams
-import de.kaan.models.UsersResponse
+import de.kaan.models.*
 import de.kaan.repository.profile.ProfileRepository
 import de.kaan.utils.Constants
 import de.kaan.utils.getLongParameter
@@ -15,10 +13,8 @@ import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
 import java.io.File
-
 
 fun Routing.profileRouting() {
     val repository by inject<ProfileRepository>()
@@ -47,43 +43,62 @@ fun Routing.profileRouting() {
         }
 
         put(path = "/update") {
-            var fileName = ""
-            var updateUserParams: UpdateUserParams? = null
-            val multiPartData = call.receiveMultipart()
-
             try {
-                multiPartData.forEachPart { partData ->
-                    when (partData) {
-                        is PartData.FileItem -> {
-                            fileName = partData.saveFile(folderPath = Constants.PROFILE_IMAGES_FOLDER_PATH)
-                        }
+                val updateUserParams = call.receive<UpdateUserParams>()
 
-                        is PartData.FormItem -> {
-                            if (partData.name == "profile_data") {
-                                updateUserParams = Json.decodeFromString(partData.value)
-                            }
-                        }
-
-                        else -> {}
-                    }
-                    partData.dispose()
-                }
-
-                val imageUrl = "http://192.168.1.125:8080/static/profile_images/$fileName"
-
-                val result = repository.updateUser(imageUrl, updateUserParams!!)
+                val result = repository.updateUser(updateUserParams)
                 call.respond(status = result.code, message = result.data)
-            } catch (anyError: Throwable) {
-                if (fileName.isNotEmpty()) {
-                    File("${Constants.PROFILE_IMAGES_FOLDER_PATH}/$fileName").delete()
-                }
+            } catch (e: BadRequestException) {
+                call.respond(HttpStatusCode.BadRequest)
+            } catch (e: Throwable) {
                 call.respond(
                     status = HttpStatusCode.InternalServerError,
                     message = ProfileResponse(
                         success = false,
-                        message = "Fehlgeschlagen"
+                        message = "Interner Serverfehler"
                     )
                 )
+            }
+        }
+
+        put(path = "/update/image") {
+            var fileName = ""
+            val multiPartData = call.receiveMultipart()
+
+            try {
+                var userId: Long? = null
+
+                multiPartData.forEachPart { partData ->
+                    when (partData) {
+                        is PartData.FileItem -> {
+                            fileName = partData.saveFile(Constants.PROFILE_IMAGES_FOLDER_PATH)
+                        }
+
+                        is PartData.FormItem -> {
+                            if (partData.name == "userId") {
+                                userId = partData.value.toLong()
+                            }
+                        }
+
+                        else -> {
+                        }
+                    }
+                    partData.dispose()
+                }
+
+                if (userId == null) {
+                    throw IllegalArgumentException("userId is missing")
+                }
+
+                val imageUrl = "http://192.168.1.125:8080/static/profile_images/$fileName"
+                val updateUserImageParams = UpdateUserImageParams(userId = userId!!, image = imageUrl)
+                val result = repository.updateUserImage(updateUserImageParams)
+                call.respond(status = result.code, message = result.data)
+            } catch (error: Throwable) {
+                if (fileName.isNotEmpty()) {
+                    File("${Constants.PROFILE_IMAGES_FOLDER_PATH}/$fileName").delete()
+                }
+                call.respond(HttpStatusCode.InternalServerError)
             }
         }
 

@@ -143,7 +143,7 @@ function LoginPage() {
             <a href="https://youtu.be/S4Z-OYtWjIM" target="_blank">
                 <img src={logo} className="logo react" alt="React logo"/>
             </a>
-            <div className="title-container">React-Social</div>
+            <div className="title-container">Social-React</div>
 
             <div className="form-container">
                 <h1>{showRegister ? 'Registrieren' : 'Login'}</h1>

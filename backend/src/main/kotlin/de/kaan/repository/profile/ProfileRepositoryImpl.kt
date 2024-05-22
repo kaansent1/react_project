@@ -3,10 +3,7 @@ package de.kaan.repository.profile
 import de.kaan.dao.follows.FollowsDao
 import de.kaan.dao.user.UserDao
 import de.kaan.dao.user.UserRow
-import de.kaan.models.Profile
-import de.kaan.models.ProfileResponse
-import de.kaan.models.UpdateUserParams
-import de.kaan.models.UsersResponse
+import de.kaan.models.*
 import de.kaan.utils.Response
 import io.ktor.http.*
 
@@ -33,7 +30,7 @@ class ProfileRepositoryImpl(
         }
     }
 
-    override suspend fun updateUser(image: String?, updateUserParams: UpdateUserParams): Response<ProfileResponse> {
+    override suspend fun updateUser(updateUserParams: UpdateUserParams): Response<ProfileResponse> {
         val userExists = userDao.findById(userId = updateUserParams.userId) != null
 
         if (userExists) {
@@ -41,7 +38,6 @@ class ProfileRepositoryImpl(
                 userId = updateUserParams.userId,
                 username = updateUserParams.username,
                 email = updateUserParams.email,
-                image = image
             )
 
             return if (userUpdated) {
@@ -63,6 +59,38 @@ class ProfileRepositoryImpl(
             return Response.Error(
                 code = HttpStatusCode.NotFound,
                 data = ProfileResponse(success = false, message = "Could not find user: ${updateUserParams.userId}")
+            )
+        }
+    }
+
+    override suspend fun updateUserImage(updateUserImageParams: UpdateUserImageParams): Response<ProfileResponse> {
+        val userExists = userDao.findById(userId = updateUserImageParams.userId) != null
+
+        if (userExists) {
+            val userUpdated = userDao.updateUserImage(
+                userId = updateUserImageParams.userId,
+                image = updateUserImageParams.image
+            )
+
+            return if (userUpdated) {
+                Response.Success(
+                    data = ProfileResponse(
+                        success = true,
+                    )
+                )
+            } else {
+                Response.Error(
+                    code = HttpStatusCode.Conflict,
+                    data = ProfileResponse(
+                        success = false,
+                        message = "Could not update user: ${updateUserImageParams.userId}"
+                    )
+                )
+            }
+        } else {
+            return Response.Error(
+                code = HttpStatusCode.NotFound,
+                data = ProfileResponse(success = false, message = "Could not find user: ${updateUserImageParams.userId}")
             )
         }
     }

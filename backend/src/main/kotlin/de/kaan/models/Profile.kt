@@ -10,6 +10,12 @@ data class UpdateUserParams(
 )
 
 @Serializable
+data class UpdateUserImageParams(
+    val userId: Long,
+    val image: String? = null
+)
+
+@Serializable
 data class Profile(
     val userId: Long,
     val username: String,
