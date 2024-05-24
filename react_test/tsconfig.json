@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src/components/avatar-editor.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -6,6 +6,8 @@ import {
     Grid,
     Button,
     TextField,
+    CardContent,
+    Card, Box, Avatar,
 } from "@mui/material";
 import Footer from "../components/Footer.tsx";
 import {useNavigate, useParams} from "react-router-dom";
@@ -19,7 +21,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import BackButton from "../components/BackButton";
 import Swal from "sweetalert2";
 import CommentIcon from '@mui/icons-material/Comment';
-
+import AvatarEditor from 'react-avatar-editor'
 
 const UserDetailPage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
@@ -29,6 +31,8 @@ const UserDetailPage: React.FC = () => {
     const [editedUsername, setEditedUsername] = useState("");
     const [editedEmail, setEditedEmail] = useState("");
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+    const [editor, setEditor] = useState<AvatarEditor | null>(null);
     const {client, setClient} = useClient();
     const navigate = useNavigate();
     const {userId} = useParams<{ userId?: string }>();
@@ -181,15 +185,19 @@ const UserDetailPage: React.FC = () => {
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
-            setSelectedFile(event.target.files[0]);
+            const file = event.target.files[0];
+            setSelectedFile(file);
+            setImagePreviewUrl(URL.createObjectURL(file));
         }
     };
 
     const handleImageUpload = async () => {
-        if (!selectedFile) return;
+        if (!selectedFile || !editor) return;
 
+        const canvas = editor.getImageScaledToCanvas().toDataURL();
+        const blob = await (await fetch(canvas)).blob();
         const formData = new FormData();
-        formData.append('file', selectedFile);
+        formData.append('file', blob, selectedFile.name);
         formData.append('userId', client.userId.toString());
 
         try {
@@ -203,6 +211,9 @@ const UserDetailPage: React.FC = () => {
                 const userResponse = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
                 setUser(userResponse.data.profile);
                 setSelectedFile(null);
+                setImagePreviewUrl(null);
+                const postResponse = await axios.get(`http://192.168.1.125:8080/posts/${userId}?currentUserId=${client.userId}`);
+                setPosts(postResponse.data.posts);
             } else {
                 console.error(response.data.message);
             }
@@ -211,7 +222,6 @@ const UserDetailPage: React.FC = () => {
         }
     };
 
-
     const isOwnProfile = userId === client.userId.toString();
 
     return (
@@ -219,127 +229,127 @@ const UserDetailPage: React.FC = () => {
             <Header/>
             <Container style={{padding: '20px', minHeight: 'calc(100vh - 170px)'}}>
                 <Grid container justifyContent="center" spacing={2}>
-                    <Grid item xs={12} md={6} lg={4} alignItems="center" justifyContent="center">
-                        <div style={{display: 'flex', justifyContent: 'center'}}>
-                            {user?.image ? (
-                                <img src={user.image} alt="Profilbild"
-                                     style={{width: '7rem', height: '7rem', borderRadius: '50%'}}/>
-                            ) : (
-                                <AccountCircleIcon style={{fontSize: '7rem'}}/>
-                            )}
-                        </div>
-                        {isOwnProfile && (
-                            <>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                    style={{display: 'none'}}
-                                    id="upload-button"
-                                />
-                                <label htmlFor="upload-button">
-                                    <Button
-                                        component="span"
-                                        variant="contained"
-                                        color="primary"
-                                        sx={{borderRadius: '20px', width: 'auto', mb: 1, mt: 1}}
-                                    >
-                                        Bild ändern
-                                    </Button>
-                                </label>
-                                {selectedFile && (
-                                    <Grid container justifyContent="center" style={{marginTop: '20px'}}>
+                    <Grid item xs={12} md={6} lg={4} container direction="column" alignItems="center">
+                        <Card sx={{ padding: '20px', textAlign: 'center', maxHeight: '75vh', overflowY: 'auto' }}>
+                            <Box sx={{position: 'relative'}}>
+                                {user?.image ? (
+                                    <Avatar
+                                        alt="Profilbild"
+                                        src={user.image}
+                                        sx={{width: 150, height: 150, margin: 'auto'}}
+                                    />
+                                ) : (
+                                    <AccountCircleIcon sx={{fontSize: 150, margin: 'auto'}}/>
+                                )}
+                                {isOwnProfile && !imagePreviewUrl && (
+                                    <>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                            style={{display: 'none'}}
+                                            id="upload-button"
+                                        />
+                                        <label htmlFor="upload-button">
+                                            <Button
+                                                component="span"
+                                                variant="contained"
+                                                color="primary"
+                                                sx={{marginTop: 2}}
+                                            >
+                                                Bild ändern
+                                            </Button>
+                                        </label>
+                                    </>
+                                )}
+                                {isOwnProfile && imagePreviewUrl && (
+                                    <Box sx={{marginTop: 2}}>
+                                        <AvatarEditor
+                                            ref={setEditor}
+                                            image={imagePreviewUrl}
+                                            width={250}
+                                            height={250}
+                                            border={50}
+                                            borderRadius={125}
+                                            color={[255, 255, 255, 0.6]} // RGBA
+                                            scale={1.2}
+                                            rotate={0}
+                                        />
                                         <Button
                                             onClick={handleImageUpload}
                                             variant="contained"
                                             color="primary"
-                                            sx={{borderRadius: '20px', width: 'auto', mb: 1}}
+                                            sx={{marginTop: 2}}
                                         >
                                             Bild hochladen
                                         </Button>
-                                    </Grid>
+                                    </Box>
                                 )}
-                            </>
-                        )}
-                        {isEditing ? (
-                            <>
-                                <TextField
-                                    label="Username"
-                                    value={editedUsername}
-                                    onChange={(e) => setEditedUsername(e.target.value)}
-                                    fullWidth
-                                    margin="normal"
-                                />
-                                <TextField
-                                    label="Email"
-                                    value={editedEmail}
-                                    onChange={(e) => setEditedEmail(e.target.value)}
-                                    fullWidth
-                                    margin="normal"
-                                />
-                                <Grid container justifyContent="center" style={{marginTop: '20px'}}>
-                                    <Button
-                                        onClick={handleSaveClick}
-                                        variant="contained"
-                                        color="primary"
-                                        sx={{borderRadius: '20px', width: 'auto', mb: 1}}
-                                    >
-                                        Speichern
-                                    </Button>
-                                </Grid>
-                            </>
-                        ) : (
-                            <>
-                                <Typography variant="h4" align="center" gutterBottom>
-                                    {user?.username}
-                                </Typography>
-                                <Typography variant="h6" align="center" gutterBottom>
-                                    {user?.email}
-                                </Typography>
-                                {isOwnProfile && (
-                                    <Grid container justifyContent="center" style={{marginTop: '20px'}}>
+                            </Box>
+                            <CardContent>
+                                {isEditing ? (
+                                    <>
+                                        <TextField
+                                            label="Username"
+                                            value={editedUsername}
+                                            onChange={(e) => setEditedUsername(e.target.value)}
+                                            fullWidth
+                                            margin="normal"
+                                        />
+                                        <TextField
+                                            label="Email"
+                                            value={editedEmail}
+                                            onChange={(e) => setEditedEmail(e.target.value)}
+                                            fullWidth
+                                            margin="normal"
+                                        />
                                         <Button
-                                            onClick={handleEditClick}
+                                            onClick={handleSaveClick}
                                             variant="contained"
                                             color="primary"
-                                            sx={{borderRadius: '20px', width: 'auto', mb: 1}}
+                                            sx={{marginTop: 2}}
                                         >
-                                            Bearbeiten
+                                            Speichern
                                         </Button>
-                                    </Grid>
-                                )}
-                            </>
-                        )}
-
-                        <Typography variant="body1" align="center" gutterBottom>
-                            Followers: {user?.followersCount}
-                        </Typography>
-                        <Typography variant="body1" align="center" gutterBottom>
-                            Following: {user?.followingCount}
-                        </Typography>
-                        {!isOwnProfile && (
-                            <div style={{display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
-                                {user?.isFollowing ? (
-                                    <Button
-                                        onClick={handleUnfollowClick}
-                                        variant="contained"
-                                        color="error"
-                                        sx={{borderRadius: '20px', width: 'auto'}}
-                                    >
-                                        Unfollow
-                                    </Button>
+                                    </>
                                 ) : (
+                                    <>
+                                        <Typography variant="h5" sx={{marginTop: 2}}>
+                                            {user?.username}
+                                        </Typography>
+                                        <Typography variant="body1" color="textSecondary" sx={{marginBottom: 2}}>
+                                            {user?.email}
+                                        </Typography>
+                                        {isOwnProfile && (
+                                            <Button
+                                                onClick={handleEditClick}
+                                                variant="contained"
+                                                color="primary"
+                                                sx={{marginTop: 2}}
+                                            >
+                                                Bearbeiten
+                                            </Button>
+                                        )}
+                                    </>
+                                )}
+                                <Typography variant="body1" sx={{marginTop: 2}}>
+                                    Followers: {user?.followersCount}
+                                </Typography>
+                                <Typography variant="body1">
+                                    Following: {user?.followingCount}
+                                </Typography>
+                                {!isOwnProfile && (
                                     <Button
-                                        onClick={handleFollowClick}
+                                        onClick={user?.isFollowing ? handleUnfollowClick : handleFollowClick}
                                         variant="contained"
-                                        color="primary"
-                                        sx={{borderRadius: '20px', width: 'auto'}}
+                                        color={user?.isFollowing ? 'error' : 'primary'}
+                                        sx={{marginTop: 2}}
                                     >
-                                        Follow
+                                        {user?.isFollowing ? 'Unfollow' : 'Follow'}
                                     </Button>
                                 )}
-                            </div>
-                        )}
+                            </CardContent>
+                        </Card>
                     </Grid>
                     <Grid item xs={12} md={8} style={{overflowY: 'auto', maxHeight: 'calc(100vh - 180px)'}}>
                         <Typography variant="h5" align="center" style={{marginTop: '20px'}}>
