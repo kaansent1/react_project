@@ -230,17 +230,15 @@ const UserDetailPage: React.FC = () => {
             <Container style={{padding: '20px', minHeight: 'calc(100vh - 170px)'}}>
                 <Grid container justifyContent="center" spacing={2}>
                     <Grid item xs={12} md={6} lg={4} container direction="column" alignItems="center">
-                        <Card sx={{ padding: '20px', textAlign: 'center', maxHeight: '75vh', overflowY: 'auto' }}>
+                        <Card sx={{padding: '20px', textAlign: 'center', maxHeight: '75vh', overflowY: 'auto'}}>
                             <Box sx={{position: 'relative'}}>
-                                {user?.image ? (
-                                    <Avatar
-                                        alt="Profilbild"
-                                        src={user.image}
-                                        sx={{width: 150, height: 150, margin: 'auto'}}
-                                    />
-                                ) : (
-                                    <AccountCircleIcon sx={{fontSize: 150, margin: 'auto'}}/>
-                                )}
+                                <Avatar
+                                    alt="Profilbild"
+                                    src={user?.image || ""}
+                                    sx={{width: 150, height: 150, margin: 'auto'}}
+                                >
+                                    {!user?.image && <AccountCircleIcon sx={{fontSize: 150}}/>}
+                                </Avatar>
                                 {isOwnProfile && !imagePreviewUrl && (
                                     <>
                                         <input
@@ -271,7 +269,7 @@ const UserDetailPage: React.FC = () => {
                                             height={250}
                                             border={50}
                                             borderRadius={125}
-                                            color={[255, 255, 255, 0.6]} // RGBA
+                                            color={[255, 255, 255, 0.6]}
                                             scale={1.2}
                                             rotate={0}
                                         />
@@ -388,7 +386,10 @@ const UserDetailPage: React.FC = () => {
                                                         }}/>
                                                     ) : (
                                                         <AccountCircleIcon
-                                                            sx={{marginRight: '1rem', fontSize: '3.5rem'}}/>
+                                                            sx={{
+                                                                marginRight: '1rem', width: '5rem',
+                                                                height: '5rem', fontSize: '3.5rem'
+                                                            }}/>
                                                     )}
                                                     {post.username}
                                                 </Typography>

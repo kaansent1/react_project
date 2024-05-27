@@ -1,6 +1,5 @@
 package de.kaan.dao.post_comments
 
-import de.kaan.dao.post_comments.PostCommentsTable.commentId
 import de.kaan.dao.user.UserTable
 import de.kaan.utils.dbQuery
 import org.jetbrains.exposed.sql.*
@@ -18,7 +17,7 @@ class PostCommentsDaoImpl : PostCommentsDao {
 
     private fun toPostCommentRow(resultRow: ResultRow): PostCommentRow {
         return PostCommentRow(
-            commentId = resultRow[commentId],
+            commentId = resultRow[PostCommentsTable.commentId],
             content = resultRow[PostCommentsTable.content],
             postId = resultRow[PostCommentsTable.postId],
             userId = resultRow[PostCommentsTable.userId],
@@ -30,23 +29,24 @@ class PostCommentsDaoImpl : PostCommentsDao {
 
     override suspend fun addComment(postId: Long, userId: Long, content: String): PostCommentRow? {
         return dbQuery {
-
-            PostCommentsTable.insert {
+            val insertStatement = PostCommentsTable.insert {
                 it[PostCommentsTable.postId] = postId
                 it[PostCommentsTable.userId] = userId
                 it[PostCommentsTable.content] = content
             }
 
-            PostCommentsTable
-                .join(
-                    otherTable = UserTable,
-                    onColumn = PostCommentsTable.userId,
-                    otherColumn = UserTable.userId,
-                    joinType = JoinType.INNER
-                )
-                .select { (PostCommentsTable.postId eq postId) and (commentId eq commentId) }
-                .singleOrNull()
-                ?.let { toPostCommentRow(it) }
+            insertStatement.resultedValues?.singleOrNull()?.let {
+                PostCommentsTable
+                    .join(
+                        otherTable = UserTable,
+                        onColumn = PostCommentsTable.userId,
+                        otherColumn = UserTable.userId,
+                        joinType = JoinType.INNER
+                    )
+                    .select { PostCommentsTable.commentId eq it[PostCommentsTable.commentId] }
+                    .singleOrNull()
+                    ?.let { toPostCommentRow(it) }
+            }
         }
     }
 
@@ -82,8 +82,8 @@ class PostCommentsDaoImpl : PostCommentsDao {
                     otherColumn = UserTable.userId,
                     joinType = JoinType.INNER
                 )
-                .select(where = { PostCommentsTable.postId eq postId })
-                .orderBy(column = PostCommentsTable.createdAt, SortOrder.DESC)
+                .select { PostCommentsTable.postId eq postId }
+                .orderBy(PostCommentsTable.createdAt, SortOrder.DESC)
                 .map { toPostCommentRow(it) }
         }
     }

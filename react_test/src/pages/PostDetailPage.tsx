@@ -14,7 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import BackButton from "../components/BackButton.tsx";
 import Swal from "sweetalert2";
-import { Comments } from "../api/comments.ts";  // Ensure this is the correct import path
+import { Comments } from "../api/comments.ts";
 
 const PostDetailPage: React.FC = () => {
     const [post, setPost] = useState<Post | null>(null);
@@ -85,7 +85,7 @@ const PostDetailPage: React.FC = () => {
             title: 'Möchtest du diesen Post wirklich löschen?',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonText: 'Ja, entfolgen',
+            confirmButtonText: 'Löschen',
             confirmButtonColor: '#2c3e50',
             cancelButtonText: 'Abbrechen'
         });
@@ -140,18 +140,20 @@ const PostDetailPage: React.FC = () => {
 
         try {
             const response = await axios.post('http://192.168.1.125:8080/post/comments/create', commentData);
-            setComments([...comments, response.data.comment]);
+            setComments([response.data.comment, ...comments]); // Add new comment at the beginning
             setNewComment("");
             if (post) {
                 setPost({
                     ...post,
-                    commentsCount: (post.commentsCount + 1)
+                    commentsCount: post.commentsCount + 1
                 });
             }
+
         } catch (error) {
             console.error('Fehler beim Hinzufügen des Kommentars:', error);
         }
     };
+
 
     if (!post) {
         return (
@@ -267,7 +269,7 @@ const PostDetailPage: React.FC = () => {
                         }}
                         startIcon={isEditing ? <SaveIcon /> : <EditIcon />}
                     >
-                        {isEditing ? 'Speichern' : 'Bearbeiten'}
+                        {isEditing ? 'Speichern' : ''}
                     </Button>
                 )}
                 {post.isOwnPost && (
@@ -275,7 +277,7 @@ const PostDetailPage: React.FC = () => {
                         variant="contained"
                         color="error"
                         onClick={handleDeleteButtonClick}
-                        startIcon={<DeleteIcon style={{ fontSize: 28 }} />}
+                        startIcon={<DeleteIcon />}
                         sx={{
                             mt: 3,
                             mb: 2,
@@ -287,7 +289,6 @@ const PostDetailPage: React.FC = () => {
                             },
                         }}
                     >
-                        Löschen
                     </Button>
                 )}
                 <Typography variant="h6">Kommentare</Typography>
@@ -319,7 +320,7 @@ const PostDetailPage: React.FC = () => {
                                 {comment.image ? (
                                     <img src={comment.image} alt="Profilbild" style={{ width: '3rem', height: '3rem', borderRadius: '50%' }} />
                                 ) : (
-                                    <AccountCircleIcon sx={{ width: 40, height: 40 }} />
+                                    <AccountCircleIcon sx={{ width: '3rem', height: '3rem' }} />
                                 )}
                                 <div style={{ marginLeft: '1rem' }}>
                                     <Typography variant="subtitle2" style={{ cursor: 'pointer' }}
