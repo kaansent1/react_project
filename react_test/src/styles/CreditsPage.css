@@ -1,34 +1,25 @@
-.image {
-    margin-top: 30px;
-    max-width: 250px;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 1s;
-}
-
-.fade-enter,
-.fade-leave-to {
-    opacity: 0;
-}
-
-.contributors {
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
-    font-size: xx-large;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
 .credits-container {
-    width: 50%;
-    height: 400px;
-    margin: 70px auto;
-    overflow: auto;
-    border: 1px solid #ccc;
-    position: relative;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 3%;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10%;
+}
+
+.emblem, .react-logo, .axios-logo {
+    width: 100px;
+    height: auto;
+    margin: 0 20px;
+    transition: transform 0.5s ease-in-out;
+}
+
+.emblem:hover, .react-logo:hover, .axios-logo:hover{
+    transform: scale(1.1);
+}
+
+.axios-logo {
+    margin-top: 20%;
 }
