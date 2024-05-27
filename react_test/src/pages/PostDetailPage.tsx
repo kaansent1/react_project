@@ -15,6 +15,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import BackButton from "../components/BackButton.tsx";
 import Swal from "sweetalert2";
 import { Comments } from "../api/comments.ts";
+import {AddComment} from "@mui/icons-material";
 
 const PostDetailPage: React.FC = () => {
     const [post, setPost] = useState<Post | null>(null);
@@ -269,7 +270,7 @@ const PostDetailPage: React.FC = () => {
                         }}
                         startIcon={isEditing ? <SaveIcon /> : <EditIcon />}
                     >
-                        {isEditing ? 'Speichern' : ''}
+                        {isEditing ? 'Speichern' : ' Bearbeiten'}
                     </Button>
                 )}
                 {post.isOwnPost && (
@@ -289,6 +290,7 @@ const PostDetailPage: React.FC = () => {
                             },
                         }}
                     >
+                        Löschen
                     </Button>
                 )}
                 <Typography variant="h6">Kommentare</Typography>
@@ -309,7 +311,8 @@ const PostDetailPage: React.FC = () => {
                             style: { color: 'white' }
                         }}
                     />
-                    <Button variant="contained" color="primary" type="submit" sx={{ color: 'white', display: 'flex', width: 'auto' }}>
+                    <Button variant="contained" type="submit" sx={{ color: 'white', display: 'flex', width: 'auto' }}
+                    startIcon={<AddComment />}>
                         Kommentar hinzufügen
                     </Button>
                 </form>
