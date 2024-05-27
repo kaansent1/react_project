@@ -1,17 +1,18 @@
-import Header from "./HeaderPage.tsx";
-import Footer from "../components/Footer.tsx";
-import '../styles/CreditsPage.css';
 import React, {useEffect} from "react";
 import {useClient} from "../context/ClientContext.tsx";
 import {useNavigate} from "react-router-dom";
+import Header from "./HeaderPage.tsx";
+import Footer from "../components/Footer.tsx";
 import BackButton from "../components/BackButton.tsx";
 
 import srlogo from "../assets/logo.svg";
 import reactLogo from "../assets/react.svg";
 import sqlLogo from "../assets/sqlLogo.png";
-import axiosLogo from "../assets/axiosLogo.png"
-import muiLogo from "../assets/muiLogo.png"
-import kotlinLogo from "../assets/kotlinLogo.png"
+import axiosLogo from "../assets/axiosLogo.png";
+import muiLogo from "../assets/muiLogo.png";
+import kotlinLogo from "../assets/kotlinLogo.png";
+
+import '../styles/CreditsPage.css';
 
 const CreditsPage: React.FC = () => {
     const {client} = useClient();
@@ -43,10 +44,10 @@ const CreditsPage: React.FC = () => {
                         <img src={axiosLogo} alt="Axios Logo" className="axios-logo"/>
                     </a>
                     <a href="https://mui.com/">
-                        <img src={muiLogo} alt="SQL Logo" className="react-logo"/>
+                        <img src={muiLogo} alt="MUI Logo" className="react-logo"/>
                     </a>
-                    <a href="https://www.postgresql.org/">
-                        <img src={kotlinLogo} alt="SQL Logo" className="react-logo"/>
+                    <a href="https://kotlinlang.org/">
+                        <img src={kotlinLogo} alt="Kotlin Logo" className="react-logo"/>
                     </a>
                 </div>
             </div>
