@@ -39,7 +39,7 @@ const OwnDetailPage = () => {
             username: data.username
         }));
 
-        const response = await axios.put('http://192.168.1.125:8080/profile/update', formData, {
+        const response = await axios.put('http://192.168.1.125:8080/user/update', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

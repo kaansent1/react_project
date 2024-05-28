@@ -19,7 +19,6 @@ function Home() {
         <div className="container">
             <Header/>
             <div className="body">
-
                 <h2>UserFeed</h2>
                 <UserFeed/>
             </div>

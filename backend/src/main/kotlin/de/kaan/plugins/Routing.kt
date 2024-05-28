@@ -14,7 +14,7 @@ fun Application.configureRouting() {
         messageRouting()
         postLikesRouting()
         postCommentsRouting()
-        profileRouting()
+        userRouting()
         staticFiles("/static", File("/home/kaans/react_project/backend/src/main/kotlin/de/kaan/assets"))
     }
 }

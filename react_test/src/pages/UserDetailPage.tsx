@@ -47,10 +47,10 @@ const UserDetailPage: React.FC = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const userResponse = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
-                setUser(userResponse.data.profile);
-                setEditedUsername(userResponse.data.profile.username);
-                setEditedEmail(userResponse.data.profile.email);
+                const userResponse = await axios.get(`http://192.168.1.125:8080/user/${userId}?currentUserId=${client.userId}`);
+                setUser(userResponse.data.user);
+                setEditedUsername(userResponse.data.user.username);
+                setEditedEmail(userResponse.data.user.email);
                 const postResponse = await axios.get(`http://192.168.1.125:8080/posts/${userId}?currentUserId=${client.userId}`);
                 setPosts(postResponse.data.posts);
             } catch (error) {
@@ -118,8 +118,8 @@ const UserDetailPage: React.FC = () => {
             });
 
             if (response.data.success) {
-                const userResponse = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
-                setUser(userResponse.data.profile);
+                const userResponse = await axios.get(`http://192.168.1.125:8080/user/${userId}?currentUserId=${client.userId}`);
+                setUser(userResponse.data.user);
             } else {
                 console.error(response.data.message);
             }
@@ -146,7 +146,7 @@ const UserDetailPage: React.FC = () => {
                 });
 
                 if (response.data.success) {
-                    const userResponse = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
+                    const userResponse = await axios.get(`http://192.168.1.125:8080/user/${userId}?currentUserId=${client.userId}`);
                     setUser(userResponse.data.profile);
                 } else {
                     console.error(response.data.message);
@@ -163,7 +163,7 @@ const UserDetailPage: React.FC = () => {
 
     const handleSaveClick = async () => {
         try {
-            const response = await axios.put('http://192.168.1.125:8080/profile/update', {
+            const response = await axios.put('http://192.168.1.125:8080/user/update', {
                 userId: client.userId,
                 username: editedUsername,
                 email: editedEmail
@@ -201,15 +201,15 @@ const UserDetailPage: React.FC = () => {
         formData.append('userId', client.userId.toString());
 
         try {
-            const response = await axios.put(`http://192.168.1.125:8080/profile/update/image`, formData, {
+            const response = await axios.put(`http://192.168.1.125:8080/user/update/image`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
             if (response.data.success) {
-                const userResponse = await axios.get(`http://192.168.1.125:8080/profile/${userId}?currentUserId=${client.userId}`);
-                setUser(userResponse.data.profile);
+                const userResponse = await axios.get(`http://192.168.1.125:8080/user/${userId}?currentUserId=${client.userId}`);
+                setUser(userResponse.data.user);
                 setSelectedFile(null);
                 setImagePreviewUrl(null);
                 const postResponse = await axios.get(`http://192.168.1.125:8080/posts/${userId}?currentUserId=${client.userId}`);

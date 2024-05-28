@@ -40,7 +40,7 @@ function UserFeed() {
             const postsResponse = await axios.get(`http://192.168.1.125:8080/posts/feed?userId=${client.userId}`);
             setPosts(postsResponse.data.posts);
 
-            const usersResponse = await axios.get(`http://192.168.1.125:8080/profile/all`);
+            const usersResponse = await axios.get(`http://192.168.1.125:8080/user/all`);
             setUsers(usersResponse.data.users);
         };
 

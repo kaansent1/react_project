@@ -24,8 +24,8 @@ import de.kaan.repository.post_comments.PostCommentsRepository
 import de.kaan.repository.post_comments.PostCommentsRepositoryImpl
 import de.kaan.repository.post_likes.PostLikesRepository
 import de.kaan.repository.post_likes.PostLikesRepositoryImpl
-import de.kaan.repository.profile.ProfileRepository
-import de.kaan.repository.profile.ProfileRepositoryImpl
+import de.kaan.repository.profile.UserRepository
+import de.kaan.repository.profile.UserRepositoryImpl
 import org.koin.dsl.module
 
 val appModule = module {
@@ -33,7 +33,7 @@ val appModule = module {
     single<UserDao> { UserDaoImpl() }
     single<PostDao> { PostDaoImpl() }
     single<PostRepository> { PostRepositoryImpl(get(), get(), get()) }
-    single<ProfileRepository> { ProfileRepositoryImpl(get(), get()) }
+    single<UserRepository> { UserRepositoryImpl(get(), get()) }
     single<PostLikesDao> { PostLikesDaoImpl() }
     single<PostLikesRepository> { PostLikesRepositoryImpl(get(), get()) }
     single<FollowsDao> { FollowsDaoImpl() }

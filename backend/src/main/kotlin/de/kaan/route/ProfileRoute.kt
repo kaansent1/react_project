@@ -1,7 +1,7 @@
 package de.kaan.route
 
 import de.kaan.models.*
-import de.kaan.repository.profile.ProfileRepository
+import de.kaan.repository.profile.UserRepository
 import de.kaan.utils.Constants
 import de.kaan.utils.getLongParameter
 import de.kaan.utils.saveFile
@@ -16,10 +16,10 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import java.io.File
 
-fun Routing.profileRouting() {
-    val repository by inject<ProfileRepository>()
+fun Routing.userRouting() {
+    val repository by inject<UserRepository>()
 
-    route(path = "/profile") {
+    route(path = "/user") {
         staticFiles("/static", File("/assets"))
 
         get(path = "/{userId}") {
@@ -34,7 +34,7 @@ fun Routing.profileRouting() {
             } catch (anyError: Throwable) {
                 call.respond(
                     status = HttpStatusCode.InternalServerError,
-                    message = ProfileResponse(
+                    message = UserResponse(
                         success = false,
                         message = "Fehlgeschlagen"
                     )
@@ -53,7 +53,7 @@ fun Routing.profileRouting() {
             } catch (e: Throwable) {
                 call.respond(
                     status = HttpStatusCode.InternalServerError,
-                    message = ProfileResponse(
+                    message = UserResponse(
                         success = false,
                         message = "Interner Serverfehler"
                     )
@@ -133,7 +133,7 @@ fun Routing.profileRouting() {
             } catch (anyError: Throwable) {
                 call.respond(
                     status = HttpStatusCode.InternalServerError,
-                    message = ProfileResponse(
+                    message = UserResponse(
                         success = false,
                         message = "Fehlgeschlagen"
                     )

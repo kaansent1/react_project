@@ -16,7 +16,7 @@ data class UpdateUserImageParams(
 )
 
 @Serializable
-data class Profile(
+data class User(
     val userId: Long,
     val username: String,
     val email: String,
@@ -29,15 +29,15 @@ data class Profile(
 )
 
 @Serializable
-data class ProfileResponse(
+data class UserResponse(
     val success: Boolean,
-    val profile: Profile? = null,
+    val user: User? = null,
     val message: String? = null
 )
 
 @Serializable
 data class UsersResponse(
     val success: Boolean,
-    val users: List<Profile> = listOf(),
+    val users: List<User> = listOf(),
     val message: String? = null
 )
