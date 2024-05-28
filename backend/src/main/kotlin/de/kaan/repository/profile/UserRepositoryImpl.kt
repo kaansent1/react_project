@@ -25,7 +25,7 @@ class UserRepositoryImpl(
 
 
             Response.Success(
-                data = UserResponse(success = true, user = toUser(userRow,  isFollowing, isOwnProfile))
+                data = UserResponse(success = true, user = toUser(userRow, isFollowing, isOwnProfile))
             )
         }
     }
@@ -135,7 +135,7 @@ class UserRepositoryImpl(
     }
 
 
-    private fun toUser(userRow: UserRow, isFollowing: Boolean, isOwnProfile: Boolean): User{
+    private fun toUser(userRow: UserRow, isFollowing: Boolean, isOwnProfile: Boolean): User {
         return User(
             userId = userRow.userId,
             username = userRow.username,

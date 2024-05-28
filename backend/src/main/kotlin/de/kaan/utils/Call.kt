@@ -6,10 +6,10 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.*
 import io.ktor.server.response.*
 
-suspend fun ApplicationCall.getLongParameter(name: String, isQueryParameter: Boolean = false): Long{
-    val parameter = if (isQueryParameter){
+suspend fun ApplicationCall.getLongParameter(name: String, isQueryParameter: Boolean = false): Long {
+    val parameter = if (isQueryParameter) {
         request.queryParameters[name]?.toLongOrNull()
-    }else{
+    } else {
         parameters[name]?.toLongOrNull()
     } ?: kotlin.run {
         respond(

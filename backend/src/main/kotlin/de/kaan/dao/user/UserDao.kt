@@ -3,21 +3,21 @@ package de.kaan.dao.user
 import de.kaan.models.RegisterCredentials
 
 interface UserDao {
-        suspend fun insert(params: RegisterCredentials): UserRow?
+    suspend fun insert(params: RegisterCredentials): UserRow?
 
-        suspend fun findByUsername(username: String): UserRow?
+    suspend fun findByUsername(username: String): UserRow?
 
-        suspend fun findById(userId: Long): UserRow?
+    suspend fun findById(userId: Long): UserRow?
 
-        suspend fun updateUser(userId: Long, username: String, email: String): Boolean
+    suspend fun updateUser(userId: Long, username: String, email: String): Boolean
 
-        suspend fun updateUserImage(userId: Long, image: String?): Boolean
+    suspend fun updateUserImage(userId: Long, image: String?): Boolean
 
-        suspend fun getUsers(ids: List<Long>): List<UserRow>
+    suspend fun getUsers(ids: List<Long>): List<UserRow>
 
-        suspend fun deleteUser(userId: Long): Boolean
+    suspend fun deleteUser(userId: Long): Boolean
 
-        suspend fun updateFollowsCount(follower: Long, following: Long, isFollowing: Boolean): Boolean
+    suspend fun updateFollowsCount(follower: Long, following: Long, isFollowing: Boolean): Boolean
 
-        suspend fun getAllUsers(): List<UserRow>
+    suspend fun getAllUsers(): List<UserRow>
 }

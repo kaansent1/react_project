@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
 @Serializable
-data class UserRow (
+data class UserRow(
     val userId: Long,
     val username: String,
     val password: String,
@@ -20,7 +20,7 @@ object UserTable : Table(name = "users") {
     val username = varchar("username", 32).uniqueIndex()
     val password = varchar("password", 64)
     val email = varchar("email", 64)
-    val image= text(name = "image").nullable()
+    val image = text(name = "image").nullable()
     val followersCount = integer(name = "followers_count").default(defaultValue = 0)
     val followingCount = integer(name = "following_count").default(defaultValue = 0)
 

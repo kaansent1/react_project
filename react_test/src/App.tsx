@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React, {useState} from 'react';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import HomePage from './pages/HomePage.tsx';
 import AddPostPage from './pages/AddPostPage.tsx';
 import OwnDetailPage from './pages/OwnDetailPage.tsx';
 import LoginPage from './pages/LoginPage.tsx';
-import { ClientContext } from './context/ClientContext.tsx';
-import { User } from './api/user.ts';
+import {ClientContext} from './context/ClientContext.tsx';
+import {User} from './api/user.ts';
 import PostDetailPage from './pages/PostDetailPage.tsx';
 import UserDetailPage from './pages/UserDetailPage.tsx';
 import CreditsPage from './pages/CreditsPage.tsx';
@@ -24,7 +24,7 @@ const App: React.FC = () => {
     });
 
     return (
-        <ClientContext.Provider value={{ client, setClient }}>
+        <ClientContext.Provider value={{client, setClient}}>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LoginPage/>}/>

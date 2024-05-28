@@ -18,7 +18,7 @@ data class PostRow(
     val userImage: String?,
     val likesCount: Int,
     val commentsCount: Int,
-    )
+)
 
 object PostsTable : Table(name = "posts") {
 

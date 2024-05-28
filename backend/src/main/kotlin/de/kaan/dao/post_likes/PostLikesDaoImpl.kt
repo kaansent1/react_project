@@ -9,12 +9,12 @@ import org.jetbrains.exposed.sql.select
 
 class PostLikesDaoImpl : PostLikesDao {
     override suspend fun addLike(postId: Long, userId: Long): Boolean {
-        return dbQuery{
+        return dbQuery {
             val insertStatement = PostLikesTable.insert {
                 it[PostLikesTable.postId] = postId
                 it[PostLikesTable.userId] = userId
             }
-            insertStatement.resultedValues?.isNotEmpty()?: false
+            insertStatement.resultedValues?.isNotEmpty() ?: false
         }
     }
 

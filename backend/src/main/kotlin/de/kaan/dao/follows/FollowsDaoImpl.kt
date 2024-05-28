@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 class FollowsDaoImpl : FollowsDao {
     override suspend fun followUser(follower: Long, following: Long): Boolean {
-        return dbQuery{
+        return dbQuery {
             val insertStatement = FollowsTable.insert {
                 it[followerId] = follower
                 it[followingId] = following

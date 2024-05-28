@@ -7,5 +7,6 @@ import de.kaan.utils.Response
 
 interface AuthRepository {
     suspend fun register(params: RegisterCredentials): Response<AuthResponse>
+
     suspend fun login(params: LoginCredentials): Response<AuthResponse>
 }

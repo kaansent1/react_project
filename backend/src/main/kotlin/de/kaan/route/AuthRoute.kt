@@ -12,15 +12,15 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 
-fun Routing.authRouting(){
+fun Routing.authRouting() {
     val repository by inject<AuthRepository>()
 
-    route(path = "/register"){
+    route(path = "/register") {
         post {
 
             val params = call.receiveNullable<RegisterCredentials>()
 
-            if (params == null){
+            if (params == null) {
                 call.respond(
                     status = HttpStatusCode.BadRequest,
                     message = AuthResponse(
@@ -40,12 +40,12 @@ fun Routing.authRouting(){
         }
     }
 
-    route(path = "/login"){
+    route(path = "/login") {
         post {
 
             val params = call.receiveNullable<LoginCredentials>()
 
-            if (params == null){
+            if (params == null) {
                 call.respond(
                     status = HttpStatusCode.BadRequest,
                     message = AuthResponse(

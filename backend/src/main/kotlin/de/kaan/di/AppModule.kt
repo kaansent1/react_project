@@ -37,7 +37,7 @@ val appModule = module {
     single<PostLikesDao> { PostLikesDaoImpl() }
     single<PostLikesRepository> { PostLikesRepositoryImpl(get(), get()) }
     single<FollowsDao> { FollowsDaoImpl() }
-    single<FollowsRepository> { FollowsRepositoryImpl(get(), get())}
+    single<FollowsRepository> { FollowsRepositoryImpl(get(), get()) }
     single<MessageDao> { MessageDaoImpl() }
     single<MessageRepository> { MessageRepositoryImpl(get()) }
     single<PostCommentsDao> { PostCommentsDaoImpl() }

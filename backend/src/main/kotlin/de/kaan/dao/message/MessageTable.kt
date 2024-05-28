@@ -15,7 +15,7 @@ data class MessageRow(
 
 )
 
-object MessageTable : Table(name = "messages"){
+object MessageTable : Table(name = "messages") {
     val id = long("id").autoIncrement()
     val senderId = long("senderId")
     val receiverId = long("receiverId")

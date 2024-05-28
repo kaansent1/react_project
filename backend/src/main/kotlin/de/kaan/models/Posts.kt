@@ -22,7 +22,7 @@ data class Post(
     val likesCount: Int,
     val commentsCount: Int,
     val isLiked: Boolean
-    )
+)
 
 @Serializable
 data class PostResponse(

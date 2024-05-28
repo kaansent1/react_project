@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Header from "./HeaderPage.tsx";
-import { Container, Typography, Button, TextField, Grid } from "@mui/material";
+import {Container, Typography, Button, TextField, Grid} from "@mui/material";
 import Footer from "../components/Footer.tsx";
-import { useParams, useNavigate } from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import axios from "axios";
-import { useClient } from "../context/ClientContext.tsx";
-import { Post } from "../api/post.ts";
+import {useClient} from "../context/ClientContext.tsx";
+import {Post} from "../api/post.ts";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -14,7 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import BackButton from "../components/BackButton.tsx";
 import Swal from "sweetalert2";
-import { Comments } from "../api/comments.ts";
+import {Comments} from "../api/comments.ts";
 import {AddComment} from "@mui/icons-material";
 
 const PostDetailPage: React.FC = () => {
@@ -23,8 +23,8 @@ const PostDetailPage: React.FC = () => {
     const [newComment, setNewComment] = useState<string>("");
     const [editingText, setEditingText] = useState<string>("");
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const { postId } = useParams<{ postId?: string }>();
-    const { client } = useClient();
+    const {postId} = useParams<{ postId?: string }>();
+    const {client} = useClient();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -65,7 +65,7 @@ const PostDetailPage: React.FC = () => {
     const handleEditButtonClick = async () => {
         if (post) {
             if (isEditing) {
-                const newData = { text: editingText, userId: client.userId, username: client.username };
+                const newData = {text: editingText, userId: client.userId, username: client.username};
                 try {
                     await axios.put(`http://192.168.1.125:8080/post/${post.postId}/edit`, newData);
                     console.log("Post erfolgreich bearbeitet!");
@@ -109,9 +109,9 @@ const PostDetailPage: React.FC = () => {
         let response;
 
         if (isLiked) {
-            response = await axios.delete('http://192.168.1.125:8080/post/likes/remove', { data: { userId, postId } });
+            response = await axios.delete('http://192.168.1.125:8080/post/likes/remove', {data: {userId, postId}});
         } else {
-            response = await axios.post('http://192.168.1.125:8080/post/likes/add', { userId, postId });
+            response = await axios.post('http://192.168.1.125:8080/post/likes/add', {userId, postId});
         }
 
         if (response.data.success && post) {
@@ -159,18 +159,18 @@ const PostDetailPage: React.FC = () => {
     if (!post) {
         return (
             <div>
-                <Header />
-                <Typography variant="h4" align="center" sx={{ mb: 2, mt: 4 }}>
+                <Header/>
+                <Typography variant="h4" align="center" sx={{mb: 2, mt: 4}}>
                     Laden...
                 </Typography>
-                <Footer />
+                <Footer/>
             </div>
         );
     }
 
     return (
         <>
-            <Header />
+            <Header/>
             <Container
                 sx={{
                     width: 800,
@@ -189,14 +189,14 @@ const PostDetailPage: React.FC = () => {
                         <Grid item>
                             {post.userImage ? (
                                 <img src={post.userImage} alt="Profilbild"
-                                     style={{ width: '4rem', height: '4rem', borderRadius: '50%', cursor: 'pointer' }}
-                                     onClick={() => navigate(`/user/${post.userId}`)} />
+                                     style={{width: '4rem', height: '4rem', borderRadius: '50%', cursor: 'pointer'}}
+                                     onClick={() => navigate(`/user/${post.userId}`)}/>
                             ) : (
-                                <AccountCircleIcon sx={{ width: 60, height: 60 }} />
+                                <AccountCircleIcon sx={{width: 60, height: 60}}/>
                             )}
                         </Grid>
                         <Grid item xs>
-                            <Typography variant="h6" style={{ cursor: 'pointer', marginLeft: '1rem', fontWeight: 'bold' }}
+                            <Typography variant="h6" style={{cursor: 'pointer', marginLeft: '1rem', fontWeight: 'bold'}}
                                         onClick={() => navigate(`/user/${post.userId}`)}>
                                 {post.username}
                             </Typography>
@@ -212,29 +212,29 @@ const PostDetailPage: React.FC = () => {
                                 onChange={(e) => setEditingText(e.target.value)}
                                 multiline
                                 fullWidth
-                                sx={{ mb: 2 }}
+                                sx={{mb: 2}}
                                 InputProps={{
-                                    style: { color: 'white', borderColor: 'white', fontSize: '1.2em' }
+                                    style: {color: 'white', borderColor: 'white', fontSize: '1.2em'}
                                 }}
                                 InputLabelProps={{
-                                    style: { color: 'white' }
+                                    style: {color: 'white'}
                                 }}
                             />
                         ) : (
-                            <Typography variant="body1" style={{ fontSize: '1.2em' }}>
+                            <Typography variant="body1" style={{fontSize: '1.2em'}}>
                                 {post.text}
                             </Typography>
                         )}
                     </Grid>
                     <Grid item xs={12}>
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
                             <img src={post.image} alt="" style={{
                                 width: 'auto',
                                 maxWidth: '100%',
                                 maxHeight: '40vh',
                                 marginBottom: '1rem',
                                 marginTop: '1rem'
-                            }} />
+                            }}/>
                         </div>
                     </Grid>
                 </Grid>
@@ -242,8 +242,8 @@ const PostDetailPage: React.FC = () => {
                     <Grid item>
                         <Button
                             onClick={(e) => handleLikeClick(post.postId, e)}
-                            startIcon={post.isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                            sx={{ color: post.isLiked ? 'red' : 'white' }}
+                            startIcon={post.isLiked ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
+                            sx={{color: post.isLiked ? 'red' : 'white'}}
                         >
                             {post.likesCount}
                         </Button>
@@ -268,7 +268,7 @@ const PostDetailPage: React.FC = () => {
                                 backgroundColor: '#135ba1',
                             },
                         }}
-                        startIcon={isEditing ? <SaveIcon /> : <EditIcon />}
+                        startIcon={isEditing ? <SaveIcon/> : <EditIcon/>}
                     >
                         {isEditing ? 'Speichern' : ' Bearbeiten'}
                     </Button>
@@ -278,7 +278,7 @@ const PostDetailPage: React.FC = () => {
                         variant="contained"
                         color="error"
                         onClick={handleDeleteButtonClick}
-                        startIcon={<DeleteIcon />}
+                        startIcon={<DeleteIcon/>}
                         sx={{
                             mt: 3,
                             mb: 2,
@@ -303,43 +303,45 @@ const PostDetailPage: React.FC = () => {
                         onChange={handleCommentChange}
                         multiline
                         fullWidth
-                        sx={{ mb: 2, mt: 2 }}
+                        sx={{mb: 2, mt: 2}}
                         InputProps={{
-                            style: { color: 'white', borderColor: 'white', fontSize: '1.2em' }
+                            style: {color: 'white', borderColor: 'white', fontSize: '1.2em'}
                         }}
                         InputLabelProps={{
-                            style: { color: 'white' }
+                            style: {color: 'white'}
                         }}
                     />
-                    <Button variant="contained" type="submit" sx={{ color: 'white', display: 'flex', width: 'auto' }}
-                    startIcon={<AddComment />}>
+                    <Button variant="contained" type="submit" sx={{color: 'white', display: 'flex', width: 'auto'}}
+                            startIcon={<AddComment/>}>
                         Kommentar hinzufügen
                     </Button>
                 </form>
-                <Grid container spacing={2} sx={{ mt: 2 }}>
+                <Grid container spacing={2} sx={{mt: 2}}>
                     {comments.map((comment) => (
                         <Grid item xs={12} key={comment.commentId}>
-                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                            <div style={{display: 'flex', alignItems: 'center', marginBottom: '1rem'}}>
                                 {comment.image ? (
-                                    <img src={comment.image} alt="Profilbild" style={{ width: '3rem', height: '3rem', borderRadius: '50%' }} />
+                                    <img src={comment.image} alt="Profilbild"
+                                         style={{width: '3rem', height: '3rem', borderRadius: '50%'}}/>
                                 ) : (
-                                    <AccountCircleIcon sx={{ width: '3rem', height: '3rem' }} />
+                                    <AccountCircleIcon sx={{width: '3rem', height: '3rem'}}/>
                                 )}
-                                <div style={{ marginLeft: '1rem' }}>
-                                    <Typography variant="subtitle2" style={{ cursor: 'pointer' }}
+                                <div style={{marginLeft: '1rem'}}>
+                                    <Typography variant="subtitle2" style={{cursor: 'pointer'}}
                                                 onClick={() => navigate(`/user/${comment.userId}`)}>
                                         {comment.username}
                                     </Typography>
                                     <Typography variant="body2">{comment.content}</Typography>
-                                    <Typography variant="caption" style={{ color: '#aaa' }}>{comment.createdAt}</Typography>
+                                    <Typography variant="caption"
+                                                style={{color: '#aaa'}}>{comment.createdAt}</Typography>
                                 </div>
                             </div>
                         </Grid>
                     ))}
                 </Grid>
             </Container>
-            <BackButton />
-            <Footer />
+            <BackButton/>
+            <Footer/>
         </>
     );
 };

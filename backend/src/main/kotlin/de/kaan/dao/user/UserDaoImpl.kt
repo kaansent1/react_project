@@ -9,7 +9,6 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 
 
-
 class UserDaoImpl : UserDao {
 
     override suspend fun insert(params: RegisterCredentials): UserRow? {
@@ -78,11 +77,11 @@ class UserDaoImpl : UserDao {
         return dbQuery {
             val count = if (isFollowing) +1 else -1
 
-            val success1 = UserTable.update({ UserTable.userId eq follower}){
+            val success1 = UserTable.update({ UserTable.userId eq follower }) {
                 it.update(column = followingCount, value = followingCount.plus(count))
             } > 0
 
-            val success2 = UserTable.update({ UserTable.userId eq following}){
+            val success2 = UserTable.update({ UserTable.userId eq following }) {
                 it.update(column = followersCount, value = followersCount.plus(count))
             } > 0
 

@@ -3,7 +3,6 @@ package de.kaan
 import de.kaan.di.configureDI
 import de.kaan.plugins.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.websocket.*

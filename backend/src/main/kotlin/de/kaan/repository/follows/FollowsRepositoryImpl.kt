@@ -86,7 +86,6 @@ class FollowsRepositoryImpl(
     }
 
 
-
     private fun toFollowUserData(userRow: UserRow, isFollowing: Boolean): FollowUserData {
         return FollowUserData(
             id = userRow.userId,
