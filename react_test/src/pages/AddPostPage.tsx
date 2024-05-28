@@ -5,6 +5,7 @@ import PostForm from "../components/PostForm.tsx";
 import Footer from "../components/Footer.tsx";
 import {useClient} from "../context/ClientContext.tsx";
 import {useNavigate} from "react-router-dom";
+import BackButton from "../components/BackButton";
 
 const AddPostPage: React.FC = () => {
     const {client} = useClient();
@@ -22,6 +23,7 @@ const AddPostPage: React.FC = () => {
                 Neuen Post erstellen
             </Typography>
             <PostForm/>
+            <BackButton/>
             <Footer/>
         </div>
     );

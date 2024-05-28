@@ -27,7 +27,8 @@ export const ClientContext = createContext<{
 }>({
     client: initialClientState,
     setClient: (newClient) => {
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         this.client = newClient
     },
 });

@@ -141,7 +141,7 @@ const PostDetailPage: React.FC = () => {
 
         try {
             const response = await axios.post('http://192.168.1.125:8080/post/comments/create', commentData);
-            setComments([response.data.comment, ...comments]); // Add new comment at the beginning
+            setComments([response.data.comment, ...comments]);
             setNewComment("");
             if (post) {
                 setPost({

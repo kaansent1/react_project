@@ -55,7 +55,7 @@ const PostForm = () => {
                 minHeight: "40vh",
             }}
         >
-            <Box sx={{display: "flex", flexDirection: "column", gap: 1, width: "40vh"}}>
+            <Box sx={{display: "flex", flexDirection: "column", gap: 1, width: "60vh"}}>
                 <TextField
                     label="Was möchtest du sagen..."
                     {...register("text")}
