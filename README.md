@@ -12,13 +12,6 @@ Diese Social Media Applikation wurde entwickelt, um eine Plattform für soziale 
 
 - **Datenbank-Integration:** Die Anwendung nutzt eine PostgreSQL-Datenbank über das Exposed-Framework für die Persistenz der Benutzer- und Beitragsdaten.
 
-
-## Installation und Ausführung
-
-1. **Backend starten:** Führen Sie die Ktor-Anwendung aus, um das Backend zu starten. Stellen Sie sicher, dass die PostgreSQL-Datenbank bereitgestellt und konfiguriert ist.
-
-2. **Frontend starten:** Starten Sie das React-Frontend, um die Benutzeroberfläche der Anwendung anzuzeigen und mit ihr zu interagieren.
-
 ## Technologien
 
 - **Frontend:** React
