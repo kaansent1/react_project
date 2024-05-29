@@ -11,7 +11,6 @@ import sqlLogo from "../assets/sqlLogo.png";
 import axiosLogo from "../assets/axiosLogo.png";
 import muiLogo from "../assets/muiLogo.png";
 import kotlinLogo from "../assets/kotlinLogo.png";
-
 import '../styles/CreditsPage.css';
 
 const CreditsPage: React.FC = () => {
