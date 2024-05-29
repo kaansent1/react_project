@@ -1,8 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
-import {Box, TextField} from "@mui/material";
+import {Box, TextField, Typography} from "@mui/material";
 import {useForm} from "react-hook-form";
-import {useNavigate} from "react-router-dom";
 import {User} from "../api/user.ts";
 import axios from "axios";
 import {useClient} from '../context/ClientContext';
@@ -11,14 +10,12 @@ interface PostFormData {
     postId: string;
     text: string;
     user: User;
-    image?: string
+    image?: string;
 }
 
 const PostForm = ({onPostCreated}: { onPostCreated: () => void }) => {
     const {handleSubmit, register, reset} = useForm<PostFormData>();
-    const navigate = useNavigate();
     const {client} = useClient();
-
 
     async function onSubmit(data: PostFormData) {
         const formData = new FormData();
@@ -38,7 +35,6 @@ const PostForm = ({onPostCreated}: { onPostCreated: () => void }) => {
         });
         if (response.data.success) {
             onPostCreated();
-            navigate("/home");
         } else {
             console.error('Ein Fehler ist aufgetreten: ', response.data.message);
         }
@@ -57,6 +53,9 @@ const PostForm = ({onPostCreated}: { onPostCreated: () => void }) => {
             }}
         >
             <Box sx={{display: "flex", flexDirection: "column", gap: 1, width: "60vh"}}>
+                <Typography fontSize={25}>
+                    Neuen Post erstellen
+                </Typography>
                 <TextField
                     label="Was möchtest du sagen..."
                     {...register("text")}

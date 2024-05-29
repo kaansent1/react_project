@@ -313,7 +313,7 @@ const PostDetailPage: React.FC = () => {
                     />
                     <Button variant="contained" type="submit" sx={{color: 'white', display: 'flex', width: 'auto'}}
                             startIcon={<AddComment/>}>
-                        Kommentar hinzufügen
+                        Post
                     </Button>
                 </form>
                 <Grid container spacing={2} sx={{mt: 2}}>
