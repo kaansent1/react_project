@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import HomePage from './pages/HomePage.tsx';
-import AddPostPage from './pages/AddPostPage.tsx';
 import OwnDetailPage from './pages/OwnDetailPage.tsx';
 import LoginPage from './pages/LoginPage.tsx';
 import {ClientContext} from './context/ClientContext.tsx';
@@ -29,7 +28,6 @@ const App: React.FC = () => {
                 <Routes>
                     <Route path="/" element={<LoginPage/>}/>
                     <Route path="/home" element={<HomePage/>}/>
-                    <Route path="/new" element={<AddPostPage/>}/>
                     <Route path="/account" element={<OwnDetailPage/>}/>
                     <Route path="/detail/:postId" element={<PostDetailPage/>}/>
                     <Route path="/user/:userId" element={<UserDetailPage/>}/>

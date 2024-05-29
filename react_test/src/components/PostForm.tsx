@@ -14,7 +14,7 @@ interface PostFormData {
     image?: string
 }
 
-const PostForm = () => {
+const PostForm = ({onPostCreated}: { onPostCreated: () => void }) => {
     const {handleSubmit, register, reset} = useForm<PostFormData>();
     const navigate = useNavigate();
     const {client} = useClient();
@@ -37,6 +37,7 @@ const PostForm = () => {
             },
         });
         if (response.data.success) {
+            onPostCreated();
             navigate("/home");
         } else {
             console.error('Ein Fehler ist aufgetreten: ', response.data.message);

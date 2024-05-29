@@ -9,7 +9,8 @@ import {
     FormControl,
     RadioGroup,
     FormControlLabel,
-    Radio
+    Radio,
+    Box
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -23,6 +24,8 @@ import {useClient} from "../context/ClientContext.tsx";
 import {User} from "../api/user.ts";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CommentIcon from '@mui/icons-material/Comment';
+import PostForm from '../components/PostForm';
+import "../styles/PostFormStyle.css"
 
 function UserFeed() {
     const navigate = useNavigate();
@@ -34,6 +37,7 @@ function UserFeed() {
     const [users, setUsers] = useState<User[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
     const isSmallScreen = useMediaQuery('(max-width:950px)');
+    const [showPostForm, setShowPostForm] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -104,6 +108,12 @@ function UserFeed() {
         } else {
             console.error(response.data.message);
         }
+    };
+
+    const handlePostCreated = async () => {
+        const postsResponse = await axios.get(`http://192.168.1.125:8080/posts/feed?userId=${client.userId}`);
+        setPosts(postsResponse.data.posts);
+        setShowPostForm(false);
     };
 
     return (
@@ -298,7 +308,7 @@ function UserFeed() {
                 color="success"
                 variant="contained"
                 startIcon={isSmallScreen ? null : <AddIcon/>}
-                onClick={() => navigate('/new')}
+                onClick={() => setShowPostForm(!showPostForm)}
                 sx={{
                     position: 'fixed',
                     width: 'auto',
@@ -313,6 +323,15 @@ function UserFeed() {
             >
                 {isSmallScreen ? <AddIcon/> : 'Hinzufügen'}
             </Button>
+
+            {showPostForm && (
+                <>
+                    <Box className="backgroundOverlay" onClick={() => setShowPostForm(false)}></Box>
+                    <Box className="postFormContainer">
+                        <PostForm onPostCreated={handlePostCreated}/>
+                    </Box>
+                </>
+            )}
         </div>
     );
 }
