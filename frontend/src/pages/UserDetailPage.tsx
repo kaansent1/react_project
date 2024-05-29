@@ -1,4 +1,4 @@
-import React, {useState, useEffect, ChangeEvent} from "react";
+import {useState, useEffect, ChangeEvent} from "react";
 import Header from "./HeaderPage.tsx";
 import {
     Container,

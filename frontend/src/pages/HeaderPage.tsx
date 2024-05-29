@@ -5,7 +5,7 @@ import DropdownMenu from '../components/DropDownMenu.tsx';
 import HomeIcon from '@mui/icons-material/Home';
 import {useEffect} from "react";
 import {useClient} from "../context/ClientContext.tsx";
-import logo from "../assets/logo.svg";
+import logo from "../images/logo.svg";
 
 function Header() {
     const {client} = useClient();

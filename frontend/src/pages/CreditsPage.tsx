@@ -1,16 +1,16 @@
-import React, {useEffect} from "react";
+import {useEffect} from "react";
 import {useClient} from "../context/ClientContext.tsx";
 import {useNavigate} from "react-router-dom";
 import Header from "./HeaderPage.tsx";
 import Footer from "../components/Footer.tsx";
 import BackButton from "../components/BackButton.tsx";
 
-import srlogo from "../assets/logo.svg";
-import reactLogo from "../assets/react.svg";
-import sqlLogo from "../assets/sqlLogo.png";
-import axiosLogo from "../assets/axiosLogo.png";
-import muiLogo from "../assets/muiLogo.png";
-import kotlinLogo from "../assets/kotlinLogo.png";
+import srlogo from "../images/logo.svg";
+import reactLogo from "../images/react.svg";
+import sqlLogo from "../images/sqlLogo.png";
+import axiosLogo from '../images/axiosLogo.png';
+import muiLogo from "../images/muiLogo.png";
+import kotlinLogo from "../images/kotlinLogo.png";
 import '../styles/CreditsPage.css';
 
 const CreditsPage: React.FC = () => {

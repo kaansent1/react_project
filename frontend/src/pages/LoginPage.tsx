@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import Swal from 'sweetalert2';
 import "../styles/LoginStyle.css";
 import {useNavigate} from "react-router-dom";
 import {useClient} from "../context/ClientContext.tsx";
-import logo from "../assets/logo.svg";
+import logo from "../images/logo.svg";
 
 export interface LoginFormData {
     username: string;

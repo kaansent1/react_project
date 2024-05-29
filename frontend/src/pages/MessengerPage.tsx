@@ -3,7 +3,7 @@ import axios from 'axios';
 import {useClient} from "../context/ClientContext.tsx";
 import {Message} from "../api/message.ts";
 import Header from "./HeaderPage.tsx";
-import defaultAvatar from "../assets/blank_profile_pic.png";
+import defaultAvatar from "../images/blank_profile_pic.png";
 import '../styles/MessengerPageStyle.css';
 import {useNavigate} from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
