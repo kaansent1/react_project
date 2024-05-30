@@ -15,7 +15,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import BackButton from "../components/BackButton.tsx";
 import Swal from "sweetalert2";
 import {Comments} from "../api/comments.ts";
-import {AddComment} from "@mui/icons-material";
 
 const PostDetailPage: React.FC = () => {
     const [post, setPost] = useState<Post | null>(null);
@@ -262,35 +261,34 @@ const PostDetailPage: React.FC = () => {
                             mb: 2,
                             backgroundColor: '#1976d2',
                             color: 'white',
-                            width: '20%',
+                            width: 'auto',
                             marginRight: '10px',
                             '&:hover': {
                                 backgroundColor: '#135ba1',
                             },
                         }}
-                        startIcon={isEditing ? <SaveIcon/> : <EditIcon/>}
                     >
-                        {isEditing ? 'Speichern' : ' Bearbeiten'}
+                        {isEditing ? <SaveIcon/> : <EditIcon/>}
                     </Button>
+
                 )}
                 {post.isOwnPost && (
                     <Button
                         variant="contained"
                         color="error"
                         onClick={handleDeleteButtonClick}
-                        startIcon={<DeleteIcon/>}
                         sx={{
                             mt: 3,
                             mb: 2,
                             backgroundColor: '#f44336',
                             color: 'white',
-                            width: '20%',
+                            width: 'auto',
                             '&:hover': {
                                 backgroundColor: '#d32f2f',
                             },
                         }}
                     >
-                        Löschen
+                        <DeleteIcon/>
                     </Button>
                 )}
                 <Typography variant="h6">Kommentare</Typography>
@@ -311,8 +309,7 @@ const PostDetailPage: React.FC = () => {
                             style: {color: 'white'}
                         }}
                     />
-                    <Button variant="contained" type="submit" sx={{color: 'white', display: 'flex', width: 'auto'}}
-                            startIcon={<AddComment/>}>
+                    <Button variant="contained" type="submit" sx={{color: 'white', display: 'flex', width: 'auto'}}>
                         Post
                     </Button>
                 </form>
