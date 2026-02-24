@@ -1,6 +1,6 @@
 # Social-React
 
-Diese Social Media Applikation wurde entwickelt, um eine Plattform für soziale Interaktionen zwischen Benutzern zu schaffen. Das Frontend der Anwendung wurde mit React erstellt, während das Backend mit Ktor, einem leistungsstarken Framework für die Entwicklung von Webanwendungen in Kotlin, implementiert wurde.
+Diese Social Media Applikation wurde entwickelt, um eine Plattform für soziale Interaktionen zwischen Benutzern zu schaffen. Das Frontend der Anwendung wurde mit React erstellt, während das Backend mit Ktor implementiert wurde.
 
 ## Features
 
