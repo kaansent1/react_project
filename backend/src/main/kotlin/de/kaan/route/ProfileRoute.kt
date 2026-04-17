@@ -90,7 +90,7 @@ fun Routing.userRouting() {
                     throw IllegalArgumentException("userId is missing")
                 }
 
-                val imageUrl = "http://192.168.1.125:8080/static/profile_images/$fileName"
+                val imageUrl = "http://localhost:8080/static/profile_images/$fileName"
                 val updateUserImageParams = UpdateUserImageParams(userId = userId!!, image = imageUrl)
                 val result = repository.updateUserImage(updateUserImageParams)
                 call.respond(status = result.code, message = result.data)

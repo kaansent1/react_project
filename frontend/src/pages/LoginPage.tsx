@@ -33,7 +33,7 @@ function LoginPage() {
     const handleLogin = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        const response = await fetch("http://192.168.1.125:8080/login", {
+        const response = await fetch("http://localhost:8080/login", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ function LoginPage() {
             return;
         }
 
-        const response = await fetch("http://192.168.1.125:8080/register", {
+        const response = await fetch("http://localhost:8080/register", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

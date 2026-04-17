@@ -28,7 +28,7 @@ const PostForm = ({onPostCreated}: { onPostCreated: () => void }) => {
             username: client.username
         }));
 
-        const response = await axios.post('http://192.168.1.125:8080/post/create', formData, {
+        const response = await axios.post('http://localhost:8080/post/create', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

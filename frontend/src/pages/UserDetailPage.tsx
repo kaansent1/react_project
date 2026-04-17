@@ -32,8 +32,7 @@ const UserDetailPage: React.FC = () => {
     const [editedEmail, setEditedEmail] = useState("");
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
-    const [editor, setEditor] = useState<AvatarEditor | null>(null);
-    const {client, setClient} = useClient();
+    const [editor, setEditor] = useState<InstanceType<typeof AvatarEditor> | null>(null);    const {client, setClient} = useClient();
     const navigate = useNavigate();
     const {userId} = useParams<{ userId?: string }>();
 
@@ -47,11 +46,11 @@ const UserDetailPage: React.FC = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const userResponse = await axios.get(`http://192.168.1.125:8080/user/${userId}?currentUserId=${client.userId}`);
+                const userResponse = await axios.get(`http://localhost:8080/user/${userId}?currentUserId=${client.userId}`);
                 setUser(userResponse.data.user);
                 setEditedUsername(userResponse.data.user.username);
                 setEditedEmail(userResponse.data.user.email);
-                const postResponse = await axios.get(`http://192.168.1.125:8080/posts/${userId}?currentUserId=${client.userId}`);
+                const postResponse = await axios.get(`http://localhost:8080/posts/${userId}?currentUserId=${client.userId}`);
                 setPosts(postResponse.data.posts);
             } catch (error) {
                 console.error('Fehler beim Abrufen der Daten:', error);
@@ -84,9 +83,9 @@ const UserDetailPage: React.FC = () => {
             let response;
 
             if (post.isLiked) {
-                response = await axios.delete('http://192.168.1.125:8080/post/likes/remove', {data: {userId, postId}});
+                response = await axios.delete('http://localhost:8080/post/likes/remove', {data: {userId, postId}});
             } else {
-                response = await axios.post('http://192.168.1.125:8080/post/likes/add', {userId, postId});
+                response = await axios.post('http://localhost:8080/post/likes/add', {userId, postId});
             }
 
             if (response.data.success) {
@@ -112,13 +111,13 @@ const UserDetailPage: React.FC = () => {
 
     const handleFollowClick = async () => {
         try {
-            const response = await axios.post('http://192.168.1.125:8080/follows/follow', {
+            const response = await axios.post('http://localhost:8080/follows/follow', {
                 following: userId,
                 follower: client.userId
             });
 
             if (response.data.success) {
-                const userResponse = await axios.get(`http://192.168.1.125:8080/user/${userId}?currentUserId=${client.userId}`);
+                const userResponse = await axios.get(`http://localhost:8080/user/${userId}?currentUserId=${client.userId}`);
                 setUser(userResponse.data.user);
             } else {
                 console.error(response.data.message);
@@ -140,13 +139,13 @@ const UserDetailPage: React.FC = () => {
 
         if (confirmation.isConfirmed) {
             try {
-                const response = await axios.post('http://192.168.1.125:8080/follows/unfollow', {
+                const response = await axios.post('http://localhost:8080/follows/unfollow', {
                     following: userId,
                     follower: client.userId
                 });
 
                 if (response.data.success) {
-                    const userResponse = await axios.get(`http://192.168.1.125:8080/user/${userId}?currentUserId=${client.userId}`);
+                    const userResponse = await axios.get(`http://localhost:8080/user/${userId}?currentUserId=${client.userId}`);
                     setUser(userResponse.data.profile);
                 } else {
                     console.error(response.data.message);
@@ -163,7 +162,7 @@ const UserDetailPage: React.FC = () => {
 
     const handleSaveClick = async () => {
         try {
-            const response = await axios.put('http://192.168.1.125:8080/user/update', {
+            const response = await axios.put('http://localhost:8080/user/update', {
                 userId: client.userId,
                 username: editedUsername,
                 email: editedEmail
@@ -201,18 +200,18 @@ const UserDetailPage: React.FC = () => {
         formData.append('userId', client.userId.toString());
 
         try {
-            const response = await axios.put(`http://192.168.1.125:8080/user/update/image`, formData, {
+            const response = await axios.put(`http://localhost:8080/user/update/image`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
             if (response.data.success) {
-                const userResponse = await axios.get(`http://192.168.1.125:8080/user/${userId}?currentUserId=${client.userId}`);
+                const userResponse = await axios.get(`http://localhost:8080/user/${userId}?currentUserId=${client.userId}`);
                 setUser(userResponse.data.user);
                 setSelectedFile(null);
                 setImagePreviewUrl(null);
-                const postResponse = await axios.get(`http://192.168.1.125:8080/posts/${userId}?currentUserId=${client.userId}`);
+                const postResponse = await axios.get(`http://localhost:8080/posts/${userId}?currentUserId=${client.userId}`);
                 setPosts(postResponse.data.posts);
             } else {
                 console.error(response.data.message);

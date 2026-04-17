@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {
     Container,
     Grid,
@@ -41,10 +41,10 @@ function UserFeed() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const postsResponse = await axios.get(`http://192.168.1.125:8080/posts/feed?userId=${client.userId}`);
+            const postsResponse = await axios.get(`http://localhost:8080/posts/feed?userId=${client.userId}`);
             setPosts(postsResponse.data.posts);
 
-            const usersResponse = await axios.get(`http://192.168.1.125:8080/user/all`);
+            const usersResponse = await axios.get(`http://localhost:8080/user/all`);
             setUsers(usersResponse.data.users);
         };
 
@@ -87,9 +87,9 @@ function UserFeed() {
         let response;
 
         if (isLiked) {
-            response = await axios.delete('http://192.168.1.125:8080/post/likes/remove', {data: {userId, postId}});
+            response = await axios.delete('http://localhost:8080/post/likes/remove', {data: {userId, postId}});
         } else {
-            response = await axios.post('http://192.168.1.125:8080/post/likes/add', {userId, postId});
+            response = await axios.post('http://localhost:8080/post/likes/add', {userId, postId});
         }
 
         if (response.data.success) {
@@ -111,7 +111,7 @@ function UserFeed() {
     };
 
     const handlePostCreated = async () => {
-        const postsResponse = await axios.get(`http://192.168.1.125:8080/posts/feed?userId=${client.userId}`);
+        const postsResponse = await axios.get(`http://localhost:8080/posts/feed?userId=${client.userId}`);
         setPosts(postsResponse.data.posts);
         setShowPostForm(false);
     };

@@ -39,7 +39,7 @@ const PostDetailPage: React.FC = () => {
 
             const fetchPost = async () => {
                 try {
-                    const response = await axios.get(`http://192.168.1.125:8080/post/${postIdAsNumber}?currentUserId=${currentUserId}`);
+                    const response = await axios.get(`http://localhost:8080/post/${postIdAsNumber}?currentUserId=${currentUserId}`);
                     setPost(response.data.post);
                     setEditingText(response.data.post.text);
                 } catch (error) {
@@ -49,7 +49,7 @@ const PostDetailPage: React.FC = () => {
 
             const fetchComments = async () => {
                 try {
-                    const response = await axios.get(`http://192.168.1.125:8080/post/comments/${postIdAsNumber}`);
+                    const response = await axios.get(`http://localhost:8080/post/comments/${postIdAsNumber}`);
                     setComments(response.data.comments);
                 } catch (error) {
                     console.error('Fehler beim Abrufen der Kommentare:', error);
@@ -66,10 +66,10 @@ const PostDetailPage: React.FC = () => {
             if (isEditing) {
                 const newData = {text: editingText, userId: client.userId, username: client.username};
                 try {
-                    await axios.put(`http://192.168.1.125:8080/post/${post.postId}/edit`, newData);
+                    await axios.put(`http://localhost:8080/post/${post.postId}/edit`, newData);
                     console.log("Post erfolgreich bearbeitet!");
                     setIsEditing(false);
-                    const updatedPostResponse = await axios.get(`http://192.168.1.125:8080/post/${post.postId}?currentUserId=${client.userId}`);
+                    const updatedPostResponse = await axios.get(`http://localhost:8080/post/${post.postId}?currentUserId=${client.userId}`);
                     setPost(updatedPostResponse.data.post);
                 } catch (error) {
                     console.error('Fehler beim Bearbeiten des Posts:', error);
@@ -91,7 +91,7 @@ const PostDetailPage: React.FC = () => {
         });
         if (confirmation.isConfirmed && post) {
             try {
-                await axios.delete(`http://192.168.1.125:8080/post/${post.postId}`);
+                await axios.delete(`http://localhost:8080/post/${post.postId}`);
                 navigate("/home");
             } catch (error) {
                 console.error('Fehler beim Löschen des Posts:', error);
@@ -108,9 +108,9 @@ const PostDetailPage: React.FC = () => {
         let response;
 
         if (isLiked) {
-            response = await axios.delete('http://192.168.1.125:8080/post/likes/remove', {data: {userId, postId}});
+            response = await axios.delete('http://localhost:8080/post/likes/remove', {data: {userId, postId}});
         } else {
-            response = await axios.post('http://192.168.1.125:8080/post/likes/add', {userId, postId});
+            response = await axios.post('http://localhost:8080/post/likes/add', {userId, postId});
         }
 
         if (response.data.success && post) {
@@ -139,7 +139,7 @@ const PostDetailPage: React.FC = () => {
         };
 
         try {
-            const response = await axios.post('http://192.168.1.125:8080/post/comments/create', commentData);
+            const response = await axios.post('http://localhost:8080/post/comments/create', commentData);
             setComments([response.data.comment, ...comments]);
             setNewComment("");
             if (post) {

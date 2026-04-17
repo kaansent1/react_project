@@ -25,7 +25,7 @@ function FollowersPage() {
     useEffect(() => {
         const loadFollowers = async () => {
             try {
-                const response = await axios.get(`http://192.168.1.125:8080/follows/followers?userId=${client.userId}`);
+                const response = await axios.get(`http://localhost:8080/follows/followers?userId=${client.userId}`);
                 setFollowers(response.data.follows);
                 console.log("Follower werden geladen")
             } catch (error) {
@@ -35,7 +35,7 @@ function FollowersPage() {
 
         const loadFollowing = async () => {
             try {
-                const response = await axios.get(`http://192.168.1.125:8080/follows/following?userId=${client.userId}`);
+                const response = await axios.get(`http://localhost:8080/follows/following?userId=${client.userId}`);
                 setFollowing(response.data.follows);
                 console.log("Gefolgte Nutzer werden geladen")
             } catch (error) {

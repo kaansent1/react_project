@@ -49,7 +49,7 @@ function MessengersPage() {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`http://192.168.1.125:8080/follows/following?userId=${client.userId}`);
+            const response = await axios.get(`http://localhost:8080/follows/following?userId=${client.userId}`);
             setFollows(response.data.follows);
             setFilteredFollowers(response.data.follows);
         } catch (error) {
@@ -61,7 +61,7 @@ function MessengersPage() {
         if (!selectedUser) return;
 
         try {
-            const response = await axios.get(`http://192.168.1.125:8080/messages/get?loggedUserId=${client.userId}&recipientId=${selectedUser.id}`);
+            const response = await axios.get(`http://localhost:8080/messages/get?loggedUserId=${client.userId}&recipientId=${selectedUser.id}`);
             setMessages(response.data);
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -98,7 +98,7 @@ function MessengersPage() {
         };
 
         try {
-            const response = await axios.post('http://192.168.1.125:8080/messages/send', message);
+            const response = await axios.post('http://localhost:8080/messages/send', message);
             setMessages([...messages, response.data]);
             setNewMessage('');
             scrollToBottom();

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import HomePage from './pages/HomePage.tsx';
 import OwnDetailPage from './pages/OwnDetailPage.tsx';
